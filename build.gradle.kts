@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.3.70"
     id("application")
+    id("com.github.johnrengelman.shadow") version "5.2.0"
+
 }
 
 group = "de.breuco"
@@ -24,7 +26,7 @@ dependencies {
     val http4kVersion = "3.239.0"
 
     implementation("org.http4k:http4k-core:$http4kVersion")
-    implementation("org.http4k:http4k-server-jetty:$http4kVersion")
+    implementation("org.http4k:http4k-server-undertow:$http4kVersion")
     implementation("org.http4k:http4k-contract:$http4kVersion")
     implementation("org.http4k:http4k-format-jackson:$http4kVersion")
 
