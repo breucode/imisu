@@ -1,7 +1,7 @@
-package io.ptrack.core
+package de.breuco.imisu
 
 
-import io.ptrack.core.api.api
+import de.breuco.imisu.api.api
 import org.http4k.server.Jetty
 import org.http4k.server.asServer
 

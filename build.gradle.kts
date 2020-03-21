@@ -12,7 +12,7 @@ tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
 
-application.mainClassName = "io.ptrack.core.MainKt"
+application.mainClassName = "de.breuco.imisu.MainKt"
 
 repositories {
     mavenCentral()

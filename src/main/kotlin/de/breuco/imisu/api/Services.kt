@@ -1,4 +1,4 @@
-package io.ptrack.core.api
+package de.breuco.imisu.api
 
 import org.http4k.contract.ContractRoute
 import org.http4k.contract.div
