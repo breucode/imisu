@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    val http4kVersion = "3.235.0"
+    val http4kVersion = "3.239.0"
 
     implementation("org.http4k:http4k-core:$http4kVersion")
     implementation("org.http4k:http4k-server-jetty:$http4kVersion")
