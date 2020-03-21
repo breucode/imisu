@@ -28,6 +28,7 @@ dependencies {
     implementation("org.http4k:http4k-contract:$http4kVersion")
     implementation("org.http4k:http4k-format-jackson:$http4kVersion")
 
+    implementation("org.minidns:minidns-hla:0.3.3")
 }
 
 val compileKotlin: KotlinCompile by tasks
