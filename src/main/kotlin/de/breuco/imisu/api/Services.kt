@@ -1,6 +1,7 @@
 package de.breuco.imisu.api
 
-import de.breuco.imisu.adapters.dns.queryDns
+import de.breuco.imisu.adapters.dns.checkDnsHealth
+import de.breuco.imisu.config.ServiceType.DNS
 import de.breuco.imisu.config.loadedConfig
 import org.http4k.contract.ContractRoute
 import org.http4k.contract.div
@@ -18,11 +19,11 @@ object Services {
             listOf(
                 get(),
                 Id.get(),
-                Status.get(),
-                Status.Id.get()
+                States.get(),
+                States.Id.get()
             )
         } else {
-            listOf(Status.Id.get())
+            listOf(States.Id.get())
         }
     }
 
@@ -46,8 +47,8 @@ object Services {
         }
     }
 
-    object Status {
-        const val route = Services.route + "/status"
+    object States {
+        const val route = Services.route + "/states"
 
         fun get(): ContractRoute {
             fun handler(): HttpHandler = { Response(HttpStatus.INTERNAL_SERVER_ERROR).body("Not implemented") }
@@ -63,8 +64,23 @@ object Services {
 
                 fun handler(id: String): HttpHandler =
                     {
-                        val result = queryDns(ip = "192.168.1.2")
-                        Response(HttpStatus.INTERNAL_SERVER_ERROR)
+                        val service = loadedConfig.services.find { it.name == id }
+
+                        if (service == null) {
+                            Response(HttpStatus.NOT_FOUND)
+                        } else {
+                            val queryStatus = when (service.type) {
+                                DNS -> checkDnsHealth(service.dnsDomain, service.endpoint, service.port)
+                                //PING -> false
+                                //HTTP -> false
+                            }
+
+                            if (queryStatus) {
+                                Response(HttpStatus.OK)
+                            } else {
+                                Response(HttpStatus.SERVICE_UNAVAILABLE)
+                            }
+                        }
                     }
 
                 return route / Path.string().of("id", "id") meta {

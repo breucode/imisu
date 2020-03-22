@@ -1,4 +1,5 @@
 services:
-  - endpoint: "Yahoo"
+  - name: "localdns"
+    endpoint: "192.168.1.2"
     type: DNS
     enabled: true

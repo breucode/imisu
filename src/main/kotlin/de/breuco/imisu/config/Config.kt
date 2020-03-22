@@ -27,11 +27,13 @@ val loadedConfig by lazy {
 data class Config (
     val exposeFullApi: Boolean = false,
     val exposeSwagger: Boolean = false,
+    val serverPort: Int = 8080,
     val services: List<ServiceConfig>
 )
 
 data class ServiceConfig (
     val enabled: Boolean,
+    val name: String,
     val type: ServiceType,
     val endpoint: String,
     val port: Int?,
@@ -40,6 +42,6 @@ data class ServiceConfig (
 
 enum class ServiceType {
     DNS,
-    PING,
-    HTTP
+    //PING,
+    //HTTP
 }
