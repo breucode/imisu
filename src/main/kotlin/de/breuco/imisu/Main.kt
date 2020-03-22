@@ -8,12 +8,10 @@ import org.http4k.server.asServer
 
 private val logger = KotlinLogging.logger {}
 
-
 fun main() {
     logger.info { "Initializing" }
 
-    api()
-    .asServer(Netty(9000)).start()
+    api().asServer(Netty(9000)).start()
 
     logger.info { "Started" }
 }

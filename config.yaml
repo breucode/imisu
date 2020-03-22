@@ -1,0 +1,4 @@
+services:
+  - endpoint: "Yahoo"
+    type: DNS
+    enabled: true

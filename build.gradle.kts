@@ -23,14 +23,19 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    val http4kVersion = "3.239.0"
 
+    val http4kVersion = "3.239.0"
     implementation("org.http4k:http4k-core:$http4kVersion")
     implementation("org.http4k:http4k-server-netty:$http4kVersion")
     implementation("org.http4k:http4k-contract:$http4kVersion")
     implementation("org.http4k:http4k-format-jackson:$http4kVersion")
 
     implementation("org.minidns:minidns-hla:0.3.3")
+
+    val hopliteVersion = "1.2.0"
+    implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
+    implementation("com.sksamuel.hoplite:hoplite-yaml:$hopliteVersion")
+
     runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
     implementation("io.github.microutils:kotlin-logging:1.7.9")
 }

@@ -1,6 +1,7 @@
 package de.breuco.imisu.api
 
 import de.breuco.imisu.adapters.dns.queryDns
+import de.breuco.imisu.config.loadedConfig
 import org.http4k.contract.ContractRoute
 import org.http4k.contract.div
 import org.http4k.contract.meta
@@ -12,12 +13,18 @@ import org.http4k.lens.string
 import org.http4k.core.Status as HttpStatus
 
 object Services {
-    val routes = listOf(
-        get(),
-        Id.get(),
-        Status.get(),
-        Status.Id.get()
-    )
+    val routes by lazy {
+        if (loadedConfig.exposeFullApi) {
+            listOf(
+                get(),
+                Id.get(),
+                Status.get(),
+                Status.Id.get()
+            )
+        } else {
+            listOf(Status.Id.get())
+        }
+    }
 
     const val route = "/services"
 
@@ -45,7 +52,8 @@ object Services {
         fun get(): ContractRoute {
             fun handler(): HttpHandler = { Response(HttpStatus.INTERNAL_SERVER_ERROR).body("Not implemented") }
             return route meta {
-                description = "Gets the status of the services, which are available for monitoring. Returns 502, of one of the services is unavailable"
+                description =
+                    "Gets the status of the services, which are available for monitoring. Returns 502, of one of the services is unavailable"
 
             } bindContract GET to handler()
         }
