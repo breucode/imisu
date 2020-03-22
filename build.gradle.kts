@@ -26,11 +26,20 @@ dependencies {
     val http4kVersion = "3.239.0"
 
     implementation("org.http4k:http4k-core:$http4kVersion")
-    implementation("org.http4k:http4k-server-undertow:$http4kVersion")
+    implementation("org.http4k:http4k-server-netty:$http4kVersion")
     implementation("org.http4k:http4k-contract:$http4kVersion")
     implementation("org.http4k:http4k-format-jackson:$http4kVersion")
 
     implementation("org.minidns:minidns-hla:0.3.3")
+    runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
+    implementation("io.github.microutils:kotlin-logging:1.7.9")
+}
+
+tasks.getByName("shadowDistZip") {
+    enabled = false
+}
+tasks.getByName("shadowDistTar") {
+    enabled = false
 }
 
 val compileKotlin: KotlinCompile by tasks
