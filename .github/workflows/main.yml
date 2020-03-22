@@ -12,5 +12,12 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: 11
-    - name: Build
+    - name: Build & Test
       run: ./gradlew build
+    - uses: DeLaGuardo/setup-graalvm@3
+      with:
+        graalvm-version: "20.0.0.java11"
+    - name: Install native image tooling
+      run: gu install native-image
+    - name: Build native image
+      run: ./build-native-image.sh
