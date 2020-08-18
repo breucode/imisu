@@ -1,50 +1,110 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.3.71"
-    id("application")
-    id("com.github.johnrengelman.shadow") version "5.2.0"
-
+  kotlin("jvm") version "1.4.0"
+  id("com.diffplug.spotless") version "5.1.1"
+  id("io.gitlab.arturbosch.detekt") version "1.11.0"
+  id("com.github.ben-manes.versions") version "0.29.0"
+  id("application")
+  id("com.github.johnrengelman.shadow") version "6.0.0"
 }
 
 group = "de.breuco"
 version = "0.0.1"
 
 tasks.wrapper {
-    distributionType = Wrapper.DistributionType.ALL
+  distributionType = Wrapper.DistributionType.ALL
 }
 
 application.mainClassName = "de.breuco.imisu.MainKt"
 
+spotless {
+  val ktlintVersion = "0.37.2"
+  kotlin {
+    ktlint(ktlintVersion).userData(
+      mapOf(
+        Pair("indent_size", "2"),
+        Pair("max_line_length", "120")
+      )
+    )
+  }
+  kotlinGradle {
+    target("*.gradle.kts")
+
+    ktlint(ktlintVersion).userData(
+      mapOf(
+        Pair("indent_size", "2"),
+        Pair("max_line_length", "120")
+      )
+    )
+  }
+}
+
+val javaVersion = JavaVersion.VERSION_11.toString()
+
+tasks {
+  withType<Detekt> {
+    this.jvmTarget = javaVersion
+  }
+}
+
+detekt {
+  failFast = true
+  buildUponDefaultConfig = true
+  config = files("$projectDir/detekt.yaml")
+  // baseline = file("$projectDir/detekt-baseline.xml")
+}
+
+fun isNonStable(version: String): Boolean {
+  val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
+  val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+  val isStable = stableKeyword || regex.matches(version)
+  return isStable.not()
+}
+
+tasks.named("dependencyUpdates", DependencyUpdatesTask::class.java).configure {
+  rejectVersionIf {
+    isNonStable(candidate.version)
+  }
+
+  revision = "release"
+  gradleReleaseChannel = "current"
+}
+
 repositories {
-    mavenCentral()
-    jcenter()
+  mavenCentral()
+  jcenter()
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+  implementation("org.jetbrains.kotlin:kotlin-reflect") {
+    version {
+      strictly("1.4.0")
+    }
+  }
+  implementation(platform("org.http4k:http4k-bom:3.258.0"))
+  implementation("org.http4k:http4k-core")
+  implementation("org.http4k:http4k-server-undertow")
+  implementation("org.http4k:http4k-contract")
+  implementation("org.http4k:http4k-format-jackson")
 
-    val http4kVersion = "3.239.0"
-    implementation("org.http4k:http4k-core:$http4kVersion")
-    implementation("org.http4k:http4k-server-netty:$http4kVersion")
-    implementation("org.http4k:http4k-contract:$http4kVersion")
-    implementation("org.http4k:http4k-format-jackson:$http4kVersion")
+  implementation("org.minidns:minidns-hla:1.0.0")
 
-    implementation("org.minidns:minidns-hla:0.3.3")
+  val hopliteVersion = "1.3.3"
+  implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
+  implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
 
-    val hopliteVersion = "1.2.0"
-    implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
-    implementation("com.sksamuel.hoplite:hoplite-yaml:$hopliteVersion")
-
-    runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
-    implementation("io.github.microutils:kotlin-logging:1.7.9")
+  runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.13.3")
+  implementation("io.github.microutils:kotlin-logging:1.8.3")
 }
 
 tasks.getByName("shadowDistZip") {
-    enabled = false
+  enabled = false
 }
 tasks.getByName("shadowDistTar") {
-    enabled = false
+  enabled = false
 }
 
 val compileKotlin: KotlinCompile by tasks

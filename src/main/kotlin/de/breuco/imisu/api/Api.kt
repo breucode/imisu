@@ -12,21 +12,21 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 
 private fun getApiRenderer(): ContractRenderer {
-    return if (loadedConfig.exposeSwagger) {
-        OpenApi3(
-            ApiInfo("imisu API", "0.0.1", "The API of imisu"),
-            Jackson
-        )
-    } else {
-        NoRenderer
-    }
+  return if (loadedConfig.exposeSwagger) {
+    OpenApi3(
+      ApiInfo("imisu API", "0.0.1", "The API of imisu"),
+      Jackson
+    )
+  } else {
+    NoRenderer
+  }
 }
 
 fun api(): RoutingHttpHandler =
-    "/" bind routes(
-        contract {
-            renderer = getApiRenderer()
-            descriptionPath = "swagger.json"
-            routes += Services.routes
-        }
-    )
+  "/" bind routes(
+    contract {
+      renderer = getApiRenderer()
+      descriptionPath = "swagger.json"
+      routes += Services.routes
+    }
+  )
