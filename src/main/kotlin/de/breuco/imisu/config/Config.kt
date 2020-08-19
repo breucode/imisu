@@ -8,8 +8,9 @@ import kotlin.system.exitProcess
 private val logger = KotlinLogging.logger {}
 
 val loadedConfig by lazy {
+  ConfigLoader
   val configResult = ConfigLoader.invoke().loadConfig<Config>(Path.of("imisu.conf"))
-  var config: Config? = null
+  lateinit var config: Config
   configResult.fold(
     ifValid = {
       config = it
@@ -21,7 +22,7 @@ val loadedConfig by lazy {
       exitProcess(1)
     }
   )
-  config!!
+  config
 }
 
 data class Config(
@@ -31,17 +32,21 @@ data class Config(
   val services: List<ServiceConfig>
 )
 
-data class ServiceConfig(
-  val enabled: Boolean,
-  val name: String,
-  val type: ServiceType,
-  val endpoint: String,
-  val port: Int?,
-  val dnsDomain: String?
-)
-
-enum class ServiceType {
-  DNS,
-  // PING,
-  // HTTP
+sealed class ServiceConfig {
+  abstract val enabled: Boolean
+  abstract val name: String
 }
+
+data class HttpServiceConfig(
+  override val enabled: Boolean,
+  override val name: String,
+  val httpEndpoint: String,
+) : ServiceConfig()
+
+data class DnsServiceConfig(
+  override val enabled: Boolean,
+  override val name: String,
+  val dnsServer: String,
+  val dnsServerPort: Int = 53,
+  val dnsDomain: String = "google.com"
+) : ServiceConfig()

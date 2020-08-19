@@ -9,9 +9,13 @@ import org.http4k.server.asServer
 private val logger = KotlinLogging.logger {}
 
 fun main() {
-  logger.info { "Initializing" }
+  logger.info { "Starting application on port ${loadedConfig.serverPort}" }
+
+  if (loadedConfig.exposeFullApi) {
+    logger.warn { "Full API is exposed! Everyone can see the internal URLs you have configured!" }
+  }
 
   api().asServer(Undertow(loadedConfig.serverPort)).start()
 
-  logger.info { "Started on port ${loadedConfig.serverPort}" }
+  logger.info { "Application successfully started on port ${loadedConfig.serverPort}" }
 }

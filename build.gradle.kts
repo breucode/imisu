@@ -4,8 +4,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   kotlin("jvm") version "1.4.0"
+  kotlin("kapt") version "1.4.0"
   id("com.diffplug.spotless") version "5.1.1"
-  id("io.gitlab.arturbosch.detekt") version "1.11.0"
+  id("io.gitlab.arturbosch.detekt") version "1.11.1"
   id("com.github.ben-manes.versions") version "0.29.0"
   id("application")
   id("com.github.johnrengelman.shadow") version "6.0.0"
@@ -89,8 +90,22 @@ dependencies {
   implementation("org.http4k:http4k-server-undertow")
   implementation("org.http4k:http4k-contract")
   implementation("org.http4k:http4k-format-jackson")
+  implementation("org.http4k:http4k-client-okhttp")
 
   implementation("org.minidns:minidns-hla:1.0.0")
+
+  val koinVersion = "2.1.6"
+  implementation("org.koin:koin-core:$koinVersion")
+  implementation("org.koin:koin-core-ext:$koinVersion")
+  testImplementation("org.koin:koin-test:$koinVersion")
+
+  val arrowVersion = "0.10.5"
+  implementation("io.arrow-kt:arrow-core:$arrowVersion")
+  implementation("io.arrow-kt:arrow-syntax:$arrowVersion")
+  kapt("io.arrow-kt:arrow-meta:$arrowVersion")
+
+  implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.3.9"))
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 
   val hopliteVersion = "1.3.3"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
@@ -98,6 +113,14 @@ dependencies {
 
   runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.13.3")
   implementation("io.github.microutils:kotlin-logging:1.8.3")
+
+  val kotestVersion = "4.2.0.RC2"
+  testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
+  testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
+  testImplementation("io.kotest:kotest-assertions-arrow-jvm:$kotestVersion")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+
+  testImplementation("io.mockk:mockk:1.10.0")
 }
 
 tasks.getByName("shadowDistZip") {
