@@ -3,10 +3,10 @@ import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  kotlin("jvm") version "1.4.0"
-  kotlin("kapt") version "1.4.0"
+  kotlin("jvm") version Versions.kotlin
+  kotlin("kapt") version Versions.kotlin
   id("com.diffplug.spotless") version "5.1.1"
-  id("io.gitlab.arturbosch.detekt") version "1.11.1"
+  id("io.gitlab.arturbosch.detekt") version "1.11.2"
   id("com.github.ben-manes.versions") version "0.29.0"
   id("application")
   id("com.github.johnrengelman.shadow") version "6.0.0"
@@ -19,7 +19,7 @@ tasks.wrapper {
   distributionType = Wrapper.DistributionType.ALL
 }
 
-application.mainClassName = "de.breuco.imisu.MainKt"
+application.mainClassName = "de.breuco.imisu.ApplicationKt"
 
 spotless {
   val ktlintVersion = "0.37.2"
@@ -82,7 +82,7 @@ repositories {
 dependencies {
   implementation("org.jetbrains.kotlin:kotlin-reflect") {
     version {
-      strictly("1.4.0")
+      strictly(Versions.kotlin)
     }
   }
   implementation(platform("org.http4k:http4k-bom:3.258.0"))
@@ -114,7 +114,7 @@ dependencies {
   runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.13.3")
   implementation("io.github.microutils:kotlin-logging:1.8.3")
 
-  val kotestVersion = "4.2.0.RC2"
+  val kotestVersion = "4.2.0"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
   testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
   testImplementation("io.kotest:kotest-assertions-arrow-jvm:$kotestVersion")

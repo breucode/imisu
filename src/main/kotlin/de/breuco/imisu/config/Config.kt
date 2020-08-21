@@ -7,7 +7,7 @@ import kotlin.system.exitProcess
 
 private val logger = KotlinLogging.logger {}
 
-val loadedConfig by lazy {
+val appConfig by lazy {
   ConfigLoader
   val configResult = ConfigLoader.invoke().loadConfig<Config>(Path.of("imisu.conf"))
   lateinit var config: Config
