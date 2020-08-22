@@ -52,7 +52,7 @@ private class CliApplicationStarter : CliktCommand(name = "imisu") {
           single { Api(get(), get()) }
           single { Services(get(), get(), get()) }
           single { HttpService(get()) }
-          single { DnsService(get(parameters = { parametersOf(DnsService::class.java.name) }), get()) }
+          single { DnsService(get()) }
           single<HttpHandler> { OkHttp(OkHttpClient.Builder().build()) }
           single { DnsClient(null) }
           single {
