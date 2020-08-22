@@ -1,15 +1,12 @@
 package de.breuco.imisu.config
 
 import com.sksamuel.hoplite.ConfigLoader
-import mu.KotlinLogging
+import mu.KLogger
 import java.nio.file.Path
 import kotlin.system.exitProcess
 
-private val logger = KotlinLogging.logger {}
-
-class ApplicationConfig(val configPath: Path) {
-  val userConfig by lazy {
-    ConfigLoader
+class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
+  val userConfig = {
     val configResult = ConfigLoader.invoke().loadConfig<Config>(configPath)
     lateinit var config: Config
     configResult.fold(
@@ -24,7 +21,7 @@ class ApplicationConfig(val configPath: Path) {
       }
     )
     config
-  }
+  }.invoke()
 }
 
 data class Config(

@@ -2,16 +2,12 @@ package de.breuco.imisu.service
 
 import arrow.core.Either
 import de.breuco.imisu.unsafeCatch
-import mu.KotlinLogging
+import mu.KLogger
 import org.minidns.DnsClient
 import org.minidns.record.Record
 import java.net.InetAddress
 
-class DnsService(private val dnsClient: DnsClient) {
-  companion object {
-    private val logger = KotlinLogging.logger {}
-  }
-
+class DnsService(private val logger: KLogger, private val dnsClient: DnsClient) {
   fun checkHealth(hostName: String, ip: String, port: Int): Either<Throwable, Boolean> {
     return Either.unsafeCatch {
       val dnsResult =
