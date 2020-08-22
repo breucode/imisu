@@ -62,4 +62,21 @@ class ApplicationTest {
       apiMock.routing().asServer(any()).start()
     }
   }
+
+  @Test
+  fun `log warning when full api is exposed`() {
+    every { appConfigMock.userConfig.serverPort } returns 8080
+    every { appConfigMock.userConfig.exposeFullApi } returns true
+
+    mockkStatic("org.http4k.server.Http4kServerKt")
+
+    every { apiMock.routing().asServer(any()).start() } returns mockk()
+
+    underTest.run()
+
+    verify(exactly = 1) {
+      apiMock.routing().asServer(any()).start()
+      loggerMock.warn(any<() -> Any?>())
+    }
+  }
 }
