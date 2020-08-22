@@ -14,9 +14,15 @@ class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
         config = it
       },
       ifInvalid = {
-        logger.error { "Error reading config" }
-        logger.error { it.description() }
-        logger.error { "Exiting application" }
+        logger.error {
+          """
+            |Error reading config
+            |----------------------------------------------------------------------------
+            |${it.description()}
+            |----------------------------------------------------------------------------
+            |Exiting application
+          """.trimMargin()
+        }
         exitProcess(1)
       }
     )
