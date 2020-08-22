@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   kotlin("jvm") version Versions.kotlin
   kotlin("kapt") version Versions.kotlin
+  id("jacoco")
   id("com.diffplug.spotless") version "5.1.2"
   id("io.gitlab.arturbosch.detekt") version "1.11.2"
   id("com.github.ben-manes.versions") version "0.29.0"
@@ -20,6 +21,10 @@ tasks.wrapper {
 }
 
 application.mainClassName = "de.breuco.imisu.ApplicationKt"
+
+tasks.jacocoTestReport {
+  dependsOn(tasks.test)
+}
 
 spotless {
   val ktlintVersion = "0.38.0"
