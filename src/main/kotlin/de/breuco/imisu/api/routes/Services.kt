@@ -1,9 +1,9 @@
 package de.breuco.imisu.api.routes
 
+import de.breuco.imisu.config.ApplicationConfig
 import de.breuco.imisu.config.DnsServiceConfig
 import de.breuco.imisu.config.HttpServiceConfig
 import de.breuco.imisu.config.ServiceConfig
-import de.breuco.imisu.config.appConfig
 import de.breuco.imisu.service.DnsService
 import de.breuco.imisu.service.HttpService
 import org.http4k.contract.ContractRoute
@@ -23,11 +23,12 @@ import org.http4k.lens.string
 import org.http4k.core.Status as HttpStatus
 
 class Services(
+  private val appConfig: ApplicationConfig,
   private val dnsService: DnsService,
   private val httpService: HttpService
 ) {
   val routes by lazy {
-    if (appConfig.exposeFullApi) {
+    if (appConfig.userConfig.exposeFullApi) {
       listOf(
         get(),
         Id().get(),
@@ -45,7 +46,7 @@ class Services(
     val responseLens = Body.auto<List<ServiceConfig>>().toLens()
     fun handler(): HttpHandler = {
       responseLens(
-        appConfig.services.filter { it.enabled },
+        appConfig.userConfig.services.filter { it.enabled },
         Response(OK)
       )
     }
@@ -75,7 +76,7 @@ class Services(
       fun get(): ContractRoute {
         fun handler() = { id: String, _: String ->
           { _: Request ->
-            val service = appConfig.services.find { it.name == id }
+            val service = appConfig.userConfig.services.find { it.name == id }
 
             if (service == null) {
               Response(HttpStatus.NOT_FOUND)

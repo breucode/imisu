@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   kotlin("jvm") version Versions.kotlin
   kotlin("kapt") version Versions.kotlin
-  id("com.diffplug.spotless") version "5.1.1"
+  id("com.diffplug.spotless") version "5.1.2"
   id("io.gitlab.arturbosch.detekt") version "1.11.2"
   id("com.github.ben-manes.versions") version "0.29.0"
   id("application")
@@ -22,7 +22,7 @@ tasks.wrapper {
 application.mainClassName = "de.breuco.imisu.ApplicationKt"
 
 spotless {
-  val ktlintVersion = "0.37.2"
+  val ktlintVersion = "0.38.0"
   kotlin {
     ktlint(ktlintVersion).userData(
       mapOf(
@@ -92,6 +92,8 @@ dependencies {
   implementation("org.http4k:http4k-format-jackson")
   implementation("org.http4k:http4k-client-okhttp")
 
+  implementation("com.github.ajalt:clikt:2.8.0")
+
   implementation("org.minidns:minidns-hla:1.0.0")
 
   val koinVersion = "2.1.6"
@@ -115,12 +117,19 @@ dependencies {
   implementation("io.github.microutils:kotlin-logging:1.8.3")
 
   val kotestVersion = "4.2.0"
-  testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
+  testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
+    exclude("junit")
+    exclude("org.junit.vintage")
+  }
   testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
   testImplementation("io.kotest:kotest-assertions-arrow-jvm:$kotestVersion")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
 
   testImplementation("io.mockk:mockk:1.10.0")
+}
+
+tasks.test {
+  useJUnitPlatform()
 }
 
 tasks.getByName("shadowDistZip") {

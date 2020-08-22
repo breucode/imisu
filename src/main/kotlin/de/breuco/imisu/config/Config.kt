@@ -7,22 +7,24 @@ import kotlin.system.exitProcess
 
 private val logger = KotlinLogging.logger {}
 
-val appConfig by lazy {
-  ConfigLoader
-  val configResult = ConfigLoader.invoke().loadConfig<Config>(Path.of("imisu.conf"))
-  lateinit var config: Config
-  configResult.fold(
-    ifValid = {
-      config = it
-    },
-    ifInvalid = {
-      logger.error { "Error reading config" }
-      logger.error { it.description() }
-      logger.error { "Exiting application" }
-      exitProcess(1)
-    }
-  )
-  config
+class ApplicationConfig(val configPath: Path) {
+  val userConfig by lazy {
+    ConfigLoader
+    val configResult = ConfigLoader.invoke().loadConfig<Config>(configPath)
+    lateinit var config: Config
+    configResult.fold(
+      ifValid = {
+        config = it
+      },
+      ifInvalid = {
+        logger.error { "Error reading config" }
+        logger.error { it.description() }
+        logger.error { "Exiting application" }
+        exitProcess(1)
+      }
+    )
+    config
+  }
 }
 
 data class Config(
