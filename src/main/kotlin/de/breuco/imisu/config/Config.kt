@@ -34,24 +34,21 @@ data class Config(
   val exposeFullApi: Boolean = false,
   val exposeSwagger: Boolean = false,
   val serverPort: Int = 8080,
-  val services: List<ServiceConfig>
+  val services: Map<String, ServiceConfig>
 )
 
 sealed class ServiceConfig {
   abstract val enabled: Boolean
-  abstract val name: String
 }
 
 data class HttpServiceConfig(
   override val enabled: Boolean,
-  override val name: String,
   val httpEndpoint: String,
 ) : ServiceConfig()
 
 data class DnsServiceConfig(
   override val enabled: Boolean,
-  override val name: String,
   val dnsServer: String,
   val dnsServerPort: Int = 53,
-  val dnsDomain: String = "google.com"
+  val dnsDomain: String = "example.org"
 ) : ServiceConfig()

@@ -43,10 +43,10 @@ class Services(
   private val route = "/services"
 
   fun get(): ContractRoute {
-    val responseLens = Body.auto<List<ServiceConfig>>().toLens()
+    val responseLens = Body.auto<Map<String, ServiceConfig>>().toLens()
     fun handler(): HttpHandler = {
       responseLens(
-        appConfig.userConfig.services.filter { it.enabled },
+        appConfig.userConfig.services.filter { (_, serviceConfig) -> serviceConfig.enabled },
         Response(OK)
       )
     }
@@ -76,7 +76,7 @@ class Services(
       fun get(): ContractRoute {
         fun handler() = { id: String, _: String ->
           { _: Request ->
-            val service = appConfig.userConfig.services.find { it.name == id }
+            val service = appConfig.userConfig.services[id]
 
             if (service == null) {
               Response(HttpStatus.NOT_FOUND)

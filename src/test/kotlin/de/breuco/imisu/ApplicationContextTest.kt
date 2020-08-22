@@ -14,7 +14,7 @@ class ApplicationContextTest {
 
   @Test
   fun `Application starts successfully`() {
-    val testConfigPath = Path.of(javaClass.getResource("/basic-conf.conf").toURI()).toString()
+    val testConfigPath = Path.of(javaClass.getResource("/basic.conf").toURI()).toString()
     main(arrayOf("--config-path", testConfigPath))
   }
 }
