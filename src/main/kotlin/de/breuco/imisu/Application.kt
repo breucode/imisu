@@ -42,7 +42,7 @@ class Application : KoinComponent {
   }
 }
 
-class CliApplicationStarter : CliktCommand(name = "imisu") {
+private class CliApplicationStarter : CliktCommand(name = "imisu") {
   private val configPath: String by option(help = "Path to the configuration").default("imisu.conf")
 
   override fun run() {
