@@ -96,6 +96,7 @@ dependencies {
   implementation("org.http4k:http4k-contract")
   implementation("org.http4k:http4k-format-jackson")
   implementation("org.http4k:http4k-client-okhttp")
+  testImplementation("org.http4k:http4k-testing-kotest")
 
   implementation("com.github.ajalt:clikt:2.8.0")
 

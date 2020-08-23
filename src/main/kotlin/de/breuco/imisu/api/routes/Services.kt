@@ -1,5 +1,6 @@
 package de.breuco.imisu.api.routes
 
+import arrow.core.Either
 import de.breuco.imisu.config.ApplicationConfig
 import de.breuco.imisu.config.DnsServiceConfig
 import de.breuco.imisu.config.HttpServiceConfig
@@ -15,12 +16,12 @@ import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.INTERNAL_SERVER_ERROR
+import org.http4k.core.Status.Companion.NOT_FOUND
 import org.http4k.core.Status.Companion.OK
 import org.http4k.core.Status.Companion.SERVICE_UNAVAILABLE
 import org.http4k.format.Jackson.auto
 import org.http4k.lens.Path
 import org.http4k.lens.string
-import org.http4k.core.Status as HttpStatus
 
 class Services(
   private val appConfig: ApplicationConfig,
@@ -62,9 +63,25 @@ class Services(
     private val route = this@Services.route / Path.string().of("id", "id")
 
     fun get(): ContractRoute {
+      val responseLens = Body.auto<ServiceConfig>().toLens()
       fun handler() = { id: String ->
         { _: Request ->
-          Response(INTERNAL_SERVER_ERROR).body("Not implemented, got $id")
+          val service = appConfig.userConfig.services[id]?.let {
+            if (it.enabled) {
+              it
+            } else {
+              null
+            }
+          }
+
+          if (service != null) {
+            responseLens(
+              service,
+              Response(OK)
+            )
+          } else {
+            Response(NOT_FOUND)
+          }
         }
       }
 
@@ -79,20 +96,18 @@ class Services(
       fun get(): ContractRoute {
         fun handler() = { id: String, _: String ->
           { _: Request ->
-            val service = appConfig.userConfig.services[id]
+            val service = appConfig.userConfig.services[id]?.let {
+              if (it.enabled) {
+                it
+              } else {
+                null
+              }
+            }
 
             if (service == null) {
-              Response(HttpStatus.NOT_FOUND)
+              Response(NOT_FOUND)
             } else {
-              val queryStatus = when (service) {
-                is DnsServiceConfig -> dnsService.checkHealth(
-                  service.dnsDomain,
-                  service.dnsServer,
-                  service.dnsServerPort
-                )
-                // PING -> false
-                is HttpServiceConfig -> httpService.checkHealth(service.httpEndpoint)
-              }
+              val queryStatus = checkHealth(service)
 
               queryStatus.fold(
                 ifLeft = { Response(INTERNAL_SERVER_ERROR) },
@@ -119,12 +134,37 @@ class Services(
     private val route = this@Services.route + "/health"
 
     fun get(): ContractRoute {
-      fun handler(): HttpHandler = { Response(INTERNAL_SERVER_ERROR).body("Not implemented") }
+      fun handler(): HttpHandler = {
+        val healthOfAllServices = appConfig.userConfig.services
+          .filter { (_, serviceConfig) -> serviceConfig.enabled }
+          .values
+          .map {
+            checkHealth(it)
+          }
+
+        when {
+          healthOfAllServices.any { it.isLeft() } -> Response(INTERNAL_SERVER_ERROR)
+          healthOfAllServices.any { either -> either.exists { it.not() } } -> Response(SERVICE_UNAVAILABLE)
+          else -> Response(OK)
+        }
+      }
       return route meta {
         description =
           "Gets the health of the services, which are available for monitoring. Returns 502, of one of " +
           "the services is unavailable"
       } bindContract GET to handler()
+    }
+  }
+
+  fun checkHealth(service: ServiceConfig): Either<Throwable, Boolean> {
+    return when (service) {
+      is DnsServiceConfig -> dnsService.checkHealth(
+        service.dnsDomain,
+        service.dnsServer,
+        service.dnsServerPort
+      )
+      // PING -> false
+      is HttpServiceConfig -> httpService.checkHealth(service.httpEndpoint)
     }
   }
 }
