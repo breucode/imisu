@@ -98,6 +98,8 @@ dependencies {
   implementation("org.http4k:http4k-client-okhttp")
   testImplementation("org.http4k:http4k-testing-kotest")
 
+  runtimeOnly("org.webjars:swagger-ui:3.32.3")
+
   implementation("com.github.ajalt:clikt:2.8.0")
 
   implementation("org.minidns:minidns-hla:1.0.0")

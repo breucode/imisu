@@ -44,7 +44,7 @@ class Services(
     }
   }
 
-  private val route = "services"
+  private val route = "/services"
 
   fun get(): ContractRoute {
     val responseLens = Body.auto<Map<String, ServiceConfig>>().toLens()
