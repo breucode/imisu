@@ -36,7 +36,10 @@ class Services(
         Health().get()
       )
     } else {
-      listOf(Id().Health().get())
+      listOf(
+        Id().Health().get(),
+        Health().get()
+      )
     }
   }
 
@@ -106,7 +109,7 @@ class Services(
         }
 
         return route meta {
-          description = "Gets the status of a service. Returns 502, if service is unavailable"
+          description = "Gets the health of a service. Returns 502, if service is unavailable"
         } bindContract GET to handler()
       }
     }
@@ -119,7 +122,7 @@ class Services(
       fun handler(): HttpHandler = { Response(INTERNAL_SERVER_ERROR).body("Not implemented") }
       return route meta {
         description =
-          "Gets the status of the services, which are available for monitoring. Returns 502, of one of " +
+          "Gets the health of the services, which are available for monitoring. Returns 502, of one of " +
           "the services is unavailable"
       } bindContract GET to handler()
     }
