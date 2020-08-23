@@ -32,9 +32,9 @@ class Services(
     if (appConfig.userConfig.exposeFullApi) {
       listOf(
         get(),
+        Health().get(),
         Id().get(),
         Id().Health().get(),
-        Health().get()
       )
     } else {
       listOf(
@@ -44,7 +44,7 @@ class Services(
     }
   }
 
-  private val route = "/services"
+  private val route = "services"
 
   fun get(): ContractRoute {
     val responseLens = Body.auto<Map<String, ServiceConfig>>().toLens()
