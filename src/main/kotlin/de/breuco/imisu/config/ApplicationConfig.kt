@@ -20,7 +20,10 @@ class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
       },
       ifInvalid = {
         logger.error {
-          "Error during application startup. Please report this to https://github.com/breucode/imisu/issues"
+          """
+            |Error during application startup. Please report this to https://github.com/breucode/imisu/issues
+            |${it.description()}
+          """.trimMargin()
         }
         exitProcess(1)
       }

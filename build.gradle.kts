@@ -130,9 +130,10 @@ dependencies {
   implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.3.9"))
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 
-  val hopliteVersion = "1.3.3"
+  val hopliteVersion = "1.3.5"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
+  implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
 
   runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.13.3")
   implementation("io.github.microutils:kotlin-logging:1.8.3")
@@ -153,11 +154,13 @@ tasks.test {
   useJUnitPlatform()
 }
 
-tasks.getByName("shadowDistZip") {
-  enabled = false
-}
-tasks.getByName("shadowDistTar") {
-  enabled = false
+tasks.shadowJar {
+  mergeServiceFiles()
+  manifest {
+    attributes(
+      "Multi-Release" to true
+    )
+  }
 }
 
 val compileKotlin: KotlinCompile by tasks
