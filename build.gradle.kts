@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "de.breuco"
-version = "0.0.1"
+version = "0.1.0"
 
 tasks.wrapper {
   distributionType = Wrapper.DistributionType.ALL
@@ -155,6 +155,7 @@ tasks.test {
 }
 
 tasks.shadowJar {
+  archiveFileName.set("imisu.jar")
   mergeServiceFiles()
   manifest {
     attributes(
