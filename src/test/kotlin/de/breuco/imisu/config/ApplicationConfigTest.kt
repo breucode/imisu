@@ -79,7 +79,7 @@ class ApplicationConfigTest {
     every { runtimeMock.exit(neq(0)) } just Runs
 
     shouldThrow<Exception> {
-      ApplicationConfig(loggerMock, Path.of(javaClass.getResource("/broken.conf").toURI()))
+      ApplicationConfig(loggerMock, Path.of(javaClass.getResource("/broken.conf").toURI())).userConfig
     }
 
     verify(exactly = 1) {

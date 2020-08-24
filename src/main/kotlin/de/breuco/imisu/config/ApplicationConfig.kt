@@ -31,7 +31,7 @@ class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
     config
   }.invoke()
 
-  val userConfig = {
+  val userConfig by lazy {
     val configResult = ConfigLoader().loadConfig<UserConfig>(configPath)
     lateinit var config: UserConfig
     configResult.fold(
@@ -52,7 +52,7 @@ class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
       }
     )
     config
-  }.invoke()
+  }
 }
 
 data class Versions(
