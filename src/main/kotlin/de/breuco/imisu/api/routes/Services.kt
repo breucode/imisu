@@ -55,7 +55,11 @@ class Services(
       )
     }
     return route meta {
-      description = "Gets all services, which are available for monitoring"
+      summary = "Gets all services, which are available for monitoring"
+      returning(OK,responseLens to mapOf(
+        "httpExampleService" to HttpServiceConfig(true, "http://example.org"),
+        "dnsExampleService" to DnsServiceConfig(true, "8.8.8.8")
+      ))
     } bindContract GET to handler()
   }
 
@@ -86,7 +90,9 @@ class Services(
       }
 
       return route meta {
-        description = "Gets a service"
+        summary = "Gets a service"
+        returning(OK, responseLens to HttpServiceConfig(true, "http://example.org"))
+        returning(NOT_FOUND)
       } bindContract GET to handler()
     }
 
@@ -124,7 +130,12 @@ class Services(
         }
 
         return route meta {
-          description = "Gets the health of a service. Returns 502, if service is unavailable"
+          summary = "Gets the health of a service. Returns 502, if service is unavailable"
+          returning(
+            OK to "service is healthy",
+            SERVICE_UNAVAILABLE to "service is not healthy",
+            INTERNAL_SERVER_ERROR to "error during health check"
+          )
         } bindContract GET to handler()
       }
     }
@@ -149,9 +160,14 @@ class Services(
         }
       }
       return route meta {
-        description =
-          "Gets the health of the services, which are available for monitoring. Returns 502, of one of " +
+        summary =
+          "Gets the health of the services, which are available for monitoring. Returns 502, if one of " +
           "the services is unavailable"
+        returning(
+          OK to "All services are healthy",
+          SERVICE_UNAVAILABLE to "At least one of the services is not healthy",
+          INTERNAL_SERVER_ERROR to "At least one error during health checks"
+        )
       } bindContract GET to handler()
     }
   }
