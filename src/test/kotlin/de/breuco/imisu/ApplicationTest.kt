@@ -56,7 +56,7 @@ class ApplicationTest {
 
     every { apiMock.routing().asServer(any()).start() } returns mockk()
 
-    underTest.run()
+    underTest.run(false)
 
     verify(exactly = 1) {
       apiMock.routing().asServer(any()).start()
@@ -72,7 +72,7 @@ class ApplicationTest {
 
     every { apiMock.routing().asServer(any()).start() } returns mockk()
 
-    underTest.run()
+    underTest.run(false)
 
     verify(exactly = 1) {
       apiMock.routing().asServer(any()).start()
