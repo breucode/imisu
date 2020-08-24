@@ -56,10 +56,13 @@ class Services(
     }
     return route meta {
       summary = "Gets all services, which are available for monitoring"
-      returning(OK,responseLens to mapOf(
-        "httpExampleService" to HttpServiceConfig(true, "http://example.org"),
-        "dnsExampleService" to DnsServiceConfig(true, "8.8.8.8")
-      ))
+      returning(
+        OK,
+        responseLens to mapOf(
+          "httpExampleService" to HttpServiceConfig(true, "http://example.org"),
+          "dnsExampleService" to DnsServiceConfig(true, "8.8.8.8")
+        )
+      )
     } bindContract GET to handler()
   }
 

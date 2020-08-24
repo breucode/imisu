@@ -61,7 +61,7 @@ spotless {
   }
 }
 
-val javaVersion = JavaVersion.VERSION_11.toString()
+val javaVersion = JavaVersion.VERSION_1_8.toString()
 
 tasks {
   withType<Detekt> {
@@ -164,7 +164,7 @@ tasks.shadowJar {
 }
 
 val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions.jvmTarget = "11"
+compileKotlin.kotlinOptions.jvmTarget = javaVersion
 
 val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions.jvmTarget = "11"
+compileTestKotlin.kotlinOptions.jvmTarget = javaVersion
