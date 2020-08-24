@@ -61,11 +61,11 @@ spotless {
   }
 }
 
-val javaVersion = JavaVersion.VERSION_1_8.toString()
+val javaVersion = JavaVersion.VERSION_11
 
 tasks {
   withType<Detekt> {
-    this.jvmTarget = javaVersion
+    this.jvmTarget = javaVersion.toString()
   }
 }
 
@@ -165,7 +165,12 @@ tasks.shadowJar {
 }
 
 val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions.jvmTarget = javaVersion
+compileKotlin.kotlinOptions.jvmTarget = javaVersion.toString()
 
 val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions.jvmTarget = javaVersion
+compileTestKotlin.kotlinOptions.jvmTarget = javaVersion.toString()
+
+java {
+  sourceCompatibility = javaVersion
+  targetCompatibility = javaVersion
+}
