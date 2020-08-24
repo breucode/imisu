@@ -26,6 +26,19 @@ tasks.jacocoTestReport {
   dependsOn(tasks.test)
 }
 
+val swaggerUiVersion = "3.32.3"
+
+val createVersionProperties by tasks.registering(WriteProperties::class) {
+  dependsOn(tasks.processResources)
+  property("applicationVersion", version)
+  property("swaggerUiVersion", swaggerUiVersion)
+  outputFile = File("$buildDir/resources/main/versions.properties")
+}
+
+tasks.classes {
+  dependsOn(createVersionProperties)
+}
+
 spotless {
   val ktlintVersion = "0.38.0"
   kotlin {
@@ -98,7 +111,7 @@ dependencies {
   implementation("org.http4k:http4k-client-okhttp")
   testImplementation("org.http4k:http4k-testing-kotest")
 
-  runtimeOnly("org.webjars:swagger-ui:3.32.3")
+  runtimeOnly("org.webjars:swagger-ui:$swaggerUiVersion")
 
   implementation("com.github.ajalt:clikt:2.8.0")
 

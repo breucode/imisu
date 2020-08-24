@@ -3,9 +3,10 @@ package de.breuco.imisu.api.routes
 import arrow.core.Either
 import de.breuco.imisu.api.Api
 import de.breuco.imisu.config.ApplicationConfig
-import de.breuco.imisu.config.Config
 import de.breuco.imisu.config.DnsServiceConfig
 import de.breuco.imisu.config.HttpServiceConfig
+import de.breuco.imisu.config.UserConfig
+import de.breuco.imisu.config.Versions
 import de.breuco.imisu.service.DnsService
 import de.breuco.imisu.service.HttpService
 import io.kotest.matchers.shouldBe
@@ -28,7 +29,7 @@ import org.junit.jupiter.api.Test
 
 class ServicesTest {
   private val appConfigMock = mockk<ApplicationConfig>()
-  private val userConfigMock = mockk<Config>()
+  private val userConfigMock = mockk<UserConfig>()
   private val dnsServiceMock = mockk<DnsService>()
   private val httpServiceMock = mockk<HttpService>()
 
@@ -39,6 +40,7 @@ class ServicesTest {
     every { appConfigMock.userConfig } returns userConfigMock
     every { userConfigMock.exposeFullApi } returns true
     every { userConfigMock.exposeSwagger } returns false
+    every { appConfigMock.versions } returns Versions("appVersion", "swaggerUiVersion")
     api = Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock))
   }
 

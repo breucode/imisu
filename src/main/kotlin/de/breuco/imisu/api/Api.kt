@@ -21,7 +21,7 @@ class Api(private val appConfig: ApplicationConfig, private val services: Servic
   private fun getApiRenderer(): ContractRenderer {
     return if (appConfig.userConfig.exposeSwagger) {
       OpenApi3(
-        ApiInfo("imisu API", "0.0.1", "The API of imisu"),
+        ApiInfo("imisu API", appConfig.versions.applicationVersion, "The API of imisu"),
         Jackson
       )
     } else {
@@ -36,7 +36,9 @@ class Api(private val appConfig: ApplicationConfig, private val services: Servic
       "/swagger-ui" bind GET to {
         Response(Status.FOUND).header("Location", "/swagger-ui/index.html?url=$swaggerUiPath")
       },
-      "/swagger-ui/" bind static(Classpath("META-INF/resources/webjars/swagger-ui/3.32.3")),
+      "/swagger-ui/" bind static(
+        Classpath("META-INF/resources/webjars/swagger-ui/${appConfig.versions.swaggerUiVersion}")
+      ),
       contract {
         renderer = getApiRenderer()
         descriptionPath = swaggerUiPath

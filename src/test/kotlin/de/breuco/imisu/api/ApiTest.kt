@@ -2,6 +2,8 @@ package de.breuco.imisu.api
 
 import de.breuco.imisu.api.routes.Services
 import de.breuco.imisu.config.ApplicationConfig
+import de.breuco.imisu.config.UserConfig
+import de.breuco.imisu.config.Versions
 import de.breuco.imisu.service.DnsService
 import de.breuco.imisu.service.HttpService
 import io.kotest.matchers.shouldBe
@@ -21,6 +23,7 @@ import org.junit.jupiter.api.Test
 
 class ApiTest {
   private val appConfigMock = mockk<ApplicationConfig>()
+  private val userConfigMock = mockk<UserConfig>()
   private val dnsServiceMock = mockk<DnsService>()
   private val httpServiceMock = mockk<HttpService>()
 
@@ -28,19 +31,21 @@ class ApiTest {
 
   @BeforeEach
   fun beforeEach() {
+    every { appConfigMock.userConfig } returns userConfigMock
+    every { appConfigMock.versions } returns Versions("appVersion", "swaggerUiVersion")
     underTest = Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock))
   }
 
   @AfterEach
   fun afterEach() {
-    confirmVerified(dnsServiceMock, httpServiceMock, appConfigMock)
+    confirmVerified(dnsServiceMock, httpServiceMock, userConfigMock)
     clearAllMocks()
   }
 
   @Test
   fun `404 for endpoints, which should be disabled when exposeFullApi == false`() {
-    every { appConfigMock.userConfig.exposeFullApi } returns false
-    every { appConfigMock.userConfig.exposeSwagger } returns false
+    every { userConfigMock.exposeFullApi } returns false
+    every { userConfigMock.exposeSwagger } returns false
     val disabledRoutes = listOf(
       "/services",
       "/services/testId"
@@ -54,16 +59,16 @@ class ApiTest {
 
     responses.forEach { it.status shouldBe Status.NOT_FOUND }
 
-    verify {
-      appConfigMock.userConfig.exposeFullApi
-      appConfigMock.userConfig.exposeSwagger
+    verify(exactly = 1) {
+      userConfigMock.exposeFullApi
+      userConfigMock.exposeSwagger
     }
   }
 
   @Test
   fun `Don't provide swagger json when disabled`() {
-    every { appConfigMock.userConfig.exposeFullApi } returns false
-    every { appConfigMock.userConfig.exposeSwagger } returns false
+    every { userConfigMock.exposeFullApi } returns false
+    every { userConfigMock.exposeSwagger } returns false
 
     val routing = underTest.routing()
 
@@ -72,16 +77,16 @@ class ApiTest {
     response.status shouldBe Status.OK
     response shouldHaveBody ""
 
-    verify {
-      appConfigMock.userConfig.exposeFullApi
-      appConfigMock.userConfig.exposeSwagger
+    verify(exactly = 1) {
+      userConfigMock.exposeFullApi
+      userConfigMock.exposeSwagger
     }
   }
 
   @Test
   fun `Provide swagger json when enabled`() {
-    every { appConfigMock.userConfig.exposeFullApi } returns false
-    every { appConfigMock.userConfig.exposeSwagger } returns true
+    every { userConfigMock.exposeFullApi } returns false
+    every { userConfigMock.exposeSwagger } returns true
 
     val routing = underTest.routing()
 
@@ -90,9 +95,9 @@ class ApiTest {
     response.status shouldBe Status.OK
     response shouldNotHaveBody ""
 
-    verify {
-      appConfigMock.userConfig.exposeFullApi
-      appConfigMock.userConfig.exposeSwagger
+    verify(exactly = 1) {
+      userConfigMock.exposeFullApi
+      userConfigMock.exposeSwagger
     }
   }
 }
