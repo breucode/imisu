@@ -11,6 +11,7 @@ plugins {
   id("com.github.ben-manes.versions") version "0.29.0"
   id("application")
   id("com.github.johnrengelman.shadow") version "6.0.0"
+  id("org.beryx.runtime") version "1.11.3"
 }
 
 group = "de.breuco"
@@ -156,6 +157,21 @@ tasks.shadowJar {
       "Multi-Release" to true
     )
   }
+}
+
+runtime {
+  options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
+  modules.set(
+    listOf(
+      "java.sql",
+      "java.logging",
+      "java.management",
+      "jdk.unsupported",
+      "java.security.jgss",
+      "java.desktop",
+      "jdk.crypto.ec"
+    )
+  )
 }
 
 val compileKotlin: KotlinCompile by tasks
