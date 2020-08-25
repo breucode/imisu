@@ -6,7 +6,10 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Root/>
+        <Root level="debug">
+            <AppenderRef ref="ConsoleJSONAppender"/>
+        </Root>
+<!--        <Root/>-->
         <Logger name="de.breuco" level="info">
             <AppenderRef ref="ConsoleJSONAppender"/>
         </Logger>

@@ -82,3 +82,9 @@ data class DnsServiceConfig(
   val dnsServerPort: Int = 53,
   val dnsDomain: String = "example.org"
 ) : ServiceConfig()
+
+data class PingServiceConfig(
+  override val enabled: Boolean,
+  val pingServer: String,
+  val timeout: Int = 1000
+) : ServiceConfig()

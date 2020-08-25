@@ -1,7 +1,9 @@
 package de.breuco.imisu
 
 import arrow.core.Either
-import kotlinx.coroutines.runBlocking
+import arrow.core.left
+import arrow.core.nonFatalOrThrow
+import arrow.core.right
 
-fun <R> Either.Companion.unsafeCatch(f: suspend () -> R) =
-  runBlocking { catch(f) }
+fun <A> Either.Companion.unsafeCatch(f: () -> A) =
+  try { f().right() } catch (t: Throwable) { t.nonFatalOrThrow().left() }
