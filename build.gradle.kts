@@ -61,7 +61,7 @@ spotless {
   }
 }
 
-val javaVersion = JavaVersion.VERSION_11
+val javaVersion = JavaVersion.VERSION_1_8
 
 tasks {
   withType<Detekt> {

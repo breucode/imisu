@@ -15,7 +15,7 @@ import io.mockk.verify
 import mu.KLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import java.nio.file.Path
+import java.nio.file.Paths
 
 class ApplicationConfigTest {
 
@@ -29,7 +29,7 @@ class ApplicationConfigTest {
   @Test
   fun `Load config`() {
     val userConfig =
-      ApplicationConfig(loggerMock, Path.of(javaClass.getResource("/complete.conf").toURI())).userConfig
+      ApplicationConfig(loggerMock, Paths.get(javaClass.getResource("/complete.conf").toURI())).userConfig
 
     userConfig.exposeFullApi shouldBe true
     userConfig.exposeSwagger shouldBe true
@@ -55,7 +55,7 @@ class ApplicationConfigTest {
   @Test
   fun `Load config defaults`() {
     val userConfig =
-      ApplicationConfig(loggerMock, Path.of(javaClass.getResource("/basic.conf").toURI())).userConfig
+      ApplicationConfig(loggerMock, Paths.get(javaClass.getResource("/basic.conf").toURI())).userConfig
 
     userConfig.exposeFullApi shouldBe false
     userConfig.exposeSwagger shouldBe false
@@ -79,7 +79,7 @@ class ApplicationConfigTest {
     every { runtimeMock.exit(neq(0)) } just Runs
 
     shouldThrow<Exception> {
-      ApplicationConfig(loggerMock, Path.of(javaClass.getResource("/broken.conf").toURI())).userConfig
+      ApplicationConfig(loggerMock, Paths.get(javaClass.getResource("/broken.conf").toURI())).userConfig
     }
 
     verify(exactly = 1) {

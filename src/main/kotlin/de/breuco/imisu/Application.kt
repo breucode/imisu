@@ -22,7 +22,7 @@ import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import org.minidns.DnsClient
-import java.nio.file.Path
+import java.nio.file.Paths
 import kotlin.system.exitProcess
 
 class Application : KoinComponent {
@@ -68,7 +68,7 @@ private class CliApplicationStarter : CliktCommand(name = "imisu") {
           single {
             ApplicationConfig(
               get(parameters = { parametersOf(ApplicationConfig::class.java.name) }),
-              Path.of(configPath)
+              Paths.get(configPath)
             )
           }
           factory { (name: String) -> KotlinLogging.logger(name) }
