@@ -6,8 +6,8 @@ plugins {
   kotlin("jvm") version Versions.kotlin
   kotlin("kapt") version Versions.kotlin
   id("jacoco")
-  id("com.diffplug.spotless") version "5.1.2"
-  id("io.gitlab.arturbosch.detekt") version "1.11.2"
+  id("com.diffplug.spotless") version "5.2.0"
+  id("io.gitlab.arturbosch.detekt") version "1.12.0"
   id("com.github.ben-manes.versions") version "0.29.0"
   id("application")
   id("com.github.johnrengelman.shadow") version "6.0.0"
@@ -103,7 +103,7 @@ dependencies {
       strictly(Versions.kotlin)
     }
   }
-  implementation(platform("org.http4k:http4k-bom:3.258.0"))
+  implementation(platform("org.http4k:http4k-bom:3.259.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-undertow")
   implementation("org.http4k:http4k-contract")
@@ -122,10 +122,7 @@ dependencies {
   implementation("org.koin:koin-core-ext:$koinVersion")
   testImplementation("org.koin:koin-test:$koinVersion")
 
-  val arrowVersion = "0.10.5"
-  implementation("io.arrow-kt:arrow-core:$arrowVersion")
-  implementation("io.arrow-kt:arrow-syntax:$arrowVersion")
-  kapt("io.arrow-kt:arrow-meta:$arrowVersion")
+  implementation("io.arrow-kt:arrow-core:0.10.5")
 
   val hopliteVersion = "1.3.5"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
