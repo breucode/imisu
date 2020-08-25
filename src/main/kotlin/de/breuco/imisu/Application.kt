@@ -9,6 +9,7 @@ import de.breuco.imisu.api.routes.Services
 import de.breuco.imisu.config.ApplicationConfig
 import de.breuco.imisu.service.DnsService
 import de.breuco.imisu.service.HttpService
+import de.breuco.imisu.service.PingService
 import mu.KLogger
 import mu.KotlinLogging
 import okhttp3.OkHttpClient
@@ -60,9 +61,10 @@ private class CliApplicationStarter : CliktCommand(name = "imisu") {
       modules(
         module {
           single { Api(get(), get()) }
-          single { Services(get(), get(), get()) }
+          single { Services(get(), get(), get(), get()) }
           single { HttpService(get()) }
           single { DnsService(get()) }
+          single { PingService() }
           single<HttpHandler> { OkHttp(OkHttpClient.Builder().build()) }
           single { DnsClient(null) }
           single {

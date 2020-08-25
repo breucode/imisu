@@ -5,10 +5,12 @@ import de.breuco.imisu.api.Api
 import de.breuco.imisu.config.ApplicationConfig
 import de.breuco.imisu.config.DnsServiceConfig
 import de.breuco.imisu.config.HttpServiceConfig
+import de.breuco.imisu.config.PingServiceConfig
 import de.breuco.imisu.config.UserConfig
 import de.breuco.imisu.config.Versions
 import de.breuco.imisu.service.DnsService
 import de.breuco.imisu.service.HttpService
+import de.breuco.imisu.service.PingService
 import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.confirmVerified
@@ -32,6 +34,7 @@ class ServicesTest {
   private val userConfigMock = mockk<UserConfig>()
   private val dnsServiceMock = mockk<DnsService>()
   private val httpServiceMock = mockk<HttpService>()
+  private val pingServiceMock = mockk<PingService>()
 
   private lateinit var api: Api
 
@@ -41,7 +44,7 @@ class ServicesTest {
     every { userConfigMock.exposeFullApi } returns true
     every { userConfigMock.exposeSwagger } returns false
     every { appConfigMock.versions } returns Versions("appVersion", "swaggerUiVersion")
-    api = Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock))
+    api = Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock))
   }
 
   @AfterEach
@@ -201,6 +204,25 @@ class ServicesTest {
         verify(exactly = 1) {
           userConfigMock.services[serviceId]
           dnsServiceMock.checkHealth("example.org", dnsServer, 53)
+        }
+      }
+
+      @Test
+      fun `GET Ping service health check successful`() {
+        val serviceId = "testServiceId"
+        val pingServer = "192.168.0.1"
+
+        every { userConfigMock.services[serviceId] } returns PingServiceConfig(true, pingServer)
+        every { pingServiceMock.checkHealth(pingServer, 1000) } returns Either.right(true)
+
+        val route = api.routing()
+        val response = route(Request(GET, "/services/$serviceId/health"))
+
+        response.status shouldBe OK
+
+        verify(exactly = 1) {
+          userConfigMock.services[serviceId]
+          pingServiceMock.checkHealth(pingServer, 1000)
         }
       }
 

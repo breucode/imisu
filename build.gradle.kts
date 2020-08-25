@@ -127,9 +127,6 @@ dependencies {
   implementation("io.arrow-kt:arrow-syntax:$arrowVersion")
   kapt("io.arrow-kt:arrow-meta:$arrowVersion")
 
-  implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.3.9"))
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-
   val hopliteVersion = "1.3.5"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")

@@ -35,7 +35,7 @@ class ApplicationConfigTest {
     userConfig.exposeSwagger shouldBe true
     userConfig.serverPort shouldBe 9090
 
-    userConfig.services shouldHaveSize 2
+    userConfig.services shouldHaveSize 3
 
     val dnsConfig = userConfig.services["exampleDns"]
     dnsConfig.shouldNotBeNull()
@@ -50,6 +50,13 @@ class ApplicationConfigTest {
     httpConfig.shouldBeTypeOf<HttpServiceConfig>()
     httpConfig.enabled shouldBe false
     httpConfig.httpEndpoint shouldBe "https://example.org"
+
+    val pingConfig = userConfig.services["examplePing"]
+    pingConfig.shouldNotBeNull()
+    pingConfig.shouldBeTypeOf<PingServiceConfig>()
+    pingConfig.enabled shouldBe false
+    pingConfig.pingServer shouldBe "1.1.1.1"
+    pingConfig.timeout shouldBe 1337
   }
 
   @Test
@@ -61,13 +68,20 @@ class ApplicationConfigTest {
     userConfig.exposeSwagger shouldBe false
     userConfig.serverPort shouldBe 8080
 
-    userConfig.services shouldHaveSize 1
+    userConfig.services shouldHaveSize 2
 
     val dnsConfig = userConfig.services["dnsTest"]
     dnsConfig.shouldNotBeNull()
     dnsConfig.shouldBeTypeOf<DnsServiceConfig>()
     dnsConfig.dnsDomain shouldBe "example.org"
     dnsConfig.dnsServerPort shouldBe 53
+
+    val pingConfig = userConfig.services["pingTest"]
+    pingConfig.shouldNotBeNull()
+    pingConfig.shouldBeTypeOf<PingServiceConfig>()
+    pingConfig.enabled shouldBe true
+    pingConfig.pingServer shouldBe "1.1.1.1"
+    pingConfig.timeout shouldBe 1000
   }
 
   @Test

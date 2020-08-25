@@ -4,9 +4,11 @@ import arrow.core.Either
 import de.breuco.imisu.config.ApplicationConfig
 import de.breuco.imisu.config.DnsServiceConfig
 import de.breuco.imisu.config.HttpServiceConfig
+import de.breuco.imisu.config.PingServiceConfig
 import de.breuco.imisu.config.ServiceConfig
 import de.breuco.imisu.service.DnsService
 import de.breuco.imisu.service.HttpService
+import de.breuco.imisu.service.PingService
 import org.http4k.contract.ContractRoute
 import org.http4k.contract.div
 import org.http4k.contract.meta
@@ -26,7 +28,8 @@ import org.http4k.lens.string
 class Services(
   private val appConfig: ApplicationConfig,
   private val dnsService: DnsService,
-  private val httpService: HttpService
+  private val httpService: HttpService,
+  private val pingService: PingService
 ) {
   val routes by lazy {
     if (appConfig.userConfig.exposeFullApi) {
@@ -182,7 +185,7 @@ class Services(
         service.dnsServer,
         service.dnsServerPort
       )
-      // PING -> false
+      is PingServiceConfig -> pingService.checkHealth(service.pingServer, service.timeout)
       is HttpServiceConfig -> httpService.checkHealth(service.httpEndpoint)
     }
   }
