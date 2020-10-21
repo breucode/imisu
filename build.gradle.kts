@@ -6,12 +6,12 @@ plugins {
   kotlin("jvm") version Versions.kotlin
   kotlin("kapt") version Versions.kotlin
   id("jacoco")
-  id("com.diffplug.spotless") version "5.2.0"
-  id("io.gitlab.arturbosch.detekt") version "1.12.0"
-  id("com.github.ben-manes.versions") version "0.29.0"
+  id("com.diffplug.spotless") version "5.7.0"
+  id("io.gitlab.arturbosch.detekt") version "1.14.2"
+  id("com.github.ben-manes.versions") version "0.33.0"
   id("application")
-  id("com.github.johnrengelman.shadow") version "6.0.0"
-  id("org.beryx.runtime") version "1.11.3"
+  id("com.github.johnrengelman.shadow") version "6.1.0"
+  id("org.beryx.runtime") version "1.11.4"
 }
 
 group = "de.breuco"
@@ -27,7 +27,7 @@ tasks.jacocoTestReport {
   dependsOn(tasks.test)
 }
 
-val swaggerUiVersion = "3.32.3"
+val swaggerUiVersion = "3.35.2"
 
 val createVersionProperties by tasks.registering(WriteProperties::class) {
   dependsOn(tasks.processResources)
@@ -45,8 +45,7 @@ spotless {
   kotlin {
     ktlint(ktlintVersion).userData(
       mapOf(
-        Pair("indent_size", "2"),
-        Pair("max_line_length", "120")
+        Pair("indent_size", "2")
       )
     )
   }
@@ -55,8 +54,7 @@ spotless {
 
     ktlint(ktlintVersion).userData(
       mapOf(
-        Pair("indent_size", "2"),
-        Pair("max_line_length", "120")
+        Pair("indent_size", "2")
       )
     )
   }
@@ -104,7 +102,7 @@ dependencies {
       strictly(Versions.kotlin)
     }
   }
-  implementation(platform("org.http4k:http4k-bom:3.259.0"))
+  implementation(platform("org.http4k:http4k-bom:3.269.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-undertow")
   implementation("org.http4k:http4k-contract")
@@ -123,24 +121,24 @@ dependencies {
   implementation("org.koin:koin-core-ext:$koinVersion")
   testImplementation("org.koin:koin-test:$koinVersion")
 
-  implementation("io.arrow-kt:arrow-core:0.10.5")
+  implementation("io.arrow-kt:arrow-core:0.11.0")
 
-  val hopliteVersion = "1.3.5"
+  val hopliteVersion = "1.3.7"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
 
   runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.13.3")
-  implementation("io.github.microutils:kotlin-logging:1.8.3")
+  implementation("io.github.microutils:kotlin-logging:2.0.3")
 
-  val kotestVersion = "4.2.0"
+  val kotestVersion = "4.3.0"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
     exclude("junit")
     exclude("org.junit.vintage")
   }
   testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
   testImplementation("io.kotest:kotest-assertions-arrow-jvm:$kotestVersion")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
 
   testImplementation("io.mockk:mockk:1.10.0")
 }
