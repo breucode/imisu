@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
     <Appenders>
-        <Console name="ConsoleJSONAppender" target="SYSTEM_OUT">
+        <Console name="ConsoleLineAppender" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level - %msg%n"/>
         </Console>
     </Appenders>
@@ -11,7 +11,7 @@
         </Root>-->
         <Root/>
         <Logger name="de.breuco" level="info">
-            <AppenderRef ref="ConsoleJSONAppender"/>
+            <AppenderRef ref="ConsoleLineAppender"/>
         </Logger>
     </Loggers>
 </Configuration>
