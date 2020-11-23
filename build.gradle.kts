@@ -10,8 +10,8 @@ plugins {
   id("io.gitlab.arturbosch.detekt") version "1.14.2"
   id("com.github.ben-manes.versions") version "0.33.0"
   id("application")
-  id("com.github.johnrengelman.shadow") version "6.1.0"
   id("org.beryx.runtime") version "1.11.4"
+  id("com.google.cloud.tools.jib") version "2.6.0"
 }
 
 group = "de.breuco"
@@ -21,7 +21,7 @@ tasks.wrapper {
   distributionType = Wrapper.DistributionType.ALL
 }
 
-application.mainClassName = "de.breuco.imisu.ApplicationKt"
+application.mainClass.set("de.breuco.imisu.ApplicationKt")
 
 tasks.jacocoTestReport {
   dependsOn(tasks.test)
@@ -60,7 +60,7 @@ spotless {
   }
 }
 
-val javaVersion = JavaVersion.VERSION_1_8
+val javaVersion = JavaVersion.VERSION_11
 
 tasks {
   withType<Detekt> {
@@ -147,16 +147,6 @@ tasks.test {
   useJUnitPlatform()
 }
 
-tasks.shadowJar {
-  archiveFileName.set("imisu.jar")
-  mergeServiceFiles()
-  manifest {
-    attributes(
-      "Multi-Release" to true
-    )
-  }
-}
-
 runtime {
   options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
   modules.set(
@@ -170,6 +160,21 @@ runtime {
       "jdk.crypto.ec"
     )
   )
+}
+
+jib {
+  container {
+    environment = mapOf(
+      "JAVA_TOOL_OPTIONS" to "-Xtune:virtualized"
+    )
+  }
+
+  from.image = "adoptopenjdk:11-jre-openj9"
+
+  to {
+    image = "ghcr.io/breucode/imisu"
+    tags = setOf(version as String, "stable")
+  }
 }
 
 val compileKotlin: KotlinCompile by tasks
