@@ -6,9 +6,9 @@ plugins {
   kotlin("jvm") version Versions.kotlin
   kotlin("kapt") version Versions.kotlin
   id("jacoco")
-  id("com.diffplug.spotless") version "5.7.0"
+  id("com.diffplug.spotless") version "5.8.2"
   id("io.gitlab.arturbosch.detekt") version "1.14.2"
-  id("com.github.ben-manes.versions") version "0.33.0"
+  id("com.github.ben-manes.versions") version "0.36.0"
   id("application")
   id("org.beryx.runtime") version "1.11.4"
   id("com.google.cloud.tools.jib") version "2.6.0"
@@ -27,7 +27,7 @@ tasks.jacocoTestReport {
   dependsOn(tasks.test)
 }
 
-val swaggerUiVersion = "3.35.2"
+val swaggerUiVersion = "3.37.0"
 
 val createVersionProperties by tasks.registering(WriteProperties::class) {
   dependsOn(tasks.processResources)
@@ -41,7 +41,7 @@ tasks.classes {
 }
 
 spotless {
-  val ktlintVersion = "0.38.0"
+  val ktlintVersion = "0.39.0"
   kotlin {
     ktlint(ktlintVersion).userData(
       mapOf(
@@ -102,7 +102,7 @@ dependencies {
       strictly(Versions.kotlin)
     }
   }
-  implementation(platform("org.http4k:http4k-bom:3.269.0"))
+  implementation(platform("org.http4k:http4k-bom:3.278.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-undertow")
   implementation("org.http4k:http4k-contract")
@@ -123,15 +123,15 @@ dependencies {
 
   implementation("io.arrow-kt:arrow-core:0.11.0")
 
-  val hopliteVersion = "1.3.7"
+  val hopliteVersion = "1.3.8"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
 
-  runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.13.3")
+  runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.14.0")
   implementation("io.github.microutils:kotlin-logging:2.0.3")
 
-  val kotestVersion = "4.3.0"
+  val kotestVersion = "4.3.1"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
     exclude("junit")
     exclude("org.junit.vintage")
