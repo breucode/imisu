@@ -7,6 +7,7 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import mu.KLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -17,13 +18,15 @@ import java.net.InetAddress
 
 class DnsServiceTest {
 
+  private val loggerMock = mockk<KLogger>(relaxed = true)
+
   private val dnsClientMock = mockk<DnsClient>()
 
   private lateinit var underTest: DnsService
 
   @BeforeEach
   fun beforeEach() {
-    underTest = DnsService(dnsClientMock)
+    underTest = DnsService(loggerMock, dnsClientMock)
   }
 
   @AfterEach
