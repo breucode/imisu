@@ -1,3 +1,7 @@
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/breucode/imisu?style=for-the-badge)](https://github.com/breucode/imisu/releases)
+[![Api-Docs](https://img.shields.io/badge/api--docs-swagger--ui-brightgreen?style=for-the-badge&logo=swagger)](https://breucode.github.io/imisu/swagger-ui.html?url=swagger.json)
+[![License](https://img.shields.io/github/license/breucode/imisu?style=for-the-badge)](LICENSE)
+
 # imisu
 
 Imisu - short for "Is my internal service up?" - exposes a healthcheck endpoint for services, which are not available on the internet
@@ -47,6 +51,8 @@ Note, that imisu determines, which type of service you configured via the keywor
 When you try to mix `httpEndpoint` and `dnsDomain` in one service, the configuration is invalid, and the application will not start.
 
 ## Run
+
+To understand, which endpoints you can call, have a look at the [api-docs](https://breucode.github.io/imisu/swagger-ui.html?url=swagger.json).
 
 Currently, imisu is only distributed as a Docker image. Feel free to raise an issue, if you need a different artifact.
 
