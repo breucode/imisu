@@ -18,12 +18,12 @@ jobs:
         with:
           node-version: 14
       - name: Check
-        run: ./gradlew check
+        run: ./gradlew check --console=plain
       - name: Release Docker image
         env:
           CR_USER: ${{ secrets.CR_USER }}
           CR_PAT: ${{ secrets.CR_PAT }}
-        run: ./gradlew -Djib.to.auth.username="$CR_USER" -Djib.to.auth.password="$CR_PAT" jib
+        run: ./gradlew -Djib.to.auth.username="$CR_USER" -Djib.to.auth.password="$CR_PAT" jib --console=plain
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1

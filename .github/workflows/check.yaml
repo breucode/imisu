@@ -20,4 +20,4 @@ jobs:
         with:
           node-version: 14
       - name: Check
-        run: ./gradlew check
+        run: ./gradlew check --console=plain
