@@ -136,7 +136,7 @@ class Services(
         }
 
         return route meta {
-          summary = "Gets the health of a service. Returns 502, if service is unavailable"
+          summary = "Gets the health of a service. Returns 503, if service is unavailable"
           returning(
             OK to "service is healthy",
             SERVICE_UNAVAILABLE to "service is not healthy",
