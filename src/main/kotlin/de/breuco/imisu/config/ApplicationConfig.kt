@@ -8,7 +8,7 @@ import java.nio.file.Path
 import kotlin.system.exitProcess
 
 class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
-  val versions = {
+  val versions = run {
     val configResult = ConfigLoader.Builder()
       .addPropertySource(ConfigFilePropertySource(ConfigSource.ClasspathSource("/versions.properties")))
       .build()
@@ -21,15 +21,15 @@ class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
       ifInvalid = {
         logger.error {
           """
-            |Error during application startup. Please report this to https://github.com/breucode/imisu/issues
-            |${it.description()}
-          """.trimMargin()
+          |Error during application startup. Please report this to https://github.com/breucode/imisu/issues
+          |${it.description()}
+        """.trimMargin()
         }
         exitProcess(1)
       }
     )
     config
-  }.invoke()
+  }
 
   val userConfig by lazy {
     val configResult = ConfigLoader().loadConfig<UserConfig>(configPath)
