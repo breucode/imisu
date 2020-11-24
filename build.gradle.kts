@@ -58,8 +58,8 @@ spotless {
       )
     )
   }
-  format("markdown") {
-    target("*.md")
+  format("prettier") {
+    target("*.md", "**.yaml")
 
     prettier("2.2.0")
   }
