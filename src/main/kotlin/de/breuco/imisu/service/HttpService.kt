@@ -10,7 +10,7 @@ import org.http4k.core.Status
 class HttpService(private val httpClient: HttpHandler) {
   fun checkHealth(hostName: String): Either<Throwable, Boolean> {
     return Either.unsafeCatch {
-      var response = httpClient(Request(Method.OPTIONS, hostName))
+      var response = httpClient(Request(Method.HEAD, hostName))
 
       if (response.status == Status.METHOD_NOT_ALLOWED) {
         response = httpClient(Request(Method.GET, hostName))

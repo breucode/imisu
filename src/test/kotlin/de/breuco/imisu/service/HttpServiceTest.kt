@@ -38,7 +38,7 @@ internal class HttpServiceTest {
 
     val responseMock = mockk<Response>()
 
-    every { httpClientMock(Request(Method.OPTIONS, hostName)) } returns responseMock
+    every { httpClientMock(Request(Method.HEAD, hostName)) } returns responseMock
     every { responseMock.status } returns Status.OK
     every { responseMock.status.successful } returns true
 
@@ -47,7 +47,7 @@ internal class HttpServiceTest {
     result.shouldBeRight(true)
 
     verify(exactly = 1) {
-      httpClientMock(Request(Method.OPTIONS, hostName))
+      httpClientMock(Request(Method.HEAD, hostName))
     }
   }
 
@@ -57,7 +57,7 @@ internal class HttpServiceTest {
 
     val responseMock = mockk<Response>()
 
-    every { httpClientMock(Request(Method.OPTIONS, hostName)) } returns responseMock
+    every { httpClientMock(Request(Method.HEAD, hostName)) } returns responseMock
     every { responseMock.status } returns Status.OK
     every { responseMock.status.successful } returns false
 
@@ -66,7 +66,7 @@ internal class HttpServiceTest {
     result.shouldBeRight(false)
 
     verify(exactly = 1) {
-      httpClientMock(Request(Method.OPTIONS, hostName))
+      httpClientMock(Request(Method.HEAD, hostName))
     }
   }
 
@@ -74,14 +74,14 @@ internal class HttpServiceTest {
   fun `Error during HTTP query`() {
     val hostName = "http://example.org"
 
-    every { httpClientMock(Request(Method.OPTIONS, hostName)) } throws Exception()
+    every { httpClientMock(Request(Method.HEAD, hostName)) } throws Exception()
 
     val result = underTest.checkHealth(hostName)
 
     result.shouldBeLeft()
 
     verify(exactly = 1) {
-      httpClientMock(Request(Method.OPTIONS, hostName))
+      httpClientMock(Request(Method.HEAD, hostName))
     }
   }
 
@@ -89,7 +89,7 @@ internal class HttpServiceTest {
   fun `HTTP OPTIONS call not allowed`() {
     val hostName = "http://example.org"
 
-    every { httpClientMock(Request(Method.OPTIONS, hostName)).status } returns Status.METHOD_NOT_ALLOWED
+    every { httpClientMock(Request(Method.HEAD, hostName)).status } returns Status.METHOD_NOT_ALLOWED
     val responseMock = mockk<Response>()
     every { httpClientMock(Request(Method.GET, hostName)) } returns responseMock
     every { responseMock.status.successful } returns true
@@ -99,7 +99,7 @@ internal class HttpServiceTest {
     result.shouldBeRight(true)
 
     verify(exactly = 1) {
-      httpClientMock(Request(Method.OPTIONS, hostName))
+      httpClientMock(Request(Method.HEAD, hostName))
       httpClientMock(Request(Method.GET, hostName))
     }
   }
