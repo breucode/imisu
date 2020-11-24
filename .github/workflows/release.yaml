@@ -3,7 +3,7 @@ on:
     tags:
       - '**'
 
-name: Create draft release and upload jar
+name: Create draft release and upload release artifacts
 
 jobs:
   draft-release:
