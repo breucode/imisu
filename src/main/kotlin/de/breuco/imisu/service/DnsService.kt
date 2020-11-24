@@ -17,7 +17,7 @@ class DnsService(private val logger: KLogger, private val dnsClient: DnsClient) 
     dnsResult.mapLeft {
       if (it is MultipleIoException) {
         logger.warn {
-          "Error during execution of dns health check for hostName '$hostName', ip '$ip$, port '$port'. " +
+          "Error during execution of dns health check for hostName '$hostName', ip '$ip', port '$port'. " +
             "Cause: ${it.message}"
         }
       }
