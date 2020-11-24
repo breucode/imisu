@@ -14,6 +14,9 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 11
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: 14
       - name: Check
         run: ./gradlew check
       - name: Release Docker image

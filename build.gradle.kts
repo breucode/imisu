@@ -58,6 +58,11 @@ spotless {
       )
     )
   }
+  format("markdown") {
+    target("*.md")
+
+    prettier("2.2.0")
+  }
 }
 
 val javaVersion = JavaVersion.VERSION_11
