@@ -169,7 +169,9 @@ jib {
     )
   }
 
-  from.image = "adoptopenjdk:11-jre-openj9"
+  // Here, a specific image digest is used to guarantee reproducible builds
+  // Tag: 11-jre-openj9; date of digest: 2020-11-24
+  from.image = "adoptopenjdk@sha256:686ef31677ea8189abe062e5ee08f5c625d823beba298170bd7a479a051efc8a"
 
   to {
     image = "ghcr.io/breucode/imisu"
