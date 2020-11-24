@@ -17,6 +17,9 @@ jobs:
       - name: Check
         run: ./gradlew check
       - name: Release Docker image
+        env:
+          CR_USER: ${{ secrets.CR_USER }}
+          CR_PAT: ${{ secrets.CR_PAT }}
         run: ./gradlew -Djib.to.auth.username="$CR_USER" -Djib.to.auth.password="$CR_PAT" jib
       - name: Create Release
         id: create_release
