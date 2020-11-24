@@ -85,6 +85,24 @@ class ApplicationConfigTest {
   }
 
   @Test
+  fun `Exit application, when forbidden service names are used`() {
+    mockkStatic(Runtime::class)
+
+    val runtimeMock = mockk<Runtime>()
+    every { Runtime.getRuntime() } returns runtimeMock
+    every { runtimeMock.exit(neq(0)) } just Runs
+
+    shouldThrow<Exception> {
+      ApplicationConfig(loggerMock, Paths.get(javaClass.getResource("/forbidden-service-name.conf").toURI())).userConfig
+    }
+
+    verify(exactly = 1) {
+      loggerMock.error(any<() -> Any?>())
+      runtimeMock.exit(neq(0))
+    }
+  }
+
+  @Test
   fun `Exit application on broken config`() {
     mockkStatic(Runtime::class)
 
