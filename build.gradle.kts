@@ -1,3 +1,4 @@
+import com.diffplug.spotless.extra.wtp.EclipseWtpFormatterStep.XML
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -59,9 +60,16 @@ spotless {
     )
   }
   format("prettier") {
-    target("*.md", "**.yaml")
+    target("*.md", "**/*.yaml")
+    targetExclude(".idea/*")
 
     prettier("2.2.0")
+  }
+  format("xml") {
+    target("**/*.xml")
+    targetExclude(".idea/*")
+
+    eclipseWtp(XML, "4.17.0")
   }
 }
 
