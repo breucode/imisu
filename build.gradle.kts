@@ -1,6 +1,6 @@
-
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
+import org.apache.tools.ant.filters.ReplaceTokens
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -35,6 +35,10 @@ val createVersionProperties by tasks.registering(WriteProperties::class) {
   property("applicationVersion", version)
   property("swaggerUiVersion", swaggerUiVersion)
   outputFile = File("$buildDir/resources/main/versions.properties")
+}
+
+tasks.processResources {
+  filter<ReplaceTokens>("tokens" to mapOf("SWAGGER_UI_VERSION" to swaggerUiVersion))
 }
 
 tasks.classes {
