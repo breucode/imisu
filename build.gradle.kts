@@ -11,7 +11,7 @@ plugins {
   id("io.gitlab.arturbosch.detekt") version "1.14.2"
   id("com.github.ben-manes.versions") version "0.36.0"
   id("application")
-  id("com.github.johnrengelman.shadow") version "6.1.0"
+  id("org.mikeneck.graalvm-native-image") version "v0.8.0"
 }
 
 group = "de.breuco"
@@ -22,7 +22,6 @@ tasks.wrapper {
 }
 
 application.mainClass.set("de.breuco.imisu.ApplicationKt")
-application.mainClassName = "de.breuco.imisu.ApplicationKt"
 
 tasks.jacocoTestReport {
   dependsOn(tasks.test)
@@ -64,8 +63,7 @@ spotless {
     )
   }
   format("prettier") {
-    target("*.md", "**/*.yaml")
-    targetExclude(".idea/*")
+    target("*.md", "*.yaml", ".github/**/*.yaml", "src/**/*.json")
 
     prettier("2.2.0")
   }
@@ -158,14 +156,15 @@ tasks.test {
   useJUnitPlatform()
 }
 
-tasks.shadowJar {
-  archiveFileName.set("imisu.jar")
-  mergeServiceFiles()
-  manifest {
-    attributes(
-      "Multi-Release" to true
-    )
-  }
+tasks.nativeImage {
+  setGraalVmHome(System.getProperty("java.home"))
+  mainClass = application.mainClass.get()
+  executableName = "imisu"
+  arguments(
+    "--no-fallback",
+    "--allow-incomplete-classpath",
+    "--initialize-at-build-time=org.slf4j.impl.SimpleLogger,org.slf4j.LoggerFactory,org.slf4j.impl.StaticLoggerBinder,org.minidns"
+  )
 }
 
 val compileKotlin: KotlinCompile by tasks
