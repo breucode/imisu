@@ -15,7 +15,7 @@ import mu.KotlinLogging
 import okhttp3.OkHttpClient
 import org.http4k.client.OkHttp
 import org.http4k.core.HttpHandler
-import org.http4k.server.Undertow
+import org.http4k.server.Netty
 import org.http4k.server.asServer
 import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
@@ -44,7 +44,7 @@ class Application : KoinComponent {
       logger.warn { "Full API is exposed! Everyone can see the internal URLs you have configured!" }
     }
 
-    api.routing().asServer(Undertow(appConfig.userConfig.serverPort)).start()
+    api.routing().asServer(Netty(appConfig.userConfig.serverPort)).start()
 
     logger.info { "Application successfully started on port ${appConfig.userConfig.serverPort}" }
   }
