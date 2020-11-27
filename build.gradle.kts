@@ -1,4 +1,4 @@
-import com.diffplug.spotless.extra.wtp.EclipseWtpFormatterStep.XML
+
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -11,8 +11,7 @@ plugins {
   id("io.gitlab.arturbosch.detekt") version "1.14.2"
   id("com.github.ben-manes.versions") version "0.36.0"
   id("application")
-  id("org.beryx.runtime") version "1.11.4"
-  id("com.google.cloud.tools.jib") version "2.6.0"
+  id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 group = "de.breuco"
@@ -23,6 +22,7 @@ tasks.wrapper {
 }
 
 application.mainClass.set("de.breuco.imisu.ApplicationKt")
+application.mainClassName = "de.breuco.imisu.ApplicationKt"
 
 tasks.jacocoTestReport {
   dependsOn(tasks.test)
@@ -64,12 +64,6 @@ spotless {
     targetExclude(".idea/*")
 
     prettier("2.2.0")
-  }
-  format("xml") {
-    target("**/*.xml")
-    targetExclude(".idea/*")
-
-    eclipseWtp(XML, "4.17.0")
   }
 }
 
@@ -117,7 +111,7 @@ dependencies {
   }
   implementation(platform("org.http4k:http4k-bom:3.278.0"))
   implementation("org.http4k:http4k-core")
-  implementation("org.http4k:http4k-server-undertow")
+  implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
   implementation("org.http4k:http4k-format-jackson")
   implementation("org.http4k:http4k-client-okhttp")
@@ -141,7 +135,7 @@ dependencies {
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
 
-  runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.14.0")
+  runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
   implementation("io.github.microutils:kotlin-logging:2.0.3")
 
   val kotestVersion = "4.3.1"
@@ -160,35 +154,13 @@ tasks.test {
   useJUnitPlatform()
 }
 
-runtime {
-  options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
-  modules.set(
-    listOf(
-      "java.sql",
-      "java.logging",
-      "java.management",
-      "jdk.unsupported",
-      "java.security.jgss",
-      "java.desktop",
-      "jdk.crypto.ec"
+tasks.shadowJar {
+  archiveFileName.set("imisu.jar")
+  mergeServiceFiles()
+  manifest {
+    attributes(
+      "Multi-Release" to true
     )
-  )
-}
-
-jib {
-  container {
-    environment = mapOf(
-      "JAVA_TOOL_OPTIONS" to "-Xtune:virtualized"
-    )
-  }
-
-  // Here, a specific image digest is used to guarantee reproducible builds
-  // Tag: 11-jre-openj9; date of digest: 2020-11-24
-  from.image = "adoptopenjdk@sha256:686ef31677ea8189abe062e5ee08f5c625d823beba298170bd7a479a051efc8a"
-
-  to {
-    image = "ghcr.io/breucode/imisu"
-    tags = setOf(version as String, "stable")
   }
 }
 
