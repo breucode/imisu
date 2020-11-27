@@ -63,7 +63,8 @@ class Services(
         OK,
         responseLens to mapOf(
           "httpExampleService" to HttpServiceConfig(true, "http://example.org"),
-          "dnsExampleService" to DnsServiceConfig(true, "8.8.8.8")
+          "dnsExampleService" to DnsServiceConfig(true, "1.1.1.1"),
+          "pingExampleService" to PingServiceConfig(true, "1.1.1.1")
         )
       )
     } bindContract GET to handler()
@@ -167,7 +168,7 @@ class Services(
       }
       return route meta {
         summary =
-          "Gets the health of the services, which are available for monitoring. Returns 502, if one of " +
+          "Gets the health of the services, which are available for monitoring. Returns 503, if one of " +
           "the services is unavailable"
         returning(
           OK to "All services are healthy",
