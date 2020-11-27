@@ -12,6 +12,7 @@ plugins {
   id("com.github.ben-manes.versions") version "0.36.0"
   id("application")
   id("org.mikeneck.graalvm-native-image") version "v0.8.0"
+  id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 group = "de.breuco"
@@ -22,6 +23,7 @@ tasks.wrapper {
 }
 
 application.mainClass.set("de.breuco.imisu.ApplicationKt")
+application.mainClassName = application.mainClass.get()
 
 tasks.jacocoTestReport {
   dependsOn(tasks.test)
@@ -163,8 +165,25 @@ tasks.nativeImage {
   arguments(
     "--no-fallback",
     "--allow-incomplete-classpath",
-    "--initialize-at-build-time=org.slf4j.impl.SimpleLogger,org.slf4j.LoggerFactory,org.slf4j.impl.StaticLoggerBinder,org.minidns"
+    "--initialize-at-build-time=" +
+      listOf(
+        "org.slf4j.impl.SimpleLogger",
+        "org.slf4j.LoggerFactory",
+        "org.slf4j.impl.StaticLoggerBinder",
+        "org.minidns"
+      ).joinToString(","),
+    "--initialize-at-run-time=io.netty.util.internal.logging.Log4JLogger"
   )
+}
+
+tasks.shadowJar {
+  archiveFileName.set("imisu.jar")
+  mergeServiceFiles()
+  manifest {
+    attributes(
+      "Multi-Release" to true
+    )
+  }
 }
 
 val compileKotlin: KotlinCompile by tasks

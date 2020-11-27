@@ -631,9 +631,16 @@
     "allDeclaredMethods": true
   },
   {
+    "name": "java.lang.Integer",
+    "allDeclaredConstructors": true
+  },
+  {
     "name": "java.lang.Iterable",
     "allDeclaredFields": true,
     "allDeclaredMethods": true
+  },
+  {
+    "name": "java.lang.Number"
   },
   {
     "name": "java.lang.Object"
@@ -810,6 +817,22 @@
     "methods": [{ "name": "getUnsafe", "parameterTypes": [] }]
   },
   {
+    "name": "kotlin.KotlinVersion",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "kotlin.KotlinVersion$Companion"
+  },
+  {
+    "name": "kotlin.KotlinVersion$Companion[]"
+  },
+  {
+    "name": "kotlin.KotlinVersion[]"
+  },
+  {
     "name": "kotlin.Metadata",
     "allDeclaredMethods": true
   },
@@ -822,7 +845,6 @@
   {
     "name": "kotlin.Unit"
   },
-
   {
     "name": "kotlin.collections.EmptyList",
     "allDeclaredFields": true,
@@ -848,22 +870,6 @@
   {
     "name": "kotlin.reflect.jvm.internal.ReflectionFactoryImpl",
     "allDeclaredConstructors": true
-  },
-  {
-    "name": "kotlin.KotlinVersion",
-    "allPublicMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredMethods": true,
-    "allDeclaredConstructors": true
-  },
-  {
-    "name": "kotlin.KotlinVersion[]"
-  },
-  {
-    "name": "kotlin.KotlinVersion$Companion"
-  },
-  {
-    "name": "kotlin.KotlinVersion$Companion[]"
   },
   {
     "name": "kotlin.reflect.jvm.internal.impl.resolve.scopes.DescriptorKindFilter",
