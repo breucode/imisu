@@ -172,7 +172,8 @@ tasks.nativeImage {
         "org.slf4j.impl.StaticLoggerBinder",
         "org.minidns"
       ).joinToString(","),
-    "--initialize-at-run-time=io.netty.util.internal.logging.Log4JLogger"
+    "--initialize-at-run-time=io.netty.util.internal.logging.Log4JLogger",
+    "-H:+StaticExecutableWithDynamicLibC"
   )
 }
 
