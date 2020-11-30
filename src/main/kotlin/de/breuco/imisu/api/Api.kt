@@ -34,7 +34,7 @@ class Api(private val appConfig: ApplicationConfig, private val services: Servic
   fun routing(): RoutingHttpHandler =
     routes(
       "/swagger-ui" bind GET to {
-        Response(Status.FOUND).header("Location", "/swagger-ui/index.html?url=$swaggerUiPath")
+        Response(Status.FOUND).header("Location", "/swagger-ui/index.html?url=$swaggerUiPath&validatorUrl=")
       },
       "/swagger-ui/" bind static(
         Classpath("META-INF/resources/webjars/swagger-ui/${appConfig.versions.swaggerUiVersion}")
