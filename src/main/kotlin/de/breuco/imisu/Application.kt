@@ -40,6 +40,7 @@ class Application : KoinComponent {
       exitProcess(0)
     }
 
+    logger.info { "imisu ${appConfig.versions.applicationVersion}" }
     logger.info { "Using config from ${appConfig.configPath.toAbsolutePath()}" }
     logger.info { "Starting application on port ${appConfig.userConfig.serverPort}" }
 
