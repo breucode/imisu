@@ -86,6 +86,7 @@ sealed class ServiceConfig {
 data class HttpServiceConfig(
   override val enabled: Boolean,
   val httpEndpoint: String,
+  val validateSsl: Boolean = true
 ) : ServiceConfig()
 
 data class DnsServiceConfig(

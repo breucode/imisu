@@ -18,17 +18,21 @@ import org.junit.jupiter.api.Test
 
 internal class HttpServiceTest {
   private val httpClientMock = mockk<HttpHandler>()
+  private val nonSslValidatingHttpClientMock = mockk<HttpHandler>()
 
   private lateinit var underTest: HttpService
 
   @BeforeEach
   fun beforeEach() {
-    underTest = HttpService(httpClientMock)
+    underTest = HttpService(
+      httpClientMock,
+      nonSslValidatingHttpClientMock
+    )
   }
 
   @AfterEach
   fun afterEach() {
-    confirmVerified(httpClientMock)
+    confirmVerified(httpClientMock, nonSslValidatingHttpClientMock)
     clearAllMocks()
   }
 
@@ -42,7 +46,7 @@ internal class HttpServiceTest {
     every { responseMock.status } returns Status.OK
     every { responseMock.status.successful } returns true
 
-    val result = underTest.checkHealth(hostName)
+    val result = underTest.checkHealth(hostName, true)
 
     result.shouldBeRight(true)
 
@@ -58,15 +62,17 @@ internal class HttpServiceTest {
     val responseMock = mockk<Response>()
 
     every { httpClientMock(Request(Method.HEAD, hostName)) } returns responseMock
+    every { httpClientMock(Request(Method.GET, hostName)) } returns responseMock
     every { responseMock.status } returns Status.OK
     every { responseMock.status.successful } returns false
 
-    val result = underTest.checkHealth(hostName)
+    val result = underTest.checkHealth(hostName, true)
 
     result.shouldBeRight(false)
 
     verify(exactly = 1) {
       httpClientMock(Request(Method.HEAD, hostName))
+      httpClientMock(Request(Method.GET, hostName))
     }
   }
 
@@ -76,7 +82,7 @@ internal class HttpServiceTest {
 
     every { httpClientMock(Request(Method.HEAD, hostName)) } throws Exception()
 
-    val result = underTest.checkHealth(hostName)
+    val result = underTest.checkHealth(hostName, true)
 
     result.shouldBeLeft()
 
@@ -94,13 +100,32 @@ internal class HttpServiceTest {
     every { httpClientMock(Request(Method.GET, hostName)) } returns responseMock
     every { responseMock.status.successful } returns true
 
-    val result = underTest.checkHealth(hostName)
+    val result = underTest.checkHealth(hostName, true)
 
     result.shouldBeRight(true)
 
     verify(exactly = 1) {
       httpClientMock(Request(Method.HEAD, hostName))
       httpClientMock(Request(Method.GET, hostName))
+    }
+  }
+
+  @Test
+  fun `Use nonSslValidatingHttpClient when validation is disabled`() {
+    val hostName = "http://example.org"
+
+    every { nonSslValidatingHttpClientMock(Request(Method.HEAD, hostName)).status } returns Status.METHOD_NOT_ALLOWED
+    val responseMock = mockk<Response>()
+    every { nonSslValidatingHttpClientMock(Request(Method.GET, hostName)) } returns responseMock
+    every { responseMock.status.successful } returns true
+
+    val result = underTest.checkHealth(hostName, false)
+
+    result.shouldBeRight(true)
+
+    verify(exactly = 1) {
+      nonSslValidatingHttpClientMock(Request(Method.HEAD, hostName))
+      nonSslValidatingHttpClientMock(Request(Method.GET, hostName))
     }
   }
 }

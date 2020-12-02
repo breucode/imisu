@@ -49,6 +49,7 @@ class ApplicationConfigTest {
     httpConfig.shouldNotBeNull()
     httpConfig.shouldBeTypeOf<HttpServiceConfig>()
     httpConfig.enabled shouldBe false
+    httpConfig.validateSsl shouldBe false
     httpConfig.httpEndpoint shouldBe "https://example.org"
 
     val pingConfig = userConfig.services["examplePing"]
@@ -68,13 +69,19 @@ class ApplicationConfigTest {
     userConfig.exposeSwagger shouldBe false
     userConfig.serverPort shouldBe 8080
 
-    userConfig.services shouldHaveSize 2
+    userConfig.services shouldHaveSize 3
 
     val dnsConfig = userConfig.services["dnsTest"]
     dnsConfig.shouldNotBeNull()
     dnsConfig.shouldBeTypeOf<DnsServiceConfig>()
     dnsConfig.dnsDomain shouldBe "example.org"
     dnsConfig.dnsServerPort shouldBe 53
+
+    val httpConfig = userConfig.services["httpTest"]
+    httpConfig.shouldNotBeNull()
+    httpConfig.shouldBeTypeOf<HttpServiceConfig>()
+    httpConfig.httpEndpoint shouldBe "https://example.org"
+    httpConfig.validateSsl shouldBe true
 
     val pingConfig = userConfig.services["pingTest"]
     pingConfig.shouldNotBeNull()

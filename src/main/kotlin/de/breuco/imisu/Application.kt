@@ -14,6 +14,7 @@ import mu.KLogger
 import mu.KotlinLogging
 import okhttp3.OkHttpClient
 import org.http4k.client.OkHttp
+import org.http4k.client.PreCannedOkHttpClients
 import org.http4k.core.HttpHandler
 import org.http4k.server.Netty
 import org.http4k.server.asServer
@@ -21,7 +22,9 @@ import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
 import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import org.koin.experimental.builder.single
 import org.minidns.DnsClient
 import java.nio.file.Paths
 import kotlin.system.exitProcess
@@ -62,7 +65,12 @@ private class CliApplicationStarter : CliktCommand(name = "imisu") {
         module {
           single { Api(get(), get()) }
           single { Services(get(), get(), get(), get()) }
-          single { HttpService(get()) }
+          single {
+            HttpService(
+              get(named("httpClient")),
+              get(named("nonSslValidatingHttpClient"))
+            )
+          }
           single {
             DnsService(
               get(parameters = { parametersOf(DnsService::class.java.name) }),
@@ -70,7 +78,8 @@ private class CliApplicationStarter : CliktCommand(name = "imisu") {
             )
           }
           single { PingService() }
-          single<HttpHandler> { OkHttp(OkHttpClient.Builder().build()) }
+          single<HttpHandler>(named("httpClient")) { OkHttp(OkHttpClient.Builder().build()) }
+          single<HttpHandler>(named("nonSslValidatingHttpClient")) { OkHttp(PreCannedOkHttpClients.insecureOkHttpClient()) }
           single { DnsClient(null) }
           single {
             ApplicationConfig(

@@ -1,6 +1,7 @@
 package de.breuco.imisu.api.routes
 
 import arrow.core.Either
+import de.breuco.imisu.api.INVALID_SSL_CERTIFICATE
 import de.breuco.imisu.config.ApplicationConfig
 import de.breuco.imisu.config.DnsServiceConfig
 import de.breuco.imisu.config.HttpServiceConfig
@@ -24,6 +25,7 @@ import org.http4k.core.Status.Companion.SERVICE_UNAVAILABLE
 import org.http4k.format.Jackson.auto
 import org.http4k.lens.Path
 import org.http4k.lens.string
+import javax.net.ssl.SSLPeerUnverifiedException
 
 class Services(
   private val appConfig: ApplicationConfig,
@@ -123,7 +125,13 @@ class Services(
               val queryStatus = checkHealth(service)
 
               queryStatus.fold(
-                ifLeft = { Response(INTERNAL_SERVER_ERROR) },
+                ifLeft = {
+                  if (it is SSLPeerUnverifiedException) {
+                    Response(INVALID_SSL_CERTIFICATE)
+                  } else {
+                    Response(INTERNAL_SERVER_ERROR)
+                  }
+                },
                 ifRight = {
                   if (it) {
                     Response(OK)
@@ -141,7 +149,8 @@ class Services(
           returning(
             OK to "service is healthy",
             SERVICE_UNAVAILABLE to "service is not healthy",
-            INTERNAL_SERVER_ERROR to "error during health check"
+            INTERNAL_SERVER_ERROR to "error during health check",
+            INVALID_SSL_CERTIFICATE to "the service is using an invalid SSL certificate"
           )
         } bindContract GET to handler()
       }
@@ -187,7 +196,7 @@ class Services(
         service.dnsServerPort
       )
       is PingServiceConfig -> pingService.checkHealth(service.pingServer, service.timeout)
-      is HttpServiceConfig -> httpService.checkHealth(service.httpEndpoint)
+      is HttpServiceConfig -> httpService.checkHealth(service.httpEndpoint, service.validateSsl)
     }
   }
 }
