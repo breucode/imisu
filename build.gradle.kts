@@ -11,7 +11,7 @@ plugins {
   id("io.gitlab.arturbosch.detekt") version "1.14.2"
   id("com.github.ben-manes.versions") version "0.36.0"
   id("application")
-  id("org.mikeneck.graalvm-native-image") version "v0.8.0"
+  id("org.mikeneck.graalvm-native-image") version "0.9.0"
   id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
@@ -29,7 +29,7 @@ tasks.jacocoTestReport {
   dependsOn(tasks.test)
 }
 
-val swaggerUiVersion = "3.37.0"
+val swaggerUiVersion = "3.37.2"
 
 val createVersionProperties by tasks.registering(WriteProperties::class) {
   dependsOn(tasks.processResources)
@@ -113,7 +113,7 @@ dependencies {
       strictly(Versions.kotlin)
     }
   }
-  implementation(platform("org.http4k:http4k-bom:3.278.0"))
+  implementation(platform("org.http4k:http4k-bom:3.280.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
@@ -134,7 +134,7 @@ dependencies {
 
   implementation("io.arrow-kt:arrow-core:0.11.0")
 
-  val hopliteVersion = "1.3.8"
+  val hopliteVersion = "1.3.10"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
