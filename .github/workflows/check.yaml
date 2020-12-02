@@ -13,9 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: gradle/wrapper-validation-action@v1
-      - uses: actions/setup-java@v1
+      - name: setup-graalvm-ce
+        uses: rinx/setup-graalvm-ce@v0.0.5
         with:
-          java-version: 11
+          graalvm-version: "20.3.0"
+          java-version: "java11"
+          native-image: "false"
       - uses: actions/setup-node@v2-beta
         with:
           node-version: 14
