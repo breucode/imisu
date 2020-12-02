@@ -5,18 +5,24 @@ import de.breuco.imisu.unsafeCatch
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method
 import org.http4k.core.Request
-import org.http4k.core.Status
 
-class HttpService(private val httpClient: HttpHandler) {
-  fun checkHealth(hostName: String): Either<Throwable, Boolean> {
+class HttpService(
+  private val httpClient: HttpHandler,
+  private val nonSslValidatingHttpClient: HttpHandler
+) {
+  fun checkHealth(hostName: String, validateSsl: Boolean): Either<Throwable, Boolean> {
     return Either.unsafeCatch {
-      var response = httpClient(Request(Method.HEAD, hostName))
-
-      if (response.status == Status.METHOD_NOT_ALLOWED) {
-        response = httpClient(Request(Method.GET, hostName))
+      val executingHttpClient = if (validateSsl) {
+        httpClient
+      } else {
+        nonSslValidatingHttpClient
       }
 
-      response.status.successful
+      when {
+        executingHttpClient(Request(Method.HEAD, hostName)).status.successful -> true
+        executingHttpClient(Request(Method.GET, hostName)).status.successful -> true
+        else -> false
+      }
     }
   }
 }
