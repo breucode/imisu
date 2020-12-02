@@ -34,7 +34,8 @@ This is an example configuration. When there are defaults specified, you can lea
     },
     "exampleHttp": {
       "httpEndpoint": "https://example.org",      # HTTP server, which will be queried
-      "enabled": false
+      "enabled": false,
+      "validateSsl": true                         # Specifies, if imisu validates the ssl certificate of the HTTP server. Default: true
     },
     "examplePing": {
       "pingServer": "1.1.1.1",                    # IP, which will be queried with a Ping
