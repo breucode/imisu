@@ -17,7 +17,9 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.http4k.core.Method
 import org.http4k.core.Method.GET
+import org.http4k.core.Method.HEAD
 import org.http4k.core.Request
 import org.http4k.core.Status.Companion.INTERNAL_SERVER_ERROR
 import org.http4k.core.Status.Companion.NOT_FOUND
@@ -154,6 +156,15 @@ class ServicesTest {
     inner class Health {
       @Test
       fun `GET Http service health check successful`() {
+        `Http service health check successful`(GET)
+      }
+
+      @Test
+      fun `HEAD Http service health check successful`() {
+        `Http service health check successful`(HEAD)
+      }
+
+      private fun `Http service health check successful`(method: Method) {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
@@ -161,7 +172,7 @@ class ServicesTest {
         every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Either.right(true)
 
         val route = api.routing()
-        val response = route(Request(GET, "/services/$serviceId/health"))
+        val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe OK
 
@@ -173,13 +184,22 @@ class ServicesTest {
 
       @Test
       fun `GET service disabled`() {
+        `service disabled`(GET)
+      }
+
+      @Test
+      fun `HEAD service disabled`() {
+        `service disabled`(HEAD)
+      }
+
+      private fun `service disabled`(method: Method) {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
         every { userConfigMock.services[serviceId] } returns HttpServiceConfig(false, httpEndpoint)
 
         val route = api.routing()
-        val response = route(Request(GET, "/services/$serviceId/health"))
+        val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe NOT_FOUND
 
@@ -190,6 +210,15 @@ class ServicesTest {
 
       @Test
       fun `GET Dns service health check successful`() {
+        `Dns service health check successful`(GET)
+      }
+
+      @Test
+      fun `HEAD Dns service health check successful`() {
+        `Dns service health check successful`(HEAD)
+      }
+
+      private fun `Dns service health check successful`(method: Method) {
         val serviceId = "testServiceId"
         val dnsServer = "testDnsServer"
 
@@ -197,7 +226,7 @@ class ServicesTest {
         every { dnsServiceMock.checkHealth("example.org", dnsServer, 53) } returns Either.right(true)
 
         val route = api.routing()
-        val response = route(Request(GET, "/services/$serviceId/health"))
+        val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe OK
 
@@ -209,6 +238,15 @@ class ServicesTest {
 
       @Test
       fun `GET Ping service health check successful`() {
+        `Ping service health check successful`(GET)
+      }
+
+      @Test
+      fun `HEAD Ping service health check successful`() {
+        `Ping service health check successful`(HEAD)
+      }
+
+      private fun `Ping service health check successful`(method: Method) {
         val serviceId = "testServiceId"
         val pingServer = "192.168.0.1"
 
@@ -216,7 +254,7 @@ class ServicesTest {
         every { pingServiceMock.checkHealth(pingServer, 1000) } returns Either.right(true)
 
         val route = api.routing()
-        val response = route(Request(GET, "/services/$serviceId/health"))
+        val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe OK
 
@@ -227,7 +265,16 @@ class ServicesTest {
       }
 
       @Test
-      fun `GET Http service health check unsuccessful`() {
+      fun `GET service health check unsuccessful`() {
+        `Http service health check unsuccessful`(GET)
+      }
+
+      @Test
+      fun `HEAD service health check unsuccessful`() {
+        `Http service health check unsuccessful`(HEAD)
+      }
+
+      private fun `Http service health check unsuccessful`(method: Method) {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
@@ -235,7 +282,7 @@ class ServicesTest {
         every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Either.right(false)
 
         val route = api.routing()
-        val response = route(Request(GET, "/services/$serviceId/health"))
+        val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe SERVICE_UNAVAILABLE
 
@@ -247,6 +294,15 @@ class ServicesTest {
 
       @Test
       fun `GET Http service health check error`() {
+        `Http service health check error`(GET)
+      }
+
+      @Test
+      fun `HEAD Http service health check error`() {
+        `Http service health check error`(HEAD)
+      }
+
+      private fun `Http service health check error`(method: Method) {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
@@ -254,7 +310,7 @@ class ServicesTest {
         every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Either.left(Exception())
 
         val route = api.routing()
-        val response = route(Request(GET, "/services/$serviceId/health"))
+        val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe INTERNAL_SERVER_ERROR
 
@@ -266,12 +322,21 @@ class ServicesTest {
 
       @Test
       fun `GET service not found`() {
+        `service not found`(GET)
+      }
+
+      @Test
+      fun `HEAD service not found`() {
+        `service not found`(HEAD)
+      }
+
+      private fun `service not found`(method: Method) {
         val serviceId = "testServiceId"
 
         every { userConfigMock.services[serviceId] } returns null
 
         val route = api.routing()
-        val response = route(Request(GET, "/services/$serviceId/health"))
+        val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe NOT_FOUND
 
@@ -286,10 +351,19 @@ class ServicesTest {
   inner class Health {
     @Test
     fun `GET no service configured`() {
+      `no service configured`(GET)
+    }
+
+    @Test
+    fun `HEAD no service configured`() {
+      `no service configured`(HEAD)
+    }
+
+    private fun `no service configured`(method: Method) {
       every { userConfigMock.services } returns emptyMap()
 
       val route = api.routing()
-      val response = route(Request(GET, "/services/health"))
+      val response = route(Request(method, "/services/health"))
 
       response.status shouldBe OK
 
@@ -300,6 +374,15 @@ class ServicesTest {
 
     @Test
     fun `GET error, unavailable and success`() {
+      `error, unavailable and success`(GET)
+    }
+
+    @Test
+    fun `HEAD error, unavailable and success`() {
+      `error, unavailable and success`(HEAD)
+    }
+
+    private fun `error, unavailable and success`(method: Method) {
       val errorServiceConfig = HttpServiceConfig(true, "http://example.org")
       val unavailableServiceConfig = HttpServiceConfig(true, "http://example.com")
       val successServiceConfig = HttpServiceConfig(true, "http://example.net")
@@ -314,7 +397,7 @@ class ServicesTest {
       every { httpServiceMock.checkHealth("http://example.net", true) } returns Either.right(true)
 
       val route = api.routing()
-      val response = route(Request(GET, "/services/health"))
+      val response = route(Request(method, "/services/health"))
 
       response.status shouldBe INTERNAL_SERVER_ERROR
 
@@ -328,6 +411,15 @@ class ServicesTest {
 
     @Test
     fun `GET success`() {
+      success(GET)
+    }
+
+    @Test
+    fun `HEAD success`() {
+      success(HEAD)
+    }
+
+    private fun success(method: Method) {
       val successServiceConfig = HttpServiceConfig(true, "http://example.org")
       every { userConfigMock.services } returns mapOf(
         "successService" to successServiceConfig,
@@ -336,7 +428,7 @@ class ServicesTest {
       every { httpServiceMock.checkHealth("http://example.org", true) } returns Either.right(true)
 
       val route = api.routing()
-      val response = route(Request(GET, "/services/health"))
+      val response = route(Request(method, "/services/health"))
 
       response.status shouldBe OK
 
@@ -348,6 +440,15 @@ class ServicesTest {
 
     @Test
     fun `GET unavailable`() {
+      unavailable(GET)
+    }
+
+    @Test
+    fun `HEAD unavailable`() {
+      unavailable(HEAD)
+    }
+
+    private fun unavailable(method: Method) {
       val unavailableServiceConfig = HttpServiceConfig(true, "http://example.org")
       every { userConfigMock.services } returns mapOf(
         "unavailableService" to unavailableServiceConfig,
@@ -356,7 +457,7 @@ class ServicesTest {
       every { httpServiceMock.checkHealth("http://example.org", true) } returns Either.right(false)
 
       val route = api.routing()
-      val response = route(Request(GET, "/services/health"))
+      val response = route(Request(method, "/services/health"))
 
       response.status shouldBe SERVICE_UNAVAILABLE
 
@@ -368,13 +469,22 @@ class ServicesTest {
 
     @Test
     fun `GET service disabled`() {
+      `service disabled`(GET)
+    }
+
+    @Test
+    fun `HEAD service disabled`() {
+      `service disabled`(HEAD)
+    }
+
+    private fun `service disabled`(method: Method) {
       val disabledServiceConfig = HttpServiceConfig(false, "http://example.org")
       every { userConfigMock.services } returns mapOf(
         "disabledService" to disabledServiceConfig,
       )
 
       val route = api.routing()
-      val response = route(Request(GET, "/services/health"))
+      val response = route(Request(method, "/services/health"))
 
       response.status shouldBe OK
 

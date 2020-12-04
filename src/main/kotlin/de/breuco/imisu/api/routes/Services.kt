@@ -16,6 +16,7 @@ import org.http4k.contract.meta
 import org.http4k.core.Body
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method.GET
+import org.http4k.core.Method.HEAD
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.INTERNAL_SERVER_ERROR
@@ -34,24 +35,31 @@ class Services(
   private val pingService: PingService
 ) {
   val routes by lazy {
+    val health = Health()
+    val id = Id()
+
     if (appConfig.userConfig.exposeFullApi) {
       listOf(
         get(),
-        Health().get(),
-        Id().get(),
-        Id().Health().get(),
+        health.get(),
+        health.head(),
+        id.get(),
+        id.health.get(),
+        id.health.head()
       )
     } else {
       listOf(
-        Id().Health().get(),
-        Health().get()
+        health.get(),
+        health.head(),
+        id.health.get(),
+        id.health.head()
       )
     }
   }
 
   private val route = "/services"
 
-  fun get(): ContractRoute {
+  private fun get(): ContractRoute {
     val responseLens = Body.auto<Map<String, ServiceConfig>>().toLens()
     fun handler(): HttpHandler = {
       responseLens(
@@ -72,8 +80,9 @@ class Services(
     } bindContract GET to handler()
   }
 
-  inner class Id {
+  private inner class Id {
     private val route = this@Services.route / Path.string().of("id", "id")
+    val health = Health()
 
     fun get(): ContractRoute {
       val responseLens = Body.auto<ServiceConfig>().toLens()
@@ -108,42 +117,42 @@ class Services(
     inner class Health {
       private val route = this@Id.route / "health"
 
-      fun get(): ContractRoute {
-        fun handler() = { id: String, _: String ->
-          { _: Request ->
-            val service = appConfig.userConfig.services[id]?.let {
-              if (it.enabled) {
-                it
-              } else {
-                null
-              }
-            }
-
-            if (service == null) {
-              Response(NOT_FOUND)
+      private fun handler() = { id: String, _: String ->
+        { _: Request ->
+          val service = appConfig.userConfig.services[id]?.let {
+            if (it.enabled) {
+              it
             } else {
-              val queryStatus = checkHealth(service)
-
-              queryStatus.fold(
-                ifLeft = {
-                  if (it is SSLPeerUnverifiedException) {
-                    Response(INVALID_SSL_CERTIFICATE)
-                  } else {
-                    Response(INTERNAL_SERVER_ERROR)
-                  }
-                },
-                ifRight = {
-                  if (it) {
-                    Response(OK)
-                  } else {
-                    Response(SERVICE_UNAVAILABLE)
-                  }
-                }
-              )
+              null
             }
           }
-        }
 
+          if (service == null) {
+            Response(NOT_FOUND)
+          } else {
+            val queryStatus = checkHealth(service)
+
+            queryStatus.fold(
+              ifLeft = {
+                if (it is SSLPeerUnverifiedException) {
+                  Response(INVALID_SSL_CERTIFICATE)
+                } else {
+                  Response(INTERNAL_SERVER_ERROR)
+                }
+              },
+              ifRight = {
+                if (it) {
+                  Response(OK)
+                } else {
+                  Response(SERVICE_UNAVAILABLE)
+                }
+              }
+            )
+          }
+        }
+      }
+
+      fun get(): ContractRoute {
         return route meta {
           summary = "Gets the health of a service. Returns 503, if service is unavailable"
           returning(
@@ -154,27 +163,40 @@ class Services(
           )
         } bindContract GET to handler()
       }
+
+      fun head(): ContractRoute {
+        return route meta {
+          summary = "Gets the health of a service. Returns 503, if service is unavailable"
+          returning(
+            OK to "service is healthy",
+            SERVICE_UNAVAILABLE to "service is not healthy",
+            INTERNAL_SERVER_ERROR to "error during health check",
+            INVALID_SSL_CERTIFICATE to "the service is using an invalid SSL certificate"
+          )
+        } bindContract HEAD to handler()
+      }
     }
   }
 
-  inner class Health {
+  private inner class Health {
     private val route = this@Services.route + "/health"
 
-    fun get(): ContractRoute {
-      fun handler(): HttpHandler = {
-        val healthOfAllServices = appConfig.userConfig.services
-          .filter { (_, serviceConfig) -> serviceConfig.enabled }
-          .values
-          .map {
-            checkHealth(it)
-          }
-
-        when {
-          healthOfAllServices.any { it.isLeft() } -> Response(INTERNAL_SERVER_ERROR)
-          healthOfAllServices.any { either -> either.exists { it.not() } } -> Response(SERVICE_UNAVAILABLE)
-          else -> Response(OK)
+    private fun handler(): HttpHandler = {
+      val healthOfAllServices = appConfig.userConfig.services
+        .filter { (_, serviceConfig) -> serviceConfig.enabled }
+        .values
+        .map {
+          checkHealth(it)
         }
+
+      when {
+        healthOfAllServices.any { it.isLeft() } -> Response(INTERNAL_SERVER_ERROR)
+        healthOfAllServices.any { either -> either.exists { it.not() } } -> Response(SERVICE_UNAVAILABLE)
+        else -> Response(OK)
       }
+    }
+
+    fun get(): ContractRoute {
       return route meta {
         summary =
           "Gets the health of the services, which are available for monitoring. Returns 503, if one of " +
@@ -186,9 +208,22 @@ class Services(
         )
       } bindContract GET to handler()
     }
+
+    fun head(): ContractRoute {
+      return route meta {
+        summary =
+          "Gets the health of the services, which are available for monitoring. Returns 503, if one of " +
+          "the services is unavailable"
+        returning(
+          OK to "All services are healthy",
+          SERVICE_UNAVAILABLE to "At least one of the services is not healthy",
+          INTERNAL_SERVER_ERROR to "At least one error during health checks"
+        )
+      } bindContract HEAD to handler()
+    }
   }
 
-  fun checkHealth(service: ServiceConfig): Either<Throwable, Boolean> {
+  private fun checkHealth(service: ServiceConfig): Either<Throwable, Boolean> {
     return when (service) {
       is DnsServiceConfig -> dnsService.checkHealth(
         service.dnsDomain,
