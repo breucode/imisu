@@ -190,6 +190,9 @@ class Services(
         }
 
       when {
+        healthOfAllServices
+          .filter { it.isLeft() }
+          .let { list -> list.isNotEmpty() && list.all { it is SSLPeerUnverifiedException } } -> Response(SERVICE_UNAVAILABLE)
         healthOfAllServices.any { it.isLeft() } -> Response(INTERNAL_SERVER_ERROR)
         healthOfAllServices.any { either -> either.exists { it.not() } } -> Response(SERVICE_UNAVAILABLE)
         else -> Response(OK)
