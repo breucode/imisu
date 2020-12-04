@@ -2,6 +2,7 @@ package de.breuco.imisu.api.routes
 
 import arrow.core.Either
 import de.breuco.imisu.api.Api
+import de.breuco.imisu.api.INVALID_SSL_CERTIFICATE
 import de.breuco.imisu.config.ApplicationConfig
 import de.breuco.imisu.config.DnsServiceConfig
 import de.breuco.imisu.config.HttpServiceConfig
@@ -30,6 +31,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import javax.net.ssl.SSLPeerUnverifiedException
 
 class ServicesTest {
   private val appConfigMock = mockk<ApplicationConfig>()
@@ -321,6 +323,34 @@ class ServicesTest {
       }
 
       @Test
+      fun `GET Http service health check ssl error`() {
+        `Http service health check ssl error`(GET)
+      }
+
+      @Test
+      fun `HEAD Http service health check ssl error`() {
+        `Http service health check ssl error`(HEAD)
+      }
+
+      private fun `Http service health check ssl error`(method: Method) {
+        val serviceId = "testServiceId"
+        val httpEndpoint = "http://example.org"
+
+        every { userConfigMock.services[serviceId] } returns HttpServiceConfig(true, httpEndpoint)
+        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Either.left(SSLPeerUnverifiedException(""))
+
+        val route = api.routing()
+        val response = route(Request(method, "/services/$serviceId/health"))
+
+        response.status shouldBe INVALID_SSL_CERTIFICATE
+
+        verify(exactly = 1) {
+          userConfigMock.services[serviceId]
+          httpServiceMock.checkHealth(httpEndpoint, true)
+        }
+      }
+
+      @Test
       fun `GET service not found`() {
         `service not found`(GET)
       }
@@ -369,6 +399,35 @@ class ServicesTest {
 
       verify(exactly = 1) {
         userConfigMock.services
+      }
+    }
+
+    @Test
+    fun `GET ssl error`() {
+      `ssl error`(GET)
+    }
+
+    @Test
+    fun `HEAD ssl error`() {
+      `ssl error`(HEAD)
+    }
+
+    private fun `ssl error`(method: Method) {
+      val sslErrorServiceConfig = HttpServiceConfig(true, "http://example.org")
+      every { userConfigMock.services } returns mapOf(
+        "sslErrorService" to sslErrorServiceConfig
+      )
+
+      every { httpServiceMock.checkHealth("http://example.org", true) } returns Either.left(SSLPeerUnverifiedException(""))
+
+      val route = api.routing()
+      val response = route(Request(method, "/services/health"))
+
+      response.status shouldBe SERVICE_UNAVAILABLE
+
+      verify(exactly = 1) {
+        userConfigMock.services
+        httpServiceMock.checkHealth("http://example.org", true)
       }
     }
 
