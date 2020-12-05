@@ -1,0 +1,184 @@
+
+Report Summary
+
+┌─────────────────────────────────────────────┬────────┬─────────────────┬─────────┐
+│                   Target                    │  Type  │ Vulnerabilities │ Secrets │
+├─────────────────────────────────────────────┼────────┼─────────────────┼─────────┤
+│ ghcr.io/breucode/imisu:stable (debian 11.5) │ debian │       48        │    -    │
+└─────────────────────────────────────────────┴────────┴─────────────────┴─────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+
+For OSS Maintainers: VEX Notice
+--------------------------------
+If you're an OSS maintainer and Trivy has detected vulnerabilities in your project that you believe are not actually exploitable, consider issuing a VEX (Vulnerability Exploitability eXchange) statement.
+VEX allows you to communicate the actual status of vulnerabilities in your project, improving security transparency and reducing false positives for your users.
+Learn more and start using VEX: https://trivy.dev/docs/v0.68/guide/supply-chain/vex/repo#publishing-vex-documents
+
+To disable this notice, set the TRIVY_DISABLE_VEX_NOTICE environment variable.
+
+
+ghcr.io/breucode/imisu:stable (debian 11.5)
+===========================================
+Total: 48 (UNKNOWN: 3, MEDIUM: 33, HIGH: 12, CRITICAL: 0)
+
+┌───────────┬────────────────┬──────────┬──────────────┬───────────────────┬──────────────────┬──────────────────────────────────────────────────────────────┐
+│  Library  │ Vulnerability  │ Severity │    Status    │ Installed Version │  Fixed Version   │                            Title                             │
+├───────────┼────────────────┼──────────┼──────────────┼───────────────────┼──────────────────┼──────────────────────────────────────────────────────────────┤
+│ libc6     │ CVE-2023-4911  │ HIGH     │ fixed        │ 2.31-13+deb11u4   │ 2.31-13+deb11u7  │ glibc: buffer overflow in ld.so leading to privilege         │
+│           │                │          │              │                   │                  │ escalation                                                   │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-4911                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-2961  │          │              │                   │ 2.31-13+deb11u9  │ glibc: Out of bounds write in iconv may lead to remote       │
+│           │                │          │              │                   │                  │ code...                                                      │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-2961                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-33599 │          │              │                   │ 2.31-13+deb11u10 │ glibc: stack-based buffer overflow in netgroup cache         │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-33599                   │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2025-4802  │          │              │                   │ 2.31-13+deb11u13 │ glibc: static setuid binary dlopen may incorrectly search    │
+│           │                │          │              │                   │                  │ LD_LIBRARY_PATH                                              │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2025-4802                    │
+│           ├────────────────┼──────────┼──────────────┤                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-4806  │ MEDIUM   │ will_not_fix │                   │                  │ glibc: potential use-after-free in getaddrinfo()             │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-4806                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-4813  │          │              │                   │                  │ glibc: potential use-after-free in gaih_inet()               │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-4813                    │
+│           ├────────────────┤          ├──────────────┤                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-33600 │          │ fixed        │                   │ 2.31-13+deb11u10 │ glibc: null pointer dereferences after failed netgroup cache │
+│           │                │          │              │                   │                  │ insertion                                                    │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-33600                   │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-33601 │          │              │                   │                  │ glibc: netgroup cache may terminate daemon on memory         │
+│           │                │          │              │                   │                  │ allocation failure                                           │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-33601                   │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-33602 │          │              │                   │                  │ glibc: netgroup cache assumes NSS callback uses in-buffer    │
+│           │                │          │              │                   │                  │ strings                                                      │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-33602                   │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2025-0395  │          │              │                   │ 2.31-13+deb11u12 │ glibc: buffer overflow in the GNU C Library's assert()       │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2025-0395                    │
+│           ├────────────────┤          ├──────────────┤                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2025-8058  │          │ fix_deferred │                   │                  │ glibc: Double free in glibc                                  │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2025-8058                    │
+├───────────┼────────────────┼──────────┼──────────────┼───────────────────┼──────────────────┼──────────────────────────────────────────────────────────────┤
+│ libssl1.1 │ CVE-2022-4450  │ HIGH     │ fixed        │ 1.1.1n-0+deb11u3  │ 1.1.1n-0+deb11u4 │ openssl: double free after calling PEM_read_bio_ex           │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2022-4450                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-0215  │          │              │                   │                  │ openssl: use-after-free following BIO_new_NDEF               │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-0215                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-0286  │          │              │                   │                  │ openssl: X.400 address type confusion in X.509 GeneralName   │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-0286                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-0464  │          │              │                   │ 1.1.1n-0+deb11u5 │ openssl: Denial of service by excessive resource usage in    │
+│           │                │          │              │                   │                  │ verifying X509 policy...                                     │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-0464                    │
+│           ├────────────────┼──────────┤              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2022-2097  │ MEDIUM   │              │                   │ 1.1.1n-0+deb11u4 │ openssl: AES OCB fails to encrypt some bytes                 │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2022-2097                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2022-4304  │          │              │                   │                  │ openssl: timing attack in RSA Decryption implementation      │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2022-4304                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-0465  │          │              │                   │ 1.1.1n-0+deb11u5 │ openssl: Invalid certificate policies in leaf certificates   │
+│           │                │          │              │                   │                  │ are silently ignored                                         │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-0465                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-0466  │          │              │                   │                  │ openssl: Certificate policy check not enabled                │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-0466                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-2650  │          │              │                   │                  │ openssl: Possible DoS translating ASN.1 object identifiers   │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-2650                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-3446  │          │              │                   │ 1.1.1v-0~deb11u1 │ openssl: Excessive time spent checking DH keys and           │
+│           │                │          │              │                   │                  │ parameters                                                   │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-3446                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-3817  │          │              │                   │                  │ OpenSSL: Excessive time spent checking DH q parameter value  │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-3817                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-5678  │          │              │                   │ 1.1.1w-0+deb11u2 │ openssl: Generating excessively long X9.42 DH keys or        │
+│           │                │          │              │                   │                  │ checking excessively long X9.42...                           │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-5678                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-0727  │          │              │                   │                  │ openssl: denial of service via null dereference              │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-0727                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-13176 │          │              │                   │ 1.1.1w-0+deb11u3 │ openssl: Timing side-channel in ECDSA signature computation  │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-13176                   │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-4741  │          │              │                   │ 1.1.1w-0+deb11u2 │ openssl: Use After Free with SSL_free_buffers                │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-4741                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-5535  │          │              │                   │                  │ openssl: SSL_select_next_proto buffer overread               │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-5535                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2025-9230  │          │              │                   │ 1.1.1w-0+deb11u4 │ openssl: Out-of-bounds read & write in RFC 3211 KEK Unwrap   │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2025-9230                    │
+├───────────┼────────────────┼──────────┤              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│ openssl   │ CVE-2022-4450  │ HIGH     │              │                   │ 1.1.1n-0+deb11u4 │ openssl: double free after calling PEM_read_bio_ex           │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2022-4450                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-0215  │          │              │                   │                  │ openssl: use-after-free following BIO_new_NDEF               │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-0215                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-0286  │          │              │                   │                  │ openssl: X.400 address type confusion in X.509 GeneralName   │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-0286                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-0464  │          │              │                   │ 1.1.1n-0+deb11u5 │ openssl: Denial of service by excessive resource usage in    │
+│           │                │          │              │                   │                  │ verifying X509 policy...                                     │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-0464                    │
+│           ├────────────────┼──────────┤              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2022-2097  │ MEDIUM   │              │                   │ 1.1.1n-0+deb11u4 │ openssl: AES OCB fails to encrypt some bytes                 │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2022-2097                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2022-4304  │          │              │                   │                  │ openssl: timing attack in RSA Decryption implementation      │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2022-4304                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-0465  │          │              │                   │ 1.1.1n-0+deb11u5 │ openssl: Invalid certificate policies in leaf certificates   │
+│           │                │          │              │                   │                  │ are silently ignored                                         │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-0465                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-0466  │          │              │                   │                  │ openssl: Certificate policy check not enabled                │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-0466                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-2650  │          │              │                   │                  │ openssl: Possible DoS translating ASN.1 object identifiers   │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-2650                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-3446  │          │              │                   │ 1.1.1v-0~deb11u1 │ openssl: Excessive time spent checking DH keys and           │
+│           │                │          │              │                   │                  │ parameters                                                   │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-3446                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-3817  │          │              │                   │                  │ OpenSSL: Excessive time spent checking DH q parameter value  │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-3817                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2023-5678  │          │              │                   │ 1.1.1w-0+deb11u2 │ openssl: Generating excessively long X9.42 DH keys or        │
+│           │                │          │              │                   │                  │ checking excessively long X9.42...                           │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2023-5678                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-0727  │          │              │                   │                  │ openssl: denial of service via null dereference              │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-0727                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-13176 │          │              │                   │ 1.1.1w-0+deb11u3 │ openssl: Timing side-channel in ECDSA signature computation  │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-13176                   │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-4741  │          │              │                   │ 1.1.1w-0+deb11u2 │ openssl: Use After Free with SSL_free_buffers                │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-4741                    │
+│           ├────────────────┤          │              │                   │                  ├──────────────────────────────────────────────────────────────┤
+│           │ CVE-2024-5535  │          │              │                   │                  │ openssl: SSL_select_next_proto buffer overread               │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2024-5535                    │
+│           ├────────────────┤          │              │                   ├──────────────────┼──────────────────────────────────────────────────────────────┤
+│           │ CVE-2025-9230  │          │              │                   │ 1.1.1w-0+deb11u4 │ openssl: Out-of-bounds read & write in RFC 3211 KEK Unwrap   │
+│           │                │          │              │                   │                  │ https://avd.aquasec.com/nvd/cve-2025-9230                    │
+├───────────┼────────────────┼──────────┤              ├───────────────────┼──────────────────┼──────────────────────────────────────────────────────────────┤
+│ tzdata    │ DLA-3972-1     │ UNKNOWN  │              │ 2021a-1+deb11u7   │ 2024b-0+deb11u1  │ tzdata - new timezone database                               │
+│           ├────────────────┤          │              │                   ├──────────────────┤                                                              │
+│           │ DLA-4085-1     │          │              │                   │ 2025a-0+deb11u1  │                                                              │
+│           ├────────────────┤          │              │                   ├──────────────────┤                                                              │
+│           │ DLA-4105-1     │          │              │                   │ 2025b-0+deb11u1  │                                                              │
+└───────────┴────────────────┴──────────┴──────────────┴───────────────────┴──────────────────┴──────────────────────────────────────────────────────────────┘
