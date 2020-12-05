@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: "0 4 * * 1"
   release:
-    types: created
+    types: [created]
 
 jobs:
   container-security-scan:
@@ -39,7 +39,7 @@ jobs:
           NO_OF_VULNS: ${{ needs.container-security-scan.outputs.noOfVulns }}
           TRIVY_SCAN_RESULT: ${{ needs.container-security-scan.outputs.trivyScanResult }}
         run: |
-          curl "https://img.shields.io/badge/container%20vulns-${NO_OF_VULNS}-informational?style=for-the-badge" > container-vulns.svg
+          curl "https://img.shields.io/badge/container%20vulns-${NO_OF_VULNS}-informational?style=flat-square" > container-vulns.svg
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add *.svg

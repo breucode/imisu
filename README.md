@@ -1,19 +1,19 @@
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/breucode/imisu?style=for-the-badge)](https://github.com/breucode/imisu/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/breucode/imisu?style=flat-square)](https://github.com/breucode/imisu/releases)
 ![Test Coverage](https://raw.githubusercontent.com/breucode/imisu/badges/coverage.svg)
 [![Container vulnerabilities](https://raw.githubusercontent.com/breucode/imisu/badges/container-vulns.svg)](https://github.com/breucode/imisu/blob/badges/trivy-scan-result.txt)
-[![Api-Docs](https://img.shields.io/badge/api--docs-swagger--ui-brightgreen?style=for-the-badge&logo=swagger)](https://breucode.github.io/imisu/swagger-ui.html?url=swagger.json&validatorUrl=)
-[![License](https://img.shields.io/github/license/breucode/imisu?style=for-the-badge)](LICENSE)
+[![Api-Docs](https://img.shields.io/badge/api--docs-swagger--ui-brightgreen?style=flat-square&logo=swagger)](https://breucode.github.io/imisu/swagger-ui.html?url=swagger.json&validatorUrl=)
+[![License](https://img.shields.io/github/license/breucode/imisu?style=flat-square)](LICENSE)
 
 # imisu
 
-Imisu - short for "Is my internal service up?" - exposes a healthcheck endpoint for services, which are not available on the internet
+Imisu - short for "Is my internal service up?" - exposes a health check endpoint for services, which are not available on the internet
 
 ## What can I do with imisu?
 
-Imisu is a service, which executes a healthcheck, if a certain url is called via HTTP.
+Imisu is a service, which executes a health check, if a certain url is called via HTTP.
 For example, imisu can execute a DNS query against a DNS server. If the server responds successfully without error, imisu will answer with a simple HTTP 200.
 
-Think of imisu as a secure gateway from the internet into your internal network for healthcheck purposes. Your internal services stay completely isolated from the internet.
+Think of imisu as a secure gateway from the internet into your internal network for health check purposes. Your internal services stay completely isolated from the internet.
 Only imisu needs to be available to the outside. Imisu is designed to respond with as little data as possible (namely HTTP codes), so that you don't have to worry about leaking internal sensitive error messages.
 
 ## Configuration
