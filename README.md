@@ -55,7 +55,7 @@ When you try to mix `httpEndpoint` and `dnsDomain` in one service, the configura
 
 ## Run
 
-To understand, which endpoints you can call, have a look at the [api-docs](https://breucode.github.io/imisu/swagger-ui.html?url=swagger.json).
+To understand, which endpoints you can call, have a look at the [api-docs](https://breucode.github.io/imisu/swagger-ui.html?url=swagger.json&validatorUrl=).
 
 Currently, imisu is only distributed as a Docker image. Feel free to raise an issue, if you need a different artifact.
 
