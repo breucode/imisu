@@ -1,0 +1,39 @@
++---------+------------------+----------+-------------------+---------------+---------------------------------------+
+| LIBRARY | VULNERABILITY ID | SEVERITY | INSTALLED VERSION | FIXED VERSION |                 TITLE                 |
++---------+------------------+----------+-------------------+---------------+---------------------------------------+
+| libc6   | CVE-2021-33574   | CRITICAL | 2.28-10           |               | glibc: mq_notify does                 |
+|         |                  |          |                   |               | not handle separately                 |
+|         |                  |          |                   |               | allocated thread attributes           |
+|         |                  |          |                   |               | -->avd.aquasec.com/nvd/cve-2021-33574 |
++         +------------------+----------+                   +---------------+---------------------------------------+
+|         | CVE-2020-1751    | HIGH     |                   |               | glibc: array overflow in              |
+|         |                  |          |                   |               | backtrace functions for powerpc       |
+|         |                  |          |                   |               | -->avd.aquasec.com/nvd/cve-2020-1751  |
++         +------------------+          +                   +---------------+---------------------------------------+
+|         | CVE-2020-1752    |          |                   |               | glibc: use-after-free in glob()       |
+|         |                  |          |                   |               | function when expanding ~user         |
+|         |                  |          |                   |               | -->avd.aquasec.com/nvd/cve-2020-1752  |
++         +------------------+          +                   +---------------+---------------------------------------+
+|         | CVE-2021-3326    |          |                   |               | glibc: Assertion failure in           |
+|         |                  |          |                   |               | ISO-2022-JP-3 gconv module            |
+|         |                  |          |                   |               | related to combining characters       |
+|         |                  |          |                   |               | -->avd.aquasec.com/nvd/cve-2021-3326  |
++         +------------------+----------+                   +---------------+---------------------------------------+
+|         | CVE-2019-25013   | MEDIUM   |                   |               | glibc: buffer over-read in            |
+|         |                  |          |                   |               | iconv when processing invalid         |
+|         |                  |          |                   |               | multi-byte input sequences in...      |
+|         |                  |          |                   |               | -->avd.aquasec.com/nvd/cve-2019-25013 |
++         +------------------+          +                   +---------------+---------------------------------------+
+|         | CVE-2020-10029   |          |                   |               | glibc: stack corruption               |
+|         |                  |          |                   |               | from crafted input in cosl,           |
+|         |                  |          |                   |               | sinl, sincosl, and tanl...            |
+|         |                  |          |                   |               | -->avd.aquasec.com/nvd/cve-2020-10029 |
++         +------------------+          +                   +---------------+---------------------------------------+
+|         | CVE-2020-27618   |          |                   |               | glibc: iconv when processing          |
+|         |                  |          |                   |               | invalid multi-byte input              |
+|         |                  |          |                   |               | sequences fails to advance the...     |
+|         |                  |          |                   |               | -->avd.aquasec.com/nvd/cve-2020-27618 |
++         +------------------+          +                   +---------------+---------------------------------------+
+|         | CVE-2021-35942   |          |                   |               | glibc: Arbitrary read in wordexp()    |
+|         |                  |          |                   |               | -->avd.aquasec.com/nvd/cve-2021-35942 |
++---------+------------------+----------+-------------------+---------------+---------------------------------------+
