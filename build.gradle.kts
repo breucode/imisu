@@ -27,6 +27,10 @@ application.mainClassName = application.mainClass.get()
 
 tasks.jacocoTestReport {
   dependsOn(tasks.test)
+
+  reports {
+    csv.isEnabled = true
+  }
 }
 
 val swaggerUiVersion = "3.37.2"

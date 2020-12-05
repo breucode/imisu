@@ -1,0 +1,39 @@
+name: Generate badges
+
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  generate-badges:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gradle/wrapper-validation-action@v1
+      - name: setup-graalvm-ce
+        uses: rinx/setup-graalvm-ce@v0.0.5
+        with:
+          graalvm-version: "20.3.0"
+          java-version: "java11"
+          native-image: "false"
+      - name: Calculate test coverage
+        id: calculate_coverage
+        run: |
+          ./gradlew jacocoTestReport --console=plain
+          testCoverage=$(awk -F"," '{ instructions += $4 + $5; covered += $5 } END { printf "%0.2f", 100*covered/instructions }' ./build/reports/jacoco/test/jacocoTestReport.csv)
+          echo "::set-output name=coverage::$testCoverage"
+      - name: Checkout badges branch
+        uses: actions/checkout@v2
+        with:
+          ref: badges
+      - name: Download and commit badge
+        env:
+          TEST_COVERAGE: ${{ steps.calculate_coverage.outputs.coverage }}
+        run: |
+          curl "https://img.shields.io/badge/coverage-${TEST_COVERAGE}%25-brightgreen?style=for-the-badge" > coverage.svg
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add *.svg
+          git commit --amend -m "Generate test coverage badge"
+          git push --force
