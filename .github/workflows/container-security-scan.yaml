@@ -1,0 +1,48 @@
+name: Container security scan
+
+on:
+  schedule:
+    - cron: "0 4 * * 1"
+  release:
+    types: created
+
+jobs:
+  container-security-scan:
+    runs-on: ubuntu-latest
+    container: ghcr.io/aquasecurity/trivy:latest
+    outputs:
+      noOfVulns: ${{ steps.vuln-scan.outputs.noOfVulns }}
+    steps:
+      - name: Run Trivy vulnerability scanner
+        id: vuln-scan
+        run: |
+          noOfVulns=$(trivy -q -o trivy-scan-result.txt ghcr.io/breucode/imisu:stable | grep "Total: " | awk '{print $2}')
+          echo "::set-output name=noOfVulns::$noOfVulns"
+      - name: Upload trivy-scan-result
+        uses: actions/upload-artifact@v2
+        with:
+          name: trivy-scan-result
+          path: trivy-scan-result.txt
+
+  push-badge-and-report:
+    runs-on: ubuntu-latest
+    needs: container-security-scan
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: badges
+      - uses: actions/download-artifact@v2
+        with:
+          name: trivy-scan-result
+      - name: Download and commit badge and scan report
+        env:
+          NO_OF_VULNS: ${{ needs.container-security-scan.outputs.noOfVulns }}
+          TRIVY_SCAN_RESULT: ${{ needs.container-security-scan.outputs.trivyScanResult }}
+        run: |
+          curl "https://img.shields.io/badge/container%20vulns-${NO_OF_VULNS}-informational?style=for-the-badge" > container-vulns.svg
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add *.svg
+          git add *.txt
+          git commit --amend -m "Generate container vulnerability scan"
+          git push --force
