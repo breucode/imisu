@@ -1,4 +1,5 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/breucode/imisu?style=for-the-badge)](https://github.com/breucode/imisu/releases)
+![Test Coverage](https://raw.githubusercontent.com/breucode/imisu/badges/coverage.svg)
 [![Api-Docs](https://img.shields.io/badge/api--docs-swagger--ui-brightgreen?style=for-the-badge&logo=swagger)](https://breucode.github.io/imisu/swagger-ui.html?url=swagger.json&validatorUrl=)
 [![License](https://img.shields.io/github/license/breucode/imisu?style=for-the-badge)](LICENSE)
 
