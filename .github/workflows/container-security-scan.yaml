@@ -2,9 +2,11 @@ name: Container security scan
 
 on:
   schedule:
-    - cron: "0 4 * * 1"
+    - cron: "0 4 * * *"
   release:
-    types: [created]
+    types:
+      - created
+  workflow_dispatch:
 
 jobs:
   container-security-scan:
@@ -16,7 +18,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         id: vuln-scan
         run: |
-          noOfVulns=$(trivy -q -o trivy-scan-result.txt ghcr.io/breucode/imisu:stable | grep "Total: " | awk '{print $2}')
+          noOfVulns=$(trivy -q --severity UNKNOWN,MEDIUM,HIGH,CRITICAL -o trivy-scan-result.txt ghcr.io/breucode/imisu:stable | grep "Total: " | awk '{print $2}')
           echo "::set-output name=noOfVulns::$noOfVulns"
       - name: Upload trivy-scan-result
         uses: actions/upload-artifact@v2
