@@ -14,6 +14,7 @@ jobs:
     container: ghcr.io/aquasecurity/trivy:latest
     outputs:
       noOfVulns: ${{ steps.vuln-scan.outputs.noOfVulns }}
+      baseImageVulns: ${{ steps.vuln-scan.outputs.baseImageVulns }}
     steps:
       - name: Run Trivy vulnerability scanner
         id: vuln-scan
