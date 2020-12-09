@@ -19,7 +19,9 @@ jobs:
         id: vuln-scan
         run: |
           noOfVulns=$(trivy -q --severity UNKNOWN,MEDIUM,HIGH,CRITICAL -o trivy-scan-result.txt ghcr.io/breucode/imisu:stable | grep "Total: " | awk '{print $2}')
+          baseImageVulns=$(trivy -q --severity UNKNOWN,MEDIUM,HIGH,CRITICAL gcr.io/distroless/base-debian10 | grep "Total: " | awk '{print $2}')
           echo "::set-output name=noOfVulns::$noOfVulns"
+          echo "::set-output name=baseImageVulns::$baseImageVulns"
       - name: Upload trivy-scan-result
         uses: actions/upload-artifact@v2
         with:
@@ -48,3 +50,16 @@ jobs:
           git add *.txt
           git commit --amend -m "Generate container vulnerability scan"
           git push --force
+
+  base-image-outdated:
+    runs-on: ubuntu-latest
+    needs: container-security-scan
+    if: ${{ needs.container-security-scan.outputs.noOfVulns != needs.container-security-scan.outputs.baseImageVulns }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          filename: .github/base-image-outdated-template.md
+          update_existing: true
