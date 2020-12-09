@@ -117,7 +117,7 @@ dependencies {
       strictly(Versions.kotlin)
     }
   }
-  implementation(platform("org.http4k:http4k-bom:3.281.0"))
+  implementation(platform("org.http4k:http4k-bom:3.282.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
