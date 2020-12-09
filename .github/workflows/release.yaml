@@ -36,7 +36,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ steps.get_version.outputs.version }}
         run: |
-          docker build -t ghcr.io/breucode/imisu:"$IMAGE_TAG" -t ghcr.io/breucode/imisu:stable -t ghcr.io/breucode/imisu:latest .
+          docker build --pull -t ghcr.io/breucode/imisu:"$IMAGE_TAG" -t ghcr.io/breucode/imisu:stable -t ghcr.io/breucode/imisu:latest .
           docker push ghcr.io/breucode/imisu
       - name: Run application
         env:
