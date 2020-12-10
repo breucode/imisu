@@ -61,4 +61,4 @@ Currently, imisu is only distributed as a Docker image. Feel free to raise an is
 
 ### Docker
 
-`docker run -p 8080:8080 -v /path/to/imisu.conf:/imisu.conf:ro ghcr.io/breucode/imisu:stable`
+`docker run -p 8080:8080 --memory=160m -v /path/to/imisu.conf:/imisu.conf:ro ghcr.io/breucode/imisu:stable`
