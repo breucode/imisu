@@ -33,7 +33,7 @@ tasks.jacocoTestReport {
   }
 }
 
-val swaggerUiVersion = "3.37.2"
+val swaggerUiVersion = "3.38.0"
 
 val createVersionProperties by tasks.registering(WriteProperties::class) {
   dependsOn(tasks.processResources)
@@ -117,7 +117,7 @@ dependencies {
       strictly(Versions.kotlin)
     }
   }
-  implementation(platform("org.http4k:http4k-bom:3.282.0"))
+  implementation(platform("org.http4k:http4k-bom:3.283.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
