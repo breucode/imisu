@@ -34,10 +34,8 @@ class Services(
   private val httpService: HttpService,
   private val pingService: PingService
 ) {
-  val routes by lazy {
-    val health = Health()
-    val id = Id()
 
+  val routes by lazy {
     if (appConfig.userConfig.exposeFullApi) {
       listOf(
         get(),
@@ -57,7 +55,7 @@ class Services(
     }
   }
 
-  private val route = "/services"
+  private val servicesRoute = "/services"
 
   private fun get(): ContractRoute {
     val responseLens = Body.auto<Map<String, ServiceConfig>>().toLens()
@@ -67,7 +65,7 @@ class Services(
         Response(OK)
       )
     }
-    return route meta {
+    return servicesRoute meta {
       summary = "Gets all services, which are available for monitoring"
       returning(
         OK,
@@ -80,9 +78,8 @@ class Services(
     } bindContract GET to handler()
   }
 
-  private inner class Id {
-    private val route = this@Services.route / Path.string().of("id", "id")
-    val health = Health()
+  private val id = object {
+    private val idRoute = servicesRoute / Path.string().of("id", "id")
 
     fun get(): ContractRoute {
       val responseLens = Body.auto<ServiceConfig>().toLens()
@@ -107,15 +104,15 @@ class Services(
         }
       }
 
-      return route meta {
+      return idRoute meta {
         summary = "Gets a service"
         returning(OK, responseLens to HttpServiceConfig(true, "http://example.org"))
         returning(NOT_FOUND)
       } bindContract GET to handler()
     }
 
-    inner class Health {
-      private val route = this@Id.route / "health"
+    val health = object {
+      private val healthRoute = idRoute / "health"
 
       private fun handler() = { id: String, _: String ->
         { _: Request ->
@@ -153,7 +150,7 @@ class Services(
       }
 
       fun get(): ContractRoute {
-        return route meta {
+        return healthRoute meta {
           summary = "Gets the health of a service. Returns 503, if service is unavailable"
           returning(
             OK to "service is healthy",
@@ -165,7 +162,7 @@ class Services(
       }
 
       fun head(): ContractRoute {
-        return route meta {
+        return healthRoute meta {
           summary = "Gets the health of a service. Returns 503, if service is unavailable"
           returning(
             OK to "service is healthy",
@@ -178,8 +175,8 @@ class Services(
     }
   }
 
-  private inner class Health {
-    private val route = this@Services.route + "/health"
+  private val health = object {
+    private val healthRoute = servicesRoute / "/health"
 
     private fun handler(): HttpHandler = {
       val healthOfAllServices = appConfig.userConfig.services
@@ -201,7 +198,7 @@ class Services(
     }
 
     fun get(): ContractRoute {
-      return route meta {
+      return healthRoute meta {
         summary =
           "Gets the health of the services, which are available for monitoring. Returns 503, if one of " +
           "the services is unavailable"
@@ -214,7 +211,7 @@ class Services(
     }
 
     fun head(): ContractRoute {
-      return route meta {
+      return healthRoute meta {
         summary =
           "Gets the health of the services, which are available for monitoring. Returns 503, if one of " +
           "the services is unavailable"
