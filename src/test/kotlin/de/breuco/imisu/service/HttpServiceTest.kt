@@ -85,7 +85,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, true)
 
-    result.isError()
+    result.isError() shouldBe true
 
     verify(exactly = 1) {
       httpClientMock(Request(Method.HEAD, hostName))
