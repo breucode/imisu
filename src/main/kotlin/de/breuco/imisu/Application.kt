@@ -18,22 +18,19 @@ import org.http4k.client.PreCannedOkHttpClients
 import org.http4k.core.HttpHandler
 import org.http4k.server.Netty
 import org.http4k.server.asServer
-import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
-import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import org.koin.experimental.builder.single
 import org.minidns.DnsClient
 import java.nio.file.Paths
 import kotlin.system.exitProcess
 
-class Application : KoinComponent {
-  private val api by inject<Api>()
-  private val appConfig by inject<ApplicationConfig>()
-  private val logger by inject<KLogger> { parametersOf(this.javaClass.name) }
-
+class Application(
+  private val api: Api,
+  private val appConfig: ApplicationConfig,
+  private val logger: KLogger
+) {
   fun run(printVersion: Boolean) {
     if (printVersion) {
       println("imisu ${appConfig.versions.applicationVersion}")
@@ -61,7 +58,7 @@ private class CliApplicationStarter : CliktCommand(name = "imisu") {
   )
 
   override fun run() {
-    startKoin {
+    val koinApplication = startKoin {
       modules(
         module {
           single { Api(get(), get()) }
@@ -89,11 +86,14 @@ private class CliApplicationStarter : CliktCommand(name = "imisu") {
             )
           }
           factory { (name: String) -> KotlinLogging.logger(name) }
+          single { Application(get(), get(), get(parameters = { parametersOf(Application::class.java.name) })) }
         }
       )
     }
 
-    Application().run(displayVersion)
+    val application: Application = koinApplication.koin.get()
+
+    application.run(displayVersion)
   }
 }
 

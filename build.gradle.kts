@@ -131,7 +131,7 @@ dependencies {
 
   implementation("org.minidns:minidns-hla:1.0.0")
 
-  val koinVersion = "2.1.6"
+  val koinVersion = "2.2.1"
   implementation("org.koin:koin-core:$koinVersion")
   implementation("org.koin:koin-core-ext:$koinVersion")
   testImplementation("org.koin:koin-test:$koinVersion")
