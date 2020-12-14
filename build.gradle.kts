@@ -117,7 +117,7 @@ dependencies {
       strictly(Versions.kotlin)
     }
   }
-  implementation(platform("org.http4k:http4k-bom:3.283.0"))
+  implementation(platform("org.http4k:http4k-bom:3.283.1"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
@@ -146,7 +146,7 @@ dependencies {
   runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
   implementation("io.github.microutils:kotlin-logging:2.0.3")
 
-  val kotestVersion = "4.3.1"
+  val kotestVersion = "4.3.2"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
     exclude("junit")
     exclude("org.junit.vintage")
