@@ -13,9 +13,7 @@ import org.http4k.server.asServer
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.dsl.module
 
 class ApplicationTest {
 
@@ -27,17 +25,7 @@ class ApplicationTest {
 
   @BeforeEach
   fun beforeEach() {
-    startKoin {
-      modules(
-        module {
-          single { apiMock }
-          single { appConfigMock }
-          single { loggerMock }
-        }
-      )
-    }
-
-    underTest = Application()
+    underTest = Application(apiMock, appConfigMock, loggerMock)
   }
 
   @AfterEach
