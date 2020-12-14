@@ -1,7 +1,8 @@
 package de.breuco.imisu.service
 
-import io.kotest.assertions.arrow.either.shouldBeLeft
-import io.kotest.assertions.arrow.either.shouldBeRight
+import com.github.michaelbull.result.unwrap
+import de.breuco.imisu.isError
+import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -48,7 +49,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, true)
 
-    result.shouldBeRight(true)
+    result.unwrap() shouldBe true
 
     verify(exactly = 1) {
       httpClientMock(Request(Method.HEAD, hostName))
@@ -68,7 +69,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, true)
 
-    result.shouldBeRight(false)
+    result.unwrap() shouldBe false
 
     verify(exactly = 1) {
       httpClientMock(Request(Method.HEAD, hostName))
@@ -84,7 +85,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, true)
 
-    result.shouldBeLeft()
+    result.isError()
 
     verify(exactly = 1) {
       httpClientMock(Request(Method.HEAD, hostName))
@@ -102,7 +103,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, true)
 
-    result.shouldBeRight(true)
+    result.unwrap() shouldBe true
 
     verify(exactly = 1) {
       httpClientMock(Request(Method.HEAD, hostName))
@@ -121,7 +122,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, false)
 
-    result.shouldBeRight(true)
+    result.unwrap() shouldBe true
 
     verify(exactly = 1) {
       nonSslValidatingHttpClientMock(Request(Method.HEAD, hostName))

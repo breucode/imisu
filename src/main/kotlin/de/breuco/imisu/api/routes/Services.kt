@@ -1,12 +1,16 @@
 package de.breuco.imisu.api.routes
 
-import arrow.core.Either
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.getError
+import com.github.michaelbull.result.getOr
 import de.breuco.imisu.api.INVALID_SSL_CERTIFICATE
 import de.breuco.imisu.config.ApplicationConfig
 import de.breuco.imisu.config.DnsServiceConfig
 import de.breuco.imisu.config.HttpServiceConfig
 import de.breuco.imisu.config.PingServiceConfig
 import de.breuco.imisu.config.ServiceConfig
+import de.breuco.imisu.isError
 import de.breuco.imisu.service.DnsService
 import de.breuco.imisu.service.HttpService
 import de.breuco.imisu.service.PingService
@@ -130,14 +134,14 @@ class Services(
             val queryStatus = checkHealth(service)
 
             queryStatus.fold(
-              ifLeft = {
+              failure = {
                 if (it is SSLPeerUnverifiedException) {
                   Response(INVALID_SSL_CERTIFICATE)
                 } else {
                   Response(INTERNAL_SERVER_ERROR)
                 }
               },
-              ifRight = {
+              success = {
                 if (it) {
                   Response(OK)
                 } else {
@@ -188,11 +192,10 @@ class Services(
 
       when {
         healthOfAllServices
-          .filterIsInstance<Either.Left<Throwable>>()
-          .map { it.a }
+          .mapNotNull { it.getError() }
           .let { list -> list.isNotEmpty() && list.all { it is SSLPeerUnverifiedException } } -> Response(SERVICE_UNAVAILABLE)
-        healthOfAllServices.any { it.isLeft() } -> Response(INTERNAL_SERVER_ERROR)
-        healthOfAllServices.any { either -> either.exists { it.not() } } -> Response(SERVICE_UNAVAILABLE)
+        healthOfAllServices.any { it.isError() } -> Response(INTERNAL_SERVER_ERROR)
+        healthOfAllServices.any { !it.getOr(false) } -> Response(SERVICE_UNAVAILABLE)
         else -> Response(OK)
       }
     }
@@ -224,7 +227,7 @@ class Services(
     }
   }
 
-  private fun checkHealth(service: ServiceConfig): Either<Throwable, Boolean> {
+  private fun checkHealth(service: ServiceConfig): Result<Boolean, Throwable> {
     return when (service) {
       is DnsServiceConfig -> dnsService.checkHealth(
         service.dnsDomain,

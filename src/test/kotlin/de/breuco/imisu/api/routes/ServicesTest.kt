@@ -1,6 +1,7 @@
 package de.breuco.imisu.api.routes
 
-import arrow.core.Either
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
 import de.breuco.imisu.api.Api
 import de.breuco.imisu.api.INVALID_SSL_CERTIFICATE
 import de.breuco.imisu.config.ApplicationConfig
@@ -171,7 +172,7 @@ class ServicesTest {
         val httpEndpoint = "http://example.org"
 
         every { userConfigMock.services[serviceId] } returns HttpServiceConfig(true, httpEndpoint)
-        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Either.right(true)
+        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Ok(true)
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -225,7 +226,7 @@ class ServicesTest {
         val dnsServer = "testDnsServer"
 
         every { userConfigMock.services[serviceId] } returns DnsServiceConfig(true, dnsServer)
-        every { dnsServiceMock.checkHealth("example.org", dnsServer, 53) } returns Either.right(true)
+        every { dnsServiceMock.checkHealth("example.org", dnsServer, 53) } returns Ok(true)
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -253,7 +254,7 @@ class ServicesTest {
         val pingServer = "192.168.0.1"
 
         every { userConfigMock.services[serviceId] } returns PingServiceConfig(true, pingServer)
-        every { pingServiceMock.checkHealth(pingServer, 1000) } returns Either.right(true)
+        every { pingServiceMock.checkHealth(pingServer, 1000) } returns Ok(true)
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -281,7 +282,7 @@ class ServicesTest {
         val httpEndpoint = "http://example.org"
 
         every { userConfigMock.services[serviceId] } returns HttpServiceConfig(true, httpEndpoint)
-        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Either.right(false)
+        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Ok(false)
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -309,7 +310,7 @@ class ServicesTest {
         val httpEndpoint = "http://example.org"
 
         every { userConfigMock.services[serviceId] } returns HttpServiceConfig(true, httpEndpoint)
-        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Either.left(Exception())
+        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Err(Exception())
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -337,7 +338,7 @@ class ServicesTest {
         val httpEndpoint = "http://example.org"
 
         every { userConfigMock.services[serviceId] } returns HttpServiceConfig(true, httpEndpoint)
-        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Either.left(SSLPeerUnverifiedException(""))
+        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Err(SSLPeerUnverifiedException(""))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -418,7 +419,7 @@ class ServicesTest {
         "sslErrorService" to sslErrorServiceConfig
       )
 
-      every { httpServiceMock.checkHealth("http://example.org", true) } returns Either.left(SSLPeerUnverifiedException(""))
+      every { httpServiceMock.checkHealth("http://example.org", true) } returns Err(SSLPeerUnverifiedException(""))
 
       val route = api.routing()
       val response = route(Request(method, "/services/health"))
@@ -451,9 +452,9 @@ class ServicesTest {
         "successService" to successServiceConfig
       )
 
-      every { httpServiceMock.checkHealth("http://example.org", true) } returns Either.left(Exception())
-      every { httpServiceMock.checkHealth("http://example.com", true) } returns Either.right(false)
-      every { httpServiceMock.checkHealth("http://example.net", true) } returns Either.right(true)
+      every { httpServiceMock.checkHealth("http://example.org", true) } returns Err(Exception())
+      every { httpServiceMock.checkHealth("http://example.com", true) } returns Ok(false)
+      every { httpServiceMock.checkHealth("http://example.net", true) } returns Ok(true)
 
       val route = api.routing()
       val response = route(Request(method, "/services/health"))
@@ -484,7 +485,7 @@ class ServicesTest {
         "successService" to successServiceConfig,
       )
 
-      every { httpServiceMock.checkHealth("http://example.org", true) } returns Either.right(true)
+      every { httpServiceMock.checkHealth("http://example.org", true) } returns Ok(true)
 
       val route = api.routing()
       val response = route(Request(method, "/services/health"))
@@ -513,7 +514,7 @@ class ServicesTest {
         "unavailableService" to unavailableServiceConfig,
       )
 
-      every { httpServiceMock.checkHealth("http://example.org", true) } returns Either.right(false)
+      every { httpServiceMock.checkHealth("http://example.org", true) } returns Ok(false)
 
       val route = api.routing()
       val response = route(Request(method, "/services/health"))

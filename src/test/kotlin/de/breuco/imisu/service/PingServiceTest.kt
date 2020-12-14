@@ -1,7 +1,8 @@
 package de.breuco.imisu.service
 
-import io.kotest.assertions.arrow.either.shouldBeLeft
-import io.kotest.assertions.arrow.either.shouldBeRight
+import com.github.michaelbull.result.unwrap
+import de.breuco.imisu.isError
+import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -33,7 +34,7 @@ class PingServiceTest {
 
     val result = underTest.checkHealth(pingAddress, timeout = timeout)
 
-    result shouldBeRight true
+    result.unwrap() shouldBe true
   }
 
   @Test
@@ -46,7 +47,7 @@ class PingServiceTest {
 
     val result = underTest.checkHealth(pingAddress, timeout = timeout)
 
-    result shouldBeRight false
+    result.unwrap() shouldBe false
   }
 
   @Test
@@ -59,6 +60,6 @@ class PingServiceTest {
 
     val result = underTest.checkHealth(pingAddress, timeout = timeout)
 
-    result.shouldBeLeft()
+    result.isError() shouldBe true
   }
 }

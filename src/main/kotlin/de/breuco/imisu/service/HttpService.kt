@@ -1,7 +1,7 @@
 package de.breuco.imisu.service
 
-import arrow.core.Either
-import de.breuco.imisu.unsafeCatch
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.runCatching
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -10,8 +10,8 @@ class HttpService(
   private val httpClient: HttpHandler,
   private val nonSslValidatingHttpClient: HttpHandler
 ) {
-  fun checkHealth(hostName: String, validateSsl: Boolean): Either<Throwable, Boolean> {
-    return Either.unsafeCatch {
+  fun checkHealth(hostName: String, validateSsl: Boolean): Result<Boolean, Throwable> =
+    runCatching {
       val executingHttpClient = if (validateSsl) {
         httpClient
       } else {
@@ -24,5 +24,4 @@ class HttpService(
         else -> false
       }
     }
-  }
 }

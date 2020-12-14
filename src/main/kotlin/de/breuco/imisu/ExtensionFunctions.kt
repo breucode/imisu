@@ -1,9 +1,10 @@
 package de.breuco.imisu
 
-import arrow.core.Either
-import arrow.core.left
-import arrow.core.nonFatalOrThrow
-import arrow.core.right
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.fold
 
-fun <A> Either.Companion.unsafeCatch(f: () -> A) =
-  try { f().right() } catch (t: Throwable) { t.nonFatalOrThrow().left() }
+fun <V, E> Result<V, E>.isSuccess(): Boolean =
+  this.fold({ true }, { false })
+
+fun <V, E> Result<V, E>.isError(): Boolean =
+  !this.isSuccess()
