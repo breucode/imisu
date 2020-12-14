@@ -32,7 +32,15 @@
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {
+    "name": "com.sun.crypto.provider.TlsKeyMaterialGenerator",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
     "name": "com.sun.crypto.provider.TlsMasterSecretGenerator",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "com.sun.crypto.provider.TlsPrfGenerator$V12",
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {
@@ -714,6 +722,9 @@
     "name": "java.security.SecureRandomParameters"
   },
   {
+    "name": "java.security.cert.CertStoreParameters"
+  },
+  {
     "name": "java.security.interfaces.ECPrivateKey"
   },
   {
@@ -1115,7 +1126,20 @@
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {
+    "name": "sun.security.provider.certpath.CollectionCertStore",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": ["java.security.cert.CertStoreParameters"]
+      }
+    ]
+  },
+  {
     "name": "sun.security.provider.certpath.PKIXCertPathValidator",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "sun.security.provider.certpath.SunCertPathBuilder",
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {
@@ -1132,6 +1156,14 @@
   },
   {
     "name": "sun.security.rsa.RSASignature$SHA256withRSA",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "sun.security.rsa.RSASignature$SHA384withRSA",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "sun.security.rsa.RSASignature$SHA512withRSA",
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {

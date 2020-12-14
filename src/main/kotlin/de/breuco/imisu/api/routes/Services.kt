@@ -30,7 +30,7 @@ import org.http4k.core.Status.Companion.SERVICE_UNAVAILABLE
 import org.http4k.format.Jackson.auto
 import org.http4k.lens.Path
 import org.http4k.lens.string
-import javax.net.ssl.SSLPeerUnverifiedException
+import javax.net.ssl.SSLException
 
 class Services(
   private val appConfig: ApplicationConfig,
@@ -135,7 +135,7 @@ class Services(
 
             queryStatus.fold(
               failure = {
-                if (it is SSLPeerUnverifiedException) {
+                if (it is SSLException) {
                   Response(INVALID_SSL_CERTIFICATE)
                 } else {
                   Response(INTERNAL_SERVER_ERROR)
@@ -193,7 +193,7 @@ class Services(
       when {
         healthOfAllServices
           .mapNotNull { it.getError() }
-          .let { list -> list.isNotEmpty() && list.all { it is SSLPeerUnverifiedException } } -> Response(SERVICE_UNAVAILABLE)
+          .let { list -> list.isNotEmpty() && list.all { it is SSLException } } -> Response(SERVICE_UNAVAILABLE)
         healthOfAllServices.any { it.isError() } -> Response(INTERNAL_SERVER_ERROR)
         healthOfAllServices.any { !it.getOr(false) } -> Response(SERVICE_UNAVAILABLE)
         else -> Response(OK)

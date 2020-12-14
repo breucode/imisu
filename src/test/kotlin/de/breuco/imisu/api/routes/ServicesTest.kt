@@ -32,7 +32,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import javax.net.ssl.SSLPeerUnverifiedException
+import javax.net.ssl.SSLException
 
 class ServicesTest {
   private val appConfigMock = mockk<ApplicationConfig>()
@@ -338,7 +338,7 @@ class ServicesTest {
         val httpEndpoint = "http://example.org"
 
         every { userConfigMock.services[serviceId] } returns HttpServiceConfig(true, httpEndpoint)
-        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Err(SSLPeerUnverifiedException(""))
+        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Err(SSLException(""))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -419,7 +419,7 @@ class ServicesTest {
         "sslErrorService" to sslErrorServiceConfig
       )
 
-      every { httpServiceMock.checkHealth("http://example.org", true) } returns Err(SSLPeerUnverifiedException(""))
+      every { httpServiceMock.checkHealth("http://example.org", true) } returns Err(SSLException(""))
 
       val route = api.routing()
       val response = route(Request(method, "/services/health"))
