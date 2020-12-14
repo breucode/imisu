@@ -1,7 +1,8 @@
 package de.breuco.imisu.service
 
-import io.kotest.assertions.arrow.either.shouldBeLeft
-import io.kotest.assertions.arrow.either.shouldBeRight
+import com.github.michaelbull.result.unwrap
+import de.breuco.imisu.isError
+import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -51,7 +52,7 @@ class DnsServiceTest {
 
     val result = underTest.checkHealth(hostName, ip, port)
 
-    result.shouldBeRight(true)
+    result.unwrap() shouldBe true
 
     verify(exactly = 1) {
       dnsClientMock.query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
@@ -74,7 +75,7 @@ class DnsServiceTest {
 
     val result = underTest.checkHealth(hostName, ip, port)
 
-    result.shouldBeRight(false)
+    result.unwrap() shouldBe false
 
     verify(exactly = 1) {
       dnsClientMock.query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
@@ -93,7 +94,7 @@ class DnsServiceTest {
 
     val result = underTest.checkHealth(hostName, ip, port)
 
-    result.shouldBeLeft()
+    result.isError() shouldBe true
 
     verify(exactly = 1) {
       dnsClientMock.query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)

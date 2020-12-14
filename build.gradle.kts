@@ -136,7 +136,7 @@ dependencies {
   implementation("org.koin:koin-core-ext:$koinVersion")
   testImplementation("org.koin:koin-test:$koinVersion")
 
-  implementation("io.arrow-kt:arrow-core:0.11.0")
+  implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.9")
 
   val hopliteVersion = "1.3.10"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
@@ -152,7 +152,6 @@ dependencies {
     exclude("org.junit.vintage")
   }
   testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-  testImplementation("io.kotest:kotest-assertions-arrow-jvm:$kotestVersion")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
 
   testImplementation("io.mockk:mockk:1.10.0")

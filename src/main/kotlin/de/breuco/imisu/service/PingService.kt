@@ -1,14 +1,12 @@
 package de.breuco.imisu.service
 
-import arrow.core.Either
-import de.breuco.imisu.unsafeCatch
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.runCatching
 import java.net.InetAddress
 
 class PingService {
-
-  fun checkHealth(ip: String, timeout: Int): Either<Throwable, Boolean> {
-    return Either.unsafeCatch {
+  fun checkHealth(ip: String, timeout: Int): Result<Boolean, Throwable> =
+    runCatching {
       InetAddress.getByName(ip).isReachable(timeout)
     }
-  }
 }
