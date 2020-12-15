@@ -23,6 +23,12 @@ jobs:
           ./gradlew jacocoTestReport --console=plain
           testCoverage=$(awk -F"," '{ instructions += $4 + $5; covered += $5 } END { printf "%0.2f", 100*covered/instructions }' ./build/reports/jacoco/test/jacocoTestReport.csv)
           echo "::set-output name=coverage::$testCoverage"
+      - name: Get container image size
+        id: get_container_image_size
+        run: |
+          podman pull ghcr.io/breucode/imisu:stable
+          containerImageSize=$(podman image tree ghcr.io/breucode/imisu:stable | grep "Size: " | awk '{print $2}')
+          echo "::set-output name=containerImageSize::$containerImageSize"
       - name: Checkout badges branch
         uses: actions/checkout@v2
         with:
@@ -30,8 +36,10 @@ jobs:
       - name: Download and commit badge
         env:
           TEST_COVERAGE: ${{ steps.calculate_coverage.outputs.coverage }}
+          CONTAINER_IMAGE_SIZE: ${{ steps.get_container_image_size.outputs.containerImageSize }}
         run: |
           curl "https://img.shields.io/badge/coverage-${TEST_COVERAGE}%25-brightgreen?style=flat-square" > coverage.svg
+          curl "https://img.shields.io/badge/image%20size-${CONTAINER_IMAGE_SIZE}-informational?style=flat-square&logo=open-containers-initiative" > container-image-size.svg
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add *.svg
