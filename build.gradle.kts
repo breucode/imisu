@@ -12,7 +12,6 @@ plugins {
   id("com.github.ben-manes.versions") version "0.36.0"
   id("application")
   id("org.mikeneck.graalvm-native-image") version "0.9.1"
-  id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 group = "de.breuco"
@@ -23,13 +22,18 @@ tasks.wrapper {
 }
 
 application.mainClass.set("de.breuco.imisu.ApplicationKt")
-application.mainClassName = application.mainClass.get()
 
 tasks.jacocoTestReport {
   dependsOn(tasks.test)
 
   reports {
     csv.isEnabled = true
+  }
+}
+
+if (project.property("generateNativeImageConfig").toString().toBoolean()) {
+  application {
+    applicationDefaultJvmArgs = listOf("-agentlib:native-image-agent=config-merge-dir=src/main/resources/META-INF/native-image/")
   }
 }
 
@@ -180,16 +184,6 @@ tasks.nativeImage {
     "--initialize-at-run-time=io.netty.util.internal.logging.Log4JLogger",
     "-H:+StaticExecutableWithDynamicLibC"
   )
-}
-
-tasks.shadowJar {
-  archiveFileName.set("imisu.jar")
-  mergeServiceFiles()
-  manifest {
-    attributes(
-      "Multi-Release" to true
-    )
-  }
 }
 
 val compileKotlin: KotlinCompile by tasks
