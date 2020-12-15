@@ -116,11 +116,6 @@ repositories {
 }
 
 dependencies {
-  implementation("org.jetbrains.kotlin:kotlin-reflect") {
-    version {
-      strictly(Versions.kotlin)
-    }
-  }
   implementation(platform("org.http4k:http4k-bom:3.283.1"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
