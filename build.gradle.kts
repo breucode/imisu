@@ -168,6 +168,8 @@ tasks.nativeImage {
   arguments(
     "--no-fallback",
     "--allow-incomplete-classpath",
+    "--enable-http",
+    "--enable-https",
     "--initialize-at-build-time=" +
       listOf(
         "org.slf4j.impl.SimpleLogger",

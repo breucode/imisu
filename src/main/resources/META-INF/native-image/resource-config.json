@@ -17,19 +17,6 @@
       {
         "pattern": "\\QMETA-INF/resources/webjars/swagger-ui/@SWAGGER_UI_VERSION@/swagger-ui.css\\E"
       },
-      {
-        "pattern": "\\QMETA-INF/services/com.sksamuel.hoplite.decoder.Decoder\\E"
-      },
-      {
-        "pattern": "\\QMETA-INF/services/com.sksamuel.hoplite.parsers.Parser\\E"
-      },
-      {
-        "pattern": "\\QMETA-INF/services/kotlin.reflect.jvm.internal.impl.builtins.BuiltInsLoader\\E"
-      },
-      {
-        "pattern": "\\QMETA-INF/services/kotlin.reflect.jvm.internal.impl.resolve.ExternalOverridabilityCondition\\E"
-      },
-      { "pattern": "\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E" },
       { "pattern": "\\Qsimplelogger.properties\\E" },
       { "pattern": "\\Qversions.properties\\E" }
     ]
