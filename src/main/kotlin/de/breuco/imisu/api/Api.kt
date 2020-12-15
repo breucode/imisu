@@ -18,8 +18,8 @@ import org.http4k.routing.routes
 import org.http4k.routing.static
 
 class Api(private val appConfig: ApplicationConfig, private val services: Services) {
-  private fun getApiRenderer(): ContractRenderer {
-    return if (appConfig.userConfig.exposeSwagger) {
+  private fun getApiRenderer(): ContractRenderer =
+    if (appConfig.userConfig.exposeSwagger) {
       OpenApi3(
         ApiInfo("imisu API", appConfig.versions.applicationVersion, "The API of imisu"),
         Jackson
@@ -27,7 +27,6 @@ class Api(private val appConfig: ApplicationConfig, private val services: Servic
     } else {
       NoRenderer
     }
-  }
 
   private val swaggerUiPath = "/swagger.json"
 
