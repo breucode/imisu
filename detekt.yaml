@@ -1,5 +1,14 @@
 style:
-  active: false
+  MaxLineLength:
+    active: false
+  WildcardImport:
+    active: false
+  NewLineAtEndOfFile:
+    active: false
+  NoTabs:
+    active: false
+  SpacingBetweenPackageAndImports:
+    active: false
 
 formatting:
   active: false

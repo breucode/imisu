@@ -153,8 +153,8 @@ class Services(
         }
       }
 
-      fun get(): ContractRoute {
-        return healthRoute meta {
+      fun get(): ContractRoute =
+        healthRoute meta {
           summary = "Gets the health of a service. Returns 503, if service is unavailable"
           returning(
             OK to "service is healthy",
@@ -163,10 +163,9 @@ class Services(
             INVALID_SSL_CERTIFICATE to "the service is using an invalid SSL certificate"
           )
         } bindContract GET to handler()
-      }
 
-      fun head(): ContractRoute {
-        return healthRoute meta {
+      fun head(): ContractRoute =
+        healthRoute meta {
           summary = "Gets the health of a service. Returns 503, if service is unavailable"
           returning(
             OK to "service is healthy",
@@ -175,7 +174,6 @@ class Services(
             INVALID_SSL_CERTIFICATE to "the service is using an invalid SSL certificate"
           )
         } bindContract HEAD to handler()
-      }
     }
   }
 
@@ -200,8 +198,8 @@ class Services(
       }
     }
 
-    fun get(): ContractRoute {
-      return healthRoute meta {
+    fun get(): ContractRoute =
+      healthRoute meta {
         summary =
           "Gets the health of the services, which are available for monitoring. Returns 503, if one of " +
           "the services is unavailable"
@@ -211,10 +209,9 @@ class Services(
           INTERNAL_SERVER_ERROR to "At least one error during health checks"
         )
       } bindContract GET to handler()
-    }
 
-    fun head(): ContractRoute {
-      return healthRoute meta {
+    fun head(): ContractRoute =
+      healthRoute meta {
         summary =
           "Gets the health of the services, which are available for monitoring. Returns 503, if one of " +
           "the services is unavailable"
@@ -224,11 +221,10 @@ class Services(
           INTERNAL_SERVER_ERROR to "At least one error during health checks"
         )
       } bindContract HEAD to handler()
-    }
   }
 
-  private fun checkHealth(service: ServiceConfig): Result<Boolean, Throwable> {
-    return when (service) {
+  private fun checkHealth(service: ServiceConfig): Result<Boolean, Throwable> =
+    when (service) {
       is DnsServiceConfig -> dnsService.checkHealth(
         service.dnsDomain,
         service.dnsServer,
@@ -237,5 +233,4 @@ class Services(
       is PingServiceConfig -> pingService.checkHealth(service.pingServer, service.timeout)
       is HttpServiceConfig -> httpService.checkHealth(service.httpEndpoint, service.validateSsl)
     }
-  }
 }
