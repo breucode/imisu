@@ -45,6 +45,11 @@ This is an example configuration. When there are defaults specified, you can lea
       "timeout": "1000"                           # Timout for the Ping in ms. Default: 1000
       "enabled": false
     },
+    "exampleTcp": {
+      "tcpServer": "towel.blinkenlights.nl",      # Tcp server, which will be checked for a running service on the specified port
+      "tcpServerPort": 23,                        # Port on which the tcp service runs
+      "enabled": true
+    }
   }
 }
 ```
