@@ -23,6 +23,12 @@
     "allDeclaredMethods": true
   },
   {
+    "name": "de.breuco.imisu.config.TcpServiceConfig",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true
+  },
+  {
     "name": "de.breuco.imisu.config.UserConfig",
     "methods": [
       {
