@@ -2,6 +2,9 @@
 <SmellBaseline>
   <ManuallySuppressedIssues></ManuallySuppressedIssues>
   <CurrentIssues>
+    <ID>MagicNumber:CustomStatus.kt$521</ID>
+    <ID>MagicNumber:CustomStatus.kt$523</ID>
+    <ID>MagicNumber:CustomStatus.kt$525</ID>
     <ID>MagicNumber:CustomStatus.kt$526</ID>
   </CurrentIssues>
 </SmellBaseline>

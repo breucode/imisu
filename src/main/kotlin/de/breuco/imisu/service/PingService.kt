@@ -5,8 +5,8 @@ import com.github.michaelbull.result.runCatching
 import java.net.InetAddress
 
 class PingService {
-  fun checkHealth(ip: String, timeout: Int): Result<Boolean, Throwable> =
+  fun checkHealth(hostName: String, timeout: Int): Result<HealthCheckResult, Throwable> =
     runCatching {
-      InetAddress.getByName(ip).isReachable(timeout)
+      InetAddress.getByName(hostName).isReachable(timeout).toHealthCheckResult()
     }
 }

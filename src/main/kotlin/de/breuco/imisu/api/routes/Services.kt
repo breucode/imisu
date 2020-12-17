@@ -2,18 +2,21 @@ package de.breuco.imisu.api.routes
 
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.fold
-import com.github.michaelbull.result.getError
-import com.github.michaelbull.result.getOr
 import de.breuco.imisu.api.INVALID_SSL_CERTIFICATE
+import de.breuco.imisu.api.toHttpStatus
 import de.breuco.imisu.config.ApplicationConfig
 import de.breuco.imisu.config.DnsServiceConfig
 import de.breuco.imisu.config.HttpServiceConfig
 import de.breuco.imisu.config.PingServiceConfig
 import de.breuco.imisu.config.ServiceConfig
-import de.breuco.imisu.isError
+import de.breuco.imisu.config.TcpServiceConfig
 import de.breuco.imisu.service.DnsService
+import de.breuco.imisu.service.HealthCheckFailure
+import de.breuco.imisu.service.HealthCheckResult
+import de.breuco.imisu.service.HealthCheckSuccess
 import de.breuco.imisu.service.HttpService
 import de.breuco.imisu.service.PingService
+import de.breuco.imisu.service.TcpService
 import org.http4k.contract.ContractRoute
 import org.http4k.contract.div
 import org.http4k.contract.meta
@@ -30,29 +33,25 @@ import org.http4k.core.Status.Companion.SERVICE_UNAVAILABLE
 import org.http4k.format.Jackson.auto
 import org.http4k.lens.Path
 import org.http4k.lens.string
-import javax.net.ssl.SSLException
 
 class Services(
   private val appConfig: ApplicationConfig,
   private val dnsService: DnsService,
   private val httpService: HttpService,
-  private val pingService: PingService
+  private val pingService: PingService,
+  private val tcpService: TcpService
 ) {
 
   val routes by lazy {
     if (appConfig.userConfig.exposeFullApi) {
       listOf(
         get(),
-        health.get(),
-        health.head(),
         id.get(),
         id.health.get(),
         id.health.head()
       )
     } else {
       listOf(
-        health.get(),
-        health.head(),
         id.health.get(),
         id.health.head()
       )
@@ -135,17 +134,12 @@ class Services(
 
             queryStatus.fold(
               failure = {
-                if (it is SSLException) {
-                  Response(INVALID_SSL_CERTIFICATE)
-                } else {
-                  Response(INTERNAL_SERVER_ERROR)
-                }
+                Response(INTERNAL_SERVER_ERROR)
               },
               success = {
-                if (it) {
-                  Response(OK)
-                } else {
-                  Response(SERVICE_UNAVAILABLE)
+                when (it) {
+                  is HealthCheckSuccess -> Response(OK)
+                  is HealthCheckFailure -> Response(it.cause.toHttpStatus())
                 }
               }
             )
@@ -177,53 +171,7 @@ class Services(
     }
   }
 
-  private val health = object {
-    private val healthRoute = servicesRoute / "/health"
-
-    private fun handler(): HttpHandler = {
-      val healthOfAllServices = appConfig.userConfig.services
-        .filter { (_, serviceConfig) -> serviceConfig.enabled }
-        .values
-        .map {
-          checkHealth(it)
-        }
-
-      when {
-        healthOfAllServices
-          .mapNotNull { it.getError() }
-          .let { list -> list.isNotEmpty() && list.all { it is SSLException } } -> Response(SERVICE_UNAVAILABLE)
-        healthOfAllServices.any { it.isError() } -> Response(INTERNAL_SERVER_ERROR)
-        healthOfAllServices.any { !it.getOr(false) } -> Response(SERVICE_UNAVAILABLE)
-        else -> Response(OK)
-      }
-    }
-
-    fun get(): ContractRoute =
-      healthRoute meta {
-        summary =
-          "Gets the health of the services, which are available for monitoring. Returns 503, if one of " +
-          "the services is unavailable"
-        returning(
-          OK to "All services are healthy",
-          SERVICE_UNAVAILABLE to "At least one of the services is not healthy",
-          INTERNAL_SERVER_ERROR to "At least one error during health checks"
-        )
-      } bindContract GET to handler()
-
-    fun head(): ContractRoute =
-      healthRoute meta {
-        summary =
-          "Gets the health of the services, which are available for monitoring. Returns 503, if one of " +
-          "the services is unavailable"
-        returning(
-          OK to "All services are healthy",
-          SERVICE_UNAVAILABLE to "At least one of the services is not healthy",
-          INTERNAL_SERVER_ERROR to "At least one error during health checks"
-        )
-      } bindContract HEAD to handler()
-  }
-
-  private fun checkHealth(service: ServiceConfig): Result<Boolean, Throwable> =
+  private fun checkHealth(service: ServiceConfig): Result<HealthCheckResult, Throwable> =
     when (service) {
       is DnsServiceConfig -> dnsService.checkHealth(
         service.dnsDomain,
@@ -232,5 +180,6 @@ class Services(
       )
       is PingServiceConfig -> pingService.checkHealth(service.pingServer, service.timeout)
       is HttpServiceConfig -> httpService.checkHealth(service.httpEndpoint, service.validateSsl)
+      is TcpServiceConfig -> tcpService.checkHealth(service.tcpServer, service.tcpServerPort)
     }
 }
