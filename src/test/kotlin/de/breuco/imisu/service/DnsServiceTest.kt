@@ -1,14 +1,13 @@
 package de.breuco.imisu.service
 
+import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.unwrap
-import de.breuco.imisu.isError
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.clearAllMocks
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import mu.KLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -19,15 +18,13 @@ import java.net.InetAddress
 
 class DnsServiceTest {
 
-  private val loggerMock = mockk<KLogger>(relaxed = true)
-
   private val dnsClientMock = mockk<DnsClient>()
 
   private lateinit var underTest: DnsService
 
   @BeforeEach
   fun beforeEach() {
-    underTest = DnsService(loggerMock, dnsClientMock)
+    underTest = DnsService(dnsClientMock)
   }
 
   @AfterEach
@@ -52,7 +49,7 @@ class DnsServiceTest {
 
     val result = underTest.checkHealth(hostName, ip, port)
 
-    result.unwrap() shouldBe true
+    result.unwrap().shouldBeInstanceOf<HealthCheckSuccess>()
 
     verify(exactly = 1) {
       dnsClientMock.query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
@@ -75,7 +72,7 @@ class DnsServiceTest {
 
     val result = underTest.checkHealth(hostName, ip, port)
 
-    result.unwrap() shouldBe false
+    result.unwrap().shouldBeInstanceOf<HealthCheckFailure>()
 
     verify(exactly = 1) {
       dnsClientMock.query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
@@ -94,7 +91,7 @@ class DnsServiceTest {
 
     val result = underTest.checkHealth(hostName, ip, port)
 
-    result.isError() shouldBe true
+    result.shouldBeInstanceOf<Err<*>>()
 
     verify(exactly = 1) {
       dnsClientMock.query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)

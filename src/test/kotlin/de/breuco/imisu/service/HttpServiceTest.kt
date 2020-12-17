@@ -1,8 +1,8 @@
 package de.breuco.imisu.service
 
+import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.unwrap
-import de.breuco.imisu.isError
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.clearAllMocks
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -49,7 +49,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, true)
 
-    result.unwrap() shouldBe true
+    result.unwrap().shouldBeInstanceOf<HealthCheckSuccess>()
 
     verify(exactly = 1) {
       httpClientMock(Request(Method.HEAD, hostName))
@@ -69,7 +69,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, true)
 
-    result.unwrap() shouldBe false
+    result.unwrap().shouldBeInstanceOf<HealthCheckFailure>()
 
     verify(exactly = 1) {
       httpClientMock(Request(Method.HEAD, hostName))
@@ -85,7 +85,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, true)
 
-    result.isError() shouldBe true
+    result.shouldBeInstanceOf<Err<*>>()
 
     verify(exactly = 1) {
       httpClientMock(Request(Method.HEAD, hostName))
@@ -103,7 +103,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, true)
 
-    result.unwrap() shouldBe true
+    result.unwrap().shouldBeInstanceOf<HealthCheckSuccess>()
 
     verify(exactly = 1) {
       httpClientMock(Request(Method.HEAD, hostName))
@@ -122,7 +122,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, false)
 
-    result.unwrap() shouldBe true
+    result.unwrap().shouldBeInstanceOf<HealthCheckSuccess>()
 
     verify(exactly = 1) {
       nonSslValidatingHttpClientMock(Request(Method.HEAD, hostName))

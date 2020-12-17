@@ -1,8 +1,8 @@
 package de.breuco.imisu.service
 
+import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.unwrap
-import de.breuco.imisu.isError
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -34,7 +34,7 @@ class PingServiceTest {
 
     val result = underTest.checkHealth(pingAddress, timeout = timeout)
 
-    result.unwrap() shouldBe true
+    result.unwrap().shouldBeInstanceOf<HealthCheckSuccess>()
   }
 
   @Test
@@ -47,7 +47,7 @@ class PingServiceTest {
 
     val result = underTest.checkHealth(pingAddress, timeout = timeout)
 
-    result.unwrap() shouldBe false
+    result.unwrap().shouldBeInstanceOf<HealthCheckFailure>()
   }
 
   @Test
@@ -60,6 +60,6 @@ class PingServiceTest {
 
     val result = underTest.checkHealth(pingAddress, timeout = timeout)
 
-    result.isError() shouldBe true
+    result.shouldBeInstanceOf<Err<*>>()
   }
 }
