@@ -2,7 +2,6 @@ package de.breuco.imisu
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default
-import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import de.breuco.imisu.api.Api
 import de.breuco.imisu.api.routes.Services
@@ -25,19 +24,13 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.minidns.DnsClient
 import java.nio.file.Paths
-import kotlin.system.exitProcess
 
 class Application(
   private val api: Api,
   private val appConfig: ApplicationConfig,
   private val logger: KLogger
 ) {
-  fun run(printVersion: Boolean) {
-    if (printVersion) {
-      println("imisu ${appConfig.versions.applicationVersion}")
-      exitProcess(0)
-    }
-
+  fun run() {
     logger.info { "imisu ${appConfig.versions.applicationVersion}" }
     logger.info { "Using config from ${appConfig.configPath.toAbsolutePath()}" }
     logger.info { "Starting application on port ${appConfig.userConfig.serverPort}" }
@@ -54,9 +47,6 @@ class Application(
 
 private class CliApplicationStarter : CliktCommand(name = "imisu") {
   private val configPath: String by option(help = "Path to the configuration").default("imisu.conf")
-  private val displayVersion by option("-v", "--version", help = "Print the version of imisu and exit").flag(
-    default = false
-  )
 
   override fun run() {
     val koinApplication = startKoin {
@@ -94,7 +84,7 @@ private class CliApplicationStarter : CliktCommand(name = "imisu") {
 
     val application: Application = koinApplication.koin.get()
 
-    application.run(displayVersion)
+    application.run()
   }
 }
 
