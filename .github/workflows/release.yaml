@@ -42,7 +42,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ steps.get_version.outputs.version }}
         run: |
-          podman run -p 8080:8080 -v "./imisu.conf:/imisu.conf:ro" "ghcr.io/breucode/imisu:$IMAGE_TAG" &
+          docker run -p 8080:8080 -v "$(pwd)/imisu.conf:/imisu.conf:ro" "ghcr.io/breucode/imisu:$IMAGE_TAG" &
           sleep 10
       - name: Download swagger
         run: |
