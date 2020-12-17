@@ -3,6 +3,9 @@ package de.breuco.imisu.api.routes
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.fold
 import de.breuco.imisu.api.INVALID_SSL_CERTIFICATE
+import de.breuco.imisu.api.ORIGIN_IS_UNREACHABLE
+import de.breuco.imisu.api.SERVER_IS_DOWN
+import de.breuco.imisu.api.SSL_HANDSHAKE_FAILED
 import de.breuco.imisu.api.toHttpStatus
 import de.breuco.imisu.config.ApplicationConfig
 import de.breuco.imisu.config.DnsServiceConfig
@@ -29,7 +32,6 @@ import org.http4k.core.Response
 import org.http4k.core.Status.Companion.INTERNAL_SERVER_ERROR
 import org.http4k.core.Status.Companion.NOT_FOUND
 import org.http4k.core.Status.Companion.OK
-import org.http4k.core.Status.Companion.SERVICE_UNAVAILABLE
 import org.http4k.format.Jackson.auto
 import org.http4k.lens.Path
 import org.http4k.lens.string
@@ -75,7 +77,8 @@ class Services(
         responseLens to mapOf(
           "httpExampleService" to HttpServiceConfig(true, "http://example.org"),
           "dnsExampleService" to DnsServiceConfig(true, "1.1.1.1"),
-          "pingExampleService" to PingServiceConfig(true, "1.1.1.1")
+          "pingExampleService" to PingServiceConfig(true, "1.1.1.1"),
+          "tcpExampleService" to TcpServiceConfig(true, "towel.blinkenlights.nl", 23)
         )
       )
     } bindContract GET to handler()
@@ -147,26 +150,26 @@ class Services(
         }
       }
 
+      val routeSummary = "Gets the health of a service."
+      val statusDescriptions = arrayOf(
+        OK to "the service is healthy",
+        SERVER_IS_DOWN to "the service is not healthy",
+        ORIGIN_IS_UNREACHABLE to "there was a problem reaching the service",
+        INVALID_SSL_CERTIFICATE to "the service is using an invalid SSL certificate",
+        SSL_HANDSHAKE_FAILED to "there was a problem with establishing an ssl connection",
+        INTERNAL_SERVER_ERROR to "error during health check"
+      )
+
       fun get(): ContractRoute =
         healthRoute meta {
-          summary = "Gets the health of a service. Returns 503, if service is unavailable"
-          returning(
-            OK to "service is healthy",
-            SERVICE_UNAVAILABLE to "service is not healthy",
-            INTERNAL_SERVER_ERROR to "error during health check",
-            INVALID_SSL_CERTIFICATE to "the service is using an invalid SSL certificate"
-          )
+          summary = routeSummary
+          returning(*statusDescriptions)
         } bindContract GET to handler()
 
       fun head(): ContractRoute =
         healthRoute meta {
-          summary = "Gets the health of a service. Returns 503, if service is unavailable"
-          returning(
-            OK to "service is healthy",
-            SERVICE_UNAVAILABLE to "service is not healthy",
-            INTERNAL_SERVER_ERROR to "error during health check",
-            INVALID_SSL_CERTIFICATE to "the service is using an invalid SSL certificate"
-          )
+          summary = routeSummary
+          returning(*statusDescriptions)
         } bindContract HEAD to handler()
     }
   }
