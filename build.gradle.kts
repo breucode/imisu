@@ -7,11 +7,11 @@ plugins {
   kotlin("jvm") version Versions.kotlin
   kotlin("kapt") version Versions.kotlin
   id("jacoco")
-  id("com.diffplug.spotless") version "5.8.2"
-  id("io.gitlab.arturbosch.detekt") version "1.14.2"
+  id("com.diffplug.spotless") version "5.9.0"
+  id("io.gitlab.arturbosch.detekt") version "1.15.0"
   id("com.github.ben-manes.versions") version "0.36.0"
   id("application")
-  id("org.mikeneck.graalvm-native-image") version "0.9.1"
+  id("org.mikeneck.graalvm-native-image") version "1.2.0"
 }
 
 group = "de.breuco"
@@ -37,7 +37,7 @@ if (project.property("generateNativeImageConfig").toString().toBoolean()) {
   }
 }
 
-val swaggerUiVersion = "3.38.0"
+val swaggerUiVersion = "3.40.0"
 
 val createVersionProperties by tasks.registering(WriteProperties::class) {
   dependsOn(tasks.processResources)
@@ -116,7 +116,7 @@ repositories {
 }
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:3.283.1"))
+  implementation(platform("org.http4k:http4k-bom:4.1.1.1"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
@@ -130,14 +130,14 @@ dependencies {
 
   implementation("org.minidns:minidns-hla:1.0.0")
 
-  val koinVersion = "2.2.1"
+  val koinVersion = "2.2.2"
   implementation("org.koin:koin-core:$koinVersion")
   implementation("org.koin:koin-core-ext:$koinVersion")
   testImplementation("org.koin:koin-test:$koinVersion")
 
   implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.9")
 
-  val hopliteVersion = "1.3.10"
+  val hopliteVersion = "1.3.13"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
