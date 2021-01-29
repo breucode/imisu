@@ -75,7 +75,7 @@ spotless {
   format("prettier") {
     target("*.md", "*.yaml", ".github/**/*.yaml", "src/**/*.json")
 
-    prettier("2.2.0")
+    prettier("2.2.1")
   }
 }
 
@@ -116,7 +116,7 @@ repositories {
 }
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:4.1.1.1"))
+  implementation(platform("org.http4k:http4k-bom:4.1.1.2"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
