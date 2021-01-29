@@ -17,7 +17,9 @@ jobs:
       - id: get_version
         uses: battila7/get-version-action@v2
       - name: Check
-        run: ./gradlew check --console=plain
+        run: |
+          unset JAVA_HOME
+          ./gradlew check --console=plain
       - name: Build native image
         run: ./gradlew nativeImage --console=plain
       - name: Login to GitHub Container Registry
