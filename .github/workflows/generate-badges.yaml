@@ -20,6 +20,7 @@ jobs:
       - name: Calculate test coverage
         id: calculate_coverage
         run: |
+          unset JAVA_HOME
           ./gradlew jacocoTestReport --console=plain
           testCoverage=$(awk -F"," '{ instructions += $4 + $5; covered += $5 } END { printf "%0.2f", 100*covered/instructions }' ./build/reports/jacoco/test/jacocoTestReport.csv)
           echo "::set-output name=coverage::$testCoverage"
