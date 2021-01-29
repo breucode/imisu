@@ -17,4 +17,12 @@ jobs:
         env:
           NODEJS_CHECK_SIGNATURES: no
       - name: Check
-        run: ./gradlew check --console=plain
+        run: |
+          unset JAVA_HOME
+          ./gradlew check --console=plain
+      - name: Upload test reports
+        uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: test-reports
+          path: build/reports/tests
