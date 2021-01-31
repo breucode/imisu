@@ -116,7 +116,7 @@ repositories {
 }
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:4.1.1.2"))
+  implementation(platform("org.http4k:http4k-bom:4.2.0.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
@@ -135,9 +135,9 @@ dependencies {
   implementation("org.koin:koin-core-ext:$koinVersion")
   testImplementation("org.koin:koin-test:$koinVersion")
 
-  implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.9")
+  implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.10")
 
-  val hopliteVersion = "1.3.13"
+  val hopliteVersion = "1.3.14"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
