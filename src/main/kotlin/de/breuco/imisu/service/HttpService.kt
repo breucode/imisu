@@ -1,8 +1,8 @@
 package de.breuco.imisu.service
 
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.recoverIf
 import com.github.michaelbull.result.runCatching
-import de.breuco.imisu.toSuccessIf
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -26,7 +26,7 @@ class HttpService(
         else -> HealthCheckFailure()
       }
       // Replace with recoverIf, when next kotlin-result release is out
-    }.toSuccessIf(
+    }.recoverIf(
       { it is SSLException },
       { HealthCheckFailure(it) }
     )

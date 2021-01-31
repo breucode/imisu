@@ -1,8 +1,8 @@
 package de.breuco.imisu.service
 
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.recoverIf
 import com.github.michaelbull.result.runCatching
-import de.breuco.imisu.toSuccessIf
 import org.minidns.DnsClient
 import org.minidns.record.Record
 import org.minidns.util.MultipleIoException
@@ -14,7 +14,7 @@ class DnsService(private val dnsClient: DnsClient) {
       dnsClient.query(dnsDomain, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(host), port)
         .wasSuccessful()
         .toHealthCheckResult()
-    }.toSuccessIf(
+    }.recoverIf(
       { it is MultipleIoException },
       { HealthCheckFailure(it) }
     )

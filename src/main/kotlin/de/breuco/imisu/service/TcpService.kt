@@ -1,8 +1,8 @@
 package de.breuco.imisu.service
 
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.recoverIf
 import com.github.michaelbull.result.runCatching
-import de.breuco.imisu.toSuccessIf
 import java.net.ConnectException
 import java.net.Socket
 
@@ -11,7 +11,7 @@ class TcpService {
     runCatching {
       Socket(hostName, port).use { }
       HealthCheckSuccess
-    }.toSuccessIf(
+    }.recoverIf(
       { it is ConnectException },
       { HealthCheckFailure(it) }
     )
