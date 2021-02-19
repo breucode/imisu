@@ -7,7 +7,7 @@ plugins {
   kotlin("jvm") version Versions.kotlin
   kotlin("kapt") version Versions.kotlin
   id("jacoco")
-  id("com.diffplug.spotless") version "5.9.0"
+  id("com.diffplug.spotless") version "5.10.2"
   id("io.gitlab.arturbosch.detekt") version "1.15.0"
   id("com.github.ben-manes.versions") version "0.36.0"
   id("application")
@@ -37,7 +37,7 @@ if (project.property("generateNativeImageConfig").toString().toBoolean()) {
   }
 }
 
-val swaggerUiVersion = "3.40.0"
+val swaggerUiVersion = "3.43.0"
 
 val createVersionProperties by tasks.registering(WriteProperties::class) {
   dependsOn(tasks.processResources)
@@ -116,7 +116,7 @@ repositories {
 }
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:4.2.0.0"))
+  implementation(platform("org.http4k:http4k-bom:4.3.2.2"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
@@ -135,9 +135,9 @@ dependencies {
   implementation("org.koin:koin-core-ext:$koinVersion")
   testImplementation("org.koin:koin-test:$koinVersion")
 
-  implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.10")
+  implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.11")
 
-  val hopliteVersion = "1.3.14"
+  val hopliteVersion = "1.4.0"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
@@ -145,13 +145,13 @@ dependencies {
   runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
   implementation("io.github.microutils:kotlin-logging:2.0.4")
 
-  val kotestVersion = "4.3.2"
+  val kotestVersion = "4.4.1"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
     exclude("junit")
     exclude("org.junit.vintage")
   }
   testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
 
   testImplementation("io.mockk:mockk:1.10.0")
 }
