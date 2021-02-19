@@ -56,7 +56,7 @@ This is an example configuration. When there are defaults specified, you can lea
 
 **DO NOT use `"exposeFullApi": true` in a production environment**. It will show the complete configuration of imisu, including internal IPs and URLs.
 
-Note, that imisu determines, which type of service you configured via the keywords `dnsServer`, `httpEndpoint` and `pingServer`.
+Note, that imisu determines, which type of service you configured via the keywords `dnsServer`, `httpEndpoint`, `pingServer` and `tcpServer`.
 When you try to mix `httpEndpoint` and `dnsDomain` in one service, the configuration is invalid, and the application will not start.
 
 ## Run
