@@ -1,8 +1,5 @@
 package de.breuco.imisu
 
-import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.parameters.options.default
-import com.github.ajalt.clikt.parameters.options.option
 import de.breuco.imisu.api.Api
 import de.breuco.imisu.api.routes.Services
 import de.breuco.imisu.config.ApplicationConfig
@@ -45,47 +42,41 @@ class Application(
   }
 }
 
-private class CliApplicationStarter : CliktCommand(name = "imisu") {
-  private val configPath: String by option(help = "Path to the configuration").default("imisu.conf")
-
-  override fun run() {
-    val koinApplication = startKoin {
-      modules(
-        module {
-          single { Api(get(), get()) }
-          single { Services(get(), get(), get(), get(), get()) }
-          single {
-            HttpService(
-              get(named("httpClient")),
-              get(named("nonSslValidatingHttpClient"))
-            )
-          }
-          single {
-            DnsService(
-              get()
-            )
-          }
-          single { PingService() }
-          single { TcpService() }
-          single<HttpHandler>(named("httpClient")) { OkHttp(OkHttpClient.Builder().build()) }
-          single<HttpHandler>(named("nonSslValidatingHttpClient")) { OkHttp(PreCannedOkHttpClients.insecureOkHttpClient()) }
-          single { DnsClient(null) }
-          single {
-            ApplicationConfig(
-              get(parameters = { parametersOf(ApplicationConfig::class.java.name) }),
-              Paths.get(configPath)
-            )
-          }
-          factory { (name: String) -> KotlinLogging.logger(name) }
-          single { Application(get(), get(), get(parameters = { parametersOf(Application::class.java.name) })) }
+fun main(args: Array<String>) {
+  val koinApplication = startKoin {
+    modules(
+      module {
+        single { Api(get(), get()) }
+        single { Services(get(), get(), get(), get(), get()) }
+        single {
+          HttpService(
+            get(named("httpClient")),
+            get(named("nonSslValidatingHttpClient"))
+          )
         }
-      )
-    }
-
-    val application: Application = koinApplication.koin.get()
-
-    application.run()
+        single {
+          DnsService(
+            get()
+          )
+        }
+        single { PingService() }
+        single { TcpService() }
+        single<HttpHandler>(named("httpClient")) { OkHttp(OkHttpClient.Builder().build()) }
+        single<HttpHandler>(named("nonSslValidatingHttpClient")) { OkHttp(PreCannedOkHttpClients.insecureOkHttpClient()) }
+        single { DnsClient(null) }
+        single {
+          ApplicationConfig(
+            get(parameters = { parametersOf(ApplicationConfig::class.java.name) }),
+            Paths.get(args.firstOrNull() ?: "imisu.conf")
+          )
+        }
+        factory { (name: String) -> KotlinLogging.logger(name) }
+        single { Application(get(), get(), get(parameters = { parametersOf(Application::class.java.name) })) }
+      }
+    )
   }
-}
 
-fun main(args: Array<String>) = CliApplicationStarter().main(args)
+  val application: Application = koinApplication.koin.get()
+
+  application.run()
+}

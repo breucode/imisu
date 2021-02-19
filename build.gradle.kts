@@ -126,8 +126,6 @@ dependencies {
 
   runtimeOnly("org.webjars:swagger-ui:$swaggerUiVersion")
 
-  implementation("com.github.ajalt:clikt:2.8.0")
-
   implementation("org.minidns:minidns-hla:1.0.0")
 
   val koinVersion = "2.2.2"
