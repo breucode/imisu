@@ -152,6 +152,10 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
 
   testImplementation("io.mockk:mockk:1.10.0")
+  val mockitoVersion = "3.7.7"
+  testImplementation("org.mockito:mockito-core:$mockitoVersion")
+  testRuntimeOnly("org.mockito:mockito-inline:$mockitoVersion")
+  testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
 }
 
 tasks.test {
