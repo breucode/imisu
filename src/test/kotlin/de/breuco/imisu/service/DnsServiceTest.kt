@@ -2,12 +2,14 @@ package de.breuco.imisu.service
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.unwrap
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.reset
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import com.nhaarman.mockitokotlin2.whenever
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.mockk.clearAllMocks
-import io.mockk.confirmVerified
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -18,7 +20,7 @@ import java.net.InetAddress
 
 class DnsServiceTest {
 
-  private val dnsClientMock = mockk<DnsClient>()
+  private val dnsClientMock = mock<DnsClient>()
 
   private lateinit var underTest: DnsService
 
@@ -29,8 +31,8 @@ class DnsServiceTest {
 
   @AfterEach
   fun afterEach() {
-    confirmVerified(dnsClientMock)
-    clearAllMocks()
+    verifyNoMoreInteractions(dnsClientMock)
+    reset(dnsClientMock)
   }
 
   @Test
@@ -39,21 +41,20 @@ class DnsServiceTest {
     val ip = "192.168.0.1"
     val port = 53
 
-    val dnsQueryResultMock = mockk<DnsQueryResult>()
+    val dnsQueryResultMock = mock<DnsQueryResult>()
 
-    every {
-      dnsClientMock.query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
-    } returns dnsQueryResultMock
+    doReturn(dnsQueryResultMock)
+      .whenever(dnsClientMock).query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
 
-    every { dnsQueryResultMock.wasSuccessful() } returns true
+    doReturn(true)
+      .whenever(dnsQueryResultMock).wasSuccessful()
 
     val result = underTest.checkHealth(hostName, ip, port)
 
     result.unwrap().shouldBeInstanceOf<HealthCheckSuccess>()
 
-    verify(exactly = 1) {
-      dnsClientMock.query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
-    }
+    verify(dnsClientMock)
+      .query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
   }
 
   @Test
@@ -62,21 +63,20 @@ class DnsServiceTest {
     val ip = "192.168.0.1"
     val port = 53
 
-    val dnsQueryResultMock = mockk<DnsQueryResult>()
+    val dnsQueryResultMock = mock<DnsQueryResult>()
 
-    every {
-      dnsClientMock.query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
-    } returns dnsQueryResultMock
+    doReturn(dnsQueryResultMock)
+      .whenever(dnsClientMock).query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
 
-    every { dnsQueryResultMock.wasSuccessful() } returns false
+    doReturn(false)
+      .whenever(dnsQueryResultMock).wasSuccessful()
 
     val result = underTest.checkHealth(hostName, ip, port)
 
     result.unwrap().shouldBeInstanceOf<HealthCheckFailure>()
 
-    verify(exactly = 1) {
-      dnsClientMock.query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
-    }
+    verify(dnsClientMock)
+      .query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
   }
 
   @Test
@@ -85,16 +85,14 @@ class DnsServiceTest {
     val ip = "192.168.0.1"
     val port = 53
 
-    every {
-      dnsClientMock.query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
-    } throws Exception()
+    doAnswer { throw Exception() }
+      .whenever(dnsClientMock).query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
 
     val result = underTest.checkHealth(hostName, ip, port)
 
     result.shouldBeInstanceOf<Err<*>>()
 
-    verify(exactly = 1) {
-      dnsClientMock.query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
-    }
+    verify(dnsClientMock)
+      .query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
   }
 }
