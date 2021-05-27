@@ -7,11 +7,11 @@ plugins {
   kotlin("jvm") version Versions.kotlin
   kotlin("kapt") version Versions.kotlin
   id("jacoco")
-  id("com.diffplug.spotless") version "5.10.2"
-  id("io.gitlab.arturbosch.detekt") version "1.15.0"
-  id("com.github.ben-manes.versions") version "0.36.0"
+  id("com.diffplug.spotless") version "5.12.5"
+  id("io.gitlab.arturbosch.detekt") version "1.17.1"
+  id("com.github.ben-manes.versions") version "0.39.0"
   id("application")
-  id("org.mikeneck.graalvm-native-image") version "1.2.0"
+  id("org.mikeneck.graalvm-native-image") version "1.4.1"
 }
 
 group = "de.breuco"
@@ -37,7 +37,7 @@ if (project.property("generateNativeImageConfig").toString().toBoolean()) {
   }
 }
 
-val swaggerUiVersion = "3.43.0"
+val swaggerUiVersion = "3.49.0"
 
 val createVersionProperties by tasks.registering(WriteProperties::class) {
   dependsOn(tasks.processResources)
@@ -55,7 +55,7 @@ tasks.classes {
 }
 
 spotless {
-  val ktlintVersion = "0.40.0"
+  val ktlintVersion = "0.41.0"
   kotlin {
     ktlint(ktlintVersion).userData(
       mapOf(
@@ -88,8 +88,8 @@ tasks {
 }
 
 detekt {
-  failFast = true
   buildUponDefaultConfig = true
+  allRules = true
   config = files("$projectDir/detekt.yaml")
   baseline = file("$projectDir/detekt-baseline.xml")
 }
@@ -112,11 +112,10 @@ tasks.named("dependencyUpdates", DependencyUpdatesTask::class.java).configure {
 
 repositories {
   mavenCentral()
-  jcenter()
 }
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:4.3.2.2"))
+  implementation(platform("org.http4k:http4k-bom:4.9.4.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
@@ -128,30 +127,32 @@ dependencies {
 
   implementation("org.minidns:minidns-hla:1.0.0")
 
-  val koinVersion = "2.2.2"
-  implementation("org.koin:koin-core:$koinVersion")
-  implementation("org.koin:koin-core-ext:$koinVersion")
-  testImplementation("org.koin:koin-test:$koinVersion")
+  val koinVersion = "3.0.2"
+  implementation("io.insert-koin:koin-core:$koinVersion")
+  implementation("io.insert-koin:koin-core-ext:$koinVersion")
+  testImplementation("io.insert-koin:koin-test:$koinVersion")
 
   implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.11")
 
-  val hopliteVersion = "1.4.0"
+  val hopliteVersion = "1.4.1"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
 
   runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
-  implementation("io.github.microutils:kotlin-logging:2.0.4")
+  implementation("io.github.microutils:kotlin-logging:2.0.6")
 
-  val kotestVersion = "4.4.1"
+  val kotestVersion = "4.6.0"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
     exclude("junit")
     exclude("org.junit.vintage")
   }
   testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
 
   testImplementation("io.mockk:mockk:1.10.0")
+
+  implementation(kotlin("reflect", version = Versions.kotlin))
 }
 
 tasks.test {
@@ -160,7 +161,11 @@ tasks.test {
 
 tasks.nativeImage {
   setGraalVmHome(System.getProperty("java.home"))
-  mainClass = application.mainClass.get()
+  buildType { buildTypeSelector ->
+    buildTypeSelector.executable {
+      main = application.mainClass.get()
+    }
+  }
   executableName = "imisu"
   arguments(
     "--no-fallback",
@@ -175,7 +180,8 @@ tasks.nativeImage {
         "org.minidns"
       ).joinToString(","),
     "--initialize-at-run-time=io.netty.util.internal.logging.Log4JLogger",
-    "-H:+StaticExecutableWithDynamicLibC"
+    "-H:+StaticExecutableWithDynamicLibC",
+    "-H:+InlineBeforeAnalysis"
   )
 }
 
