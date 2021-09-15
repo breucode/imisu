@@ -5,25 +5,25 @@ import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
-import io.mockk.Runs
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.verify
 import mu.KLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.reset
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import java.nio.file.Paths
 
 class ApplicationConfigTest {
 
-  private val loggerMock = mockk<KLogger>(relaxed = true)
+  private val loggerMock = mock<KLogger>(lenient = true)
 
   @AfterEach
   fun afterEach() {
-    clearAllMocks()
+    reset(loggerMock)
   }
 
   @Test
@@ -107,37 +107,41 @@ class ApplicationConfigTest {
 
   @Test
   fun `Exit application, when forbidden service names are used`() {
-    mockkStatic(Runtime::class)
+    Mockito.mockStatic(Runtime::class.java).use {
+      val runtimeMock = mock<Runtime>()
+      it.`when`<Any> { Runtime.getRuntime() }.thenReturn(runtimeMock)
 
-    val runtimeMock = mockk<Runtime>()
-    every { Runtime.getRuntime() } returns runtimeMock
-    every { runtimeMock.exit(neq(0)) } just Runs
+      whenever(Runtime.getRuntime()).thenReturn(runtimeMock)
 
-    shouldThrow<Exception> {
-      ApplicationConfig(loggerMock, Paths.get(javaClass.getResource("/forbidden-service-name.conf").toURI())).userConfig
-    }
+      shouldThrow<Exception> {
+        ApplicationConfig(
+          loggerMock,
+          Paths.get(javaClass.getResource("/forbidden-service-name.conf").toURI())
+        ).userConfig
+      }
 
-    verify(exactly = 1) {
-      loggerMock.error(any<() -> Any?>())
-      runtimeMock.exit(neq(0))
+      verify(loggerMock).error(any<() -> Any?>())
+      verify(runtimeMock).exit(ArgumentMatchers.intThat { exitCode -> exitCode != 0 })
     }
   }
 
   @Test
   fun `Exit application on broken config`() {
-    mockkStatic(Runtime::class)
+    Mockito.mockStatic(Runtime::class.java).use {
+      val runtimeMock = mock<Runtime>()
+      it.`when`<Any> { Runtime.getRuntime() }.thenReturn(runtimeMock)
 
-    val runtimeMock = mockk<Runtime>()
-    every { Runtime.getRuntime() } returns runtimeMock
-    every { runtimeMock.exit(neq(0)) } just Runs
+      whenever(Runtime.getRuntime()).thenReturn(runtimeMock)
 
-    shouldThrow<Exception> {
-      ApplicationConfig(loggerMock, Paths.get(javaClass.getResource("/broken.conf").toURI())).userConfig
-    }
+      shouldThrow<Exception> {
+        ApplicationConfig(
+          loggerMock,
+          Paths.get(javaClass.getResource("/broken.conf").toURI())
+        ).userConfig
+      }
 
-    verify(exactly = 1) {
-      loggerMock.error(any<() -> Any?>())
-      runtimeMock.exit(neq(0))
+      verify(loggerMock).error(any<() -> Any?>())
+      verify(runtimeMock).exit(ArgumentMatchers.intThat { exitCode -> exitCode != 0 })
     }
   }
 }

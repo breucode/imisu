@@ -55,21 +55,21 @@ class PingServiceTest {
     }
   }
 
-    @Test
-    fun `Ping error`() {
-      val pingAddress = "192.168.0.1"
-      val timeout = 1000
+  @Test
+  fun `Ping error`() {
+    val pingAddress = "192.168.0.1"
+    val timeout = 1000
 
-      Mockito.mockStatic(InetAddress::class.java).use {
-        val inetAddress = mock<InetAddress>()
-        it.`when`<Any> { InetAddress.getByName(pingAddress) }
-          .thenReturn(inetAddress)
+    Mockito.mockStatic(InetAddress::class.java).use {
+      val inetAddress = mock<InetAddress>()
+      it.`when`<Any> { InetAddress.getByName(pingAddress) }
+        .thenReturn(inetAddress)
 
-        doAnswer { Exception() }.whenever(inetAddress).isReachable(timeout)
+      doAnswer { Exception() }.whenever(inetAddress).isReachable(timeout)
 
-        val result = underTest.checkHealth(pingAddress, timeout = timeout)
+      val result = underTest.checkHealth(pingAddress, timeout = timeout)
 
-        result.shouldBeFailure()
-      }
+      result.shouldBeFailure()
     }
   }
+}

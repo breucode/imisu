@@ -76,7 +76,7 @@ class Services(
           "httpExampleService" to HttpServiceConfig(true, "http://example.org"),
           "dnsExampleService" to DnsServiceConfig(true, "1.1.1.1"),
           "pingExampleService" to PingServiceConfig(true, "1.1.1.1"),
-          "tcpExampleService" to TcpServiceConfig(true, "towel.blinkenlights.nl", 23)
+          "tcpExampleService" to TcpServiceConfig(true, "towel.blinkenlights.nl", @Suppress("MagicNumber") 23)
         )
       )
     } bindContract GET to handler()

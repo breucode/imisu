@@ -91,7 +91,6 @@ detekt {
   buildUponDefaultConfig = true
   allRules = true
   config = files("$projectDir/detekt.yaml")
-  baseline = file("$projectDir/detekt-baseline.xml")
 }
 
 fun isNonStable(version: String): Boolean {

@@ -16,3 +16,9 @@ formatting:
 exceptions:
   TooGenericExceptionCaught:
     active: false
+  TooGenericExceptionThrown:
+    excludes: ["**/test/**"]
+
+performance:
+  SpreadOperator:
+    active: false
