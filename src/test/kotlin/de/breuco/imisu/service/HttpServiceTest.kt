@@ -1,13 +1,6 @@
 package de.breuco.imisu.service
 
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.unwrap
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.reset
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
+import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method
@@ -17,6 +10,12 @@ import org.http4k.core.Status
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.reset
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 
 internal class HttpServiceTest {
   private val httpClientMock = mock<HttpHandler>()
@@ -52,7 +51,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, true)
 
-    result.unwrap().shouldBeInstanceOf<HealthCheckSuccess>()
+    result.getOrThrow().shouldBeInstanceOf<HealthCheckSuccess>()
 
     verify(httpClientMock).invoke(Request(Method.HEAD, hostName))
   }
@@ -74,7 +73,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, true)
 
-    result.unwrap().shouldBeInstanceOf<HealthCheckFailure>()
+    result.getOrThrow().shouldBeInstanceOf<HealthCheckFailure>()
 
     verify(httpClientMock).invoke(Request(Method.HEAD, hostName))
     verify(httpClientMock).invoke(Request(Method.GET, hostName))
@@ -89,7 +88,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, true)
 
-    result.shouldBeInstanceOf<Err<*>>()
+    result.shouldBeFailure()
 
     verify(httpClientMock).invoke(Request(Method.HEAD, hostName))
   }
@@ -113,7 +112,8 @@ internal class HttpServiceTest {
       .whenever(responseMock).status
 
     val result = underTest.checkHealth(hostName, true)
-    result.unwrap().shouldBeInstanceOf<HealthCheckSuccess>()
+
+    result.getOrThrow().shouldBeInstanceOf<HealthCheckSuccess>()
 
     verify(httpClientMock).invoke(Request(Method.HEAD, hostName))
     verify(httpClientMock).invoke(Request(Method.GET, hostName))
@@ -133,7 +133,7 @@ internal class HttpServiceTest {
 
     val result = underTest.checkHealth(hostName, false)
 
-    result.unwrap().shouldBeInstanceOf<HealthCheckSuccess>()
+    result.getOrThrow().shouldBeInstanceOf<HealthCheckSuccess>()
 
     verify(nonSslValidatingHttpClientMock).invoke(Request(Method.HEAD, hostName))
   }

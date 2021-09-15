@@ -1,14 +1,6 @@
 package de.breuco.imisu.service
 
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.unwrap
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.reset
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
+import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -16,6 +8,13 @@ import org.junit.jupiter.api.Test
 import org.minidns.DnsClient
 import org.minidns.dnsqueryresult.DnsQueryResult
 import org.minidns.record.Record
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.reset
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 import java.net.InetAddress
 
 class DnsServiceTest {
@@ -51,7 +50,7 @@ class DnsServiceTest {
 
     val result = underTest.checkHealth(hostName, ip, port)
 
-    result.unwrap().shouldBeInstanceOf<HealthCheckSuccess>()
+    result.getOrThrow().shouldBeInstanceOf<HealthCheckSuccess>()
 
     verify(dnsClientMock)
       .query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
@@ -73,7 +72,7 @@ class DnsServiceTest {
 
     val result = underTest.checkHealth(hostName, ip, port)
 
-    result.unwrap().shouldBeInstanceOf<HealthCheckFailure>()
+    result.getOrThrow().shouldBeInstanceOf<HealthCheckFailure>()
 
     verify(dnsClientMock)
       .query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
@@ -90,7 +89,7 @@ class DnsServiceTest {
 
     val result = underTest.checkHealth(hostName, ip, port)
 
-    result.shouldBeInstanceOf<Err<*>>()
+    result.shouldBeFailure()
 
     verify(dnsClientMock)
       .query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)

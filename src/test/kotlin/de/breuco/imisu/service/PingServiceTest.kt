@@ -1,15 +1,14 @@
 package de.breuco.imisu.service
 
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.unwrap
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import java.net.InetAddress
 
 class PingServiceTest {
@@ -34,7 +33,7 @@ class PingServiceTest {
 
       val result = underTest.checkHealth(pingAddress, timeout = timeout)
 
-      result.unwrap().shouldBeInstanceOf<HealthCheckSuccess>()
+      result.getOrThrow().shouldBeInstanceOf<HealthCheckSuccess>()
     }
   }
 
@@ -52,25 +51,25 @@ class PingServiceTest {
 
       val result = underTest.checkHealth(pingAddress, timeout = timeout)
 
-      result.unwrap().shouldBeInstanceOf<HealthCheckFailure>()
+      result.getOrThrow().shouldBeInstanceOf<HealthCheckFailure>()
     }
   }
 
-  @Test
-  fun `Ping error`() {
-    val pingAddress = "192.168.0.1"
-    val timeout = 1000
+    @Test
+    fun `Ping error`() {
+      val pingAddress = "192.168.0.1"
+      val timeout = 1000
 
-    Mockito.mockStatic(InetAddress::class.java).use {
-      val inetAddress = mock<InetAddress>()
-      it.`when`<Any> { InetAddress.getByName(pingAddress) }
-        .thenReturn(inetAddress)
+      Mockito.mockStatic(InetAddress::class.java).use {
+        val inetAddress = mock<InetAddress>()
+        it.`when`<Any> { InetAddress.getByName(pingAddress) }
+          .thenReturn(inetAddress)
 
-      doAnswer { Exception() }.whenever(inetAddress).isReachable(timeout)
+        doAnswer { Exception() }.whenever(inetAddress).isReachable(timeout)
 
-      val result = underTest.checkHealth(pingAddress, timeout = timeout)
+        val result = underTest.checkHealth(pingAddress, timeout = timeout)
 
-      result.shouldBeInstanceOf<Err<*>>()
+        result.shouldBeFailure()
+      }
     }
   }
-}
