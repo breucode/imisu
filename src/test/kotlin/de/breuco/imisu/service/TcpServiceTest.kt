@@ -1,9 +1,6 @@
 package de.breuco.imisu.service
 
-import com.github.michaelbull.result.Err
-import io.kotest.matchers.types.shouldBeInstanceOf
-import io.mockk.clearAllMocks
-import org.junit.jupiter.api.AfterEach
+import io.kotest.matchers.result.shouldBeFailure
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -15,15 +12,10 @@ class TcpServiceTest {
     underTest = TcpService()
   }
 
-  @AfterEach
-  fun afterEach() {
-    clearAllMocks()
-  }
-
   @Test
   fun `Tcp error`() {
     val result = underTest.checkHealth("[brokenipv6address", 1234)
 
-    result.shouldBeInstanceOf<Err<*>>()
+    result.shouldBeFailure()
   }
 }

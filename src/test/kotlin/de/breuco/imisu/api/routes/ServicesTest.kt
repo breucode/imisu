@@ -1,7 +1,5 @@
 package de.breuco.imisu.api.routes
 
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
 import de.breuco.imisu.api.Api
 import de.breuco.imisu.api.SERVER_IS_DOWN
 import de.breuco.imisu.api.SSL_HANDSHAKE_FAILED
@@ -18,11 +16,6 @@ import de.breuco.imisu.service.HttpService
 import de.breuco.imisu.service.PingService
 import de.breuco.imisu.service.TcpService
 import io.kotest.matchers.shouldBe
-import io.mockk.clearAllMocks
-import io.mockk.confirmVerified
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
 import org.http4k.core.Method
 import org.http4k.core.Method.GET
 import org.http4k.core.Method.HEAD
@@ -35,35 +28,47 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.mockito.Answers
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.reset
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 import javax.net.ssl.SSLException
 
 class ServicesTest {
-  private val appConfigMock = mockk<ApplicationConfig>()
-  private val userConfigMock = mockk<UserConfig>()
-  private val dnsServiceMock = mockk<DnsService>()
-  private val httpServiceMock = mockk<HttpService>()
-  private val pingServiceMock = mockk<PingService>()
-  private val tcpServiceMock = mockk<TcpService>()
+  private val appConfigMock = mock<ApplicationConfig>()
+  private val userConfigMock = mock<UserConfig>(defaultAnswer = Answers.RETURNS_DEEP_STUBS)
+  private val dnsServiceMock = mock<DnsService>()
+  private val httpServiceMock = mock<HttpService>()
+  private val pingServiceMock = mock<PingService>()
+  private val tcpServiceMock = mock<TcpService>()
 
   private lateinit var api: Api
 
   @BeforeEach
   fun beforeEach() {
-    every { appConfigMock.userConfig } returns userConfigMock
-    every { userConfigMock.exposeFullApi } returns true
-    every { userConfigMock.exposeSwagger } returns false
-    every { appConfigMock.versions } returns Versions("appVersion", "swaggerUiVersion")
+    whenever(appConfigMock.userConfig).thenReturn(userConfigMock)
+    whenever(userConfigMock.exposeFullApi).thenReturn(true)
+    whenever(userConfigMock.exposeSwagger).thenReturn(false)
+    whenever(appConfigMock.versions).thenReturn(Versions("appVersion", "swaggerUiVersion"))
     api = Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock, tcpServiceMock))
   }
 
   @AfterEach
   fun afterEach() {
-    verify(exactly = 1) {
-      userConfigMock.exposeFullApi
-      userConfigMock.exposeSwagger
-    }
-    confirmVerified(dnsServiceMock, httpServiceMock, tcpServiceMock, userConfigMock)
-    clearAllMocks()
+    verify(userConfigMock).exposeFullApi
+    verify(userConfigMock).exposeSwagger
+    verifyNoMoreInteractions(dnsServiceMock, httpServiceMock, tcpServiceMock)
+
+    reset(
+      appConfigMock,
+      userConfigMock,
+      dnsServiceMock,
+      httpServiceMock,
+      pingServiceMock,
+      tcpServiceMock
+    )
   }
 
   @Test
@@ -71,8 +76,10 @@ class ServicesTest {
     val serviceId = "testServiceId"
     val httpEndpoint = "http://example.org"
 
-    every { userConfigMock.services } returns mapOf(
-      serviceId to HttpServiceConfig(true, httpEndpoint)
+    whenever(userConfigMock.services).thenReturn(
+      mapOf(
+        serviceId to HttpServiceConfig(true, httpEndpoint)
+      )
     )
 
     val route = api.routing()
@@ -81,9 +88,7 @@ class ServicesTest {
     response.status shouldBe OK
     response shouldHaveBody """{"$serviceId":{"enabled":true,"httpEndpoint":"$httpEndpoint","validateSsl":true}}"""
 
-    verify(exactly = 1) {
-      userConfigMock.services
-    }
+    verify(userConfigMock).services
   }
 
   @Test
@@ -91,8 +96,10 @@ class ServicesTest {
     val serviceId = "testServiceId"
     val httpEndpoint = "http://example.org"
 
-    every { userConfigMock.services } returns mapOf(
-      serviceId to HttpServiceConfig(false, httpEndpoint)
+    whenever(userConfigMock.services).thenReturn(
+      mapOf(
+        serviceId to HttpServiceConfig(false, httpEndpoint)
+      )
     )
 
     val route = api.routing()
@@ -101,9 +108,7 @@ class ServicesTest {
     response.status shouldBe OK
     response shouldHaveBody "{}"
 
-    verify(exactly = 1) {
-      userConfigMock.services
-    }
+    verify(userConfigMock).services
   }
 
   @Nested
@@ -113,17 +118,13 @@ class ServicesTest {
       val serviceId = "testServiceId"
       val httpEndpoint = "http://example.org"
 
-      every { userConfigMock.services[serviceId] } returns HttpServiceConfig(true, httpEndpoint)
+      whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(true, httpEndpoint))
 
       val route = api.routing()
       val response = route(Request(GET, "/services/$serviceId"))
 
       response.status shouldBe OK
       response shouldHaveBody """{"enabled":true,"httpEndpoint":"$httpEndpoint","validateSsl":true}"""
-
-      verify(exactly = 1) {
-        userConfigMock.services[serviceId]
-      }
     }
 
     @Test
@@ -131,32 +132,24 @@ class ServicesTest {
       val serviceId = "testServiceId"
       val httpEndpoint = "http://example.org"
 
-      every { userConfigMock.services[serviceId] } returns HttpServiceConfig(false, httpEndpoint)
+      whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(false, httpEndpoint))
 
       val route = api.routing()
       val response = route(Request(GET, "/services/$serviceId"))
 
       response.status shouldBe NOT_FOUND
-
-      verify(exactly = 1) {
-        userConfigMock.services[serviceId]
-      }
     }
 
     @Test
     fun `GET ServiceConfig not found`() {
       val serviceId = "testServiceId"
 
-      every { userConfigMock.services[serviceId] } returns null
+      whenever(userConfigMock.services[serviceId]).thenReturn(null)
 
       val route = api.routing()
       val response = route(Request(GET, "/services/$serviceId"))
 
       response.status shouldBe NOT_FOUND
-
-      verify(exactly = 1) {
-        userConfigMock.services[serviceId]
-      }
     }
 
     @Nested
@@ -175,18 +168,15 @@ class ServicesTest {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
-        every { userConfigMock.services[serviceId] } returns HttpServiceConfig(true, httpEndpoint)
-        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Ok(HealthCheckSuccess)
+        whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(true, httpEndpoint))
+        whenever(httpServiceMock.checkHealth(httpEndpoint, true)).thenReturn(Result.success(HealthCheckSuccess))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe OK
 
-        verify(exactly = 1) {
-          userConfigMock.services[serviceId]
-          httpServiceMock.checkHealth(httpEndpoint, true)
-        }
+        verify(httpServiceMock).checkHealth(httpEndpoint, true)
       }
 
       @Test
@@ -203,16 +193,12 @@ class ServicesTest {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
-        every { userConfigMock.services[serviceId] } returns HttpServiceConfig(false, httpEndpoint)
+        whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(false, httpEndpoint))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe NOT_FOUND
-
-        verify(exactly = 1) {
-          userConfigMock.services[serviceId]
-        }
       }
 
       @Test
@@ -229,18 +215,15 @@ class ServicesTest {
         val serviceId = "testServiceId"
         val dnsServer = "testDnsServer"
 
-        every { userConfigMock.services[serviceId] } returns DnsServiceConfig(true, dnsServer)
-        every { dnsServiceMock.checkHealth("example.org", dnsServer, 53) } returns Ok(HealthCheckSuccess)
+        whenever(userConfigMock.services[serviceId]).thenReturn(DnsServiceConfig(true, dnsServer))
+        whenever(dnsServiceMock.checkHealth("example.org", dnsServer, 53)).thenReturn(Result.success(HealthCheckSuccess))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe OK
 
-        verify(exactly = 1) {
-          userConfigMock.services[serviceId]
-          dnsServiceMock.checkHealth("example.org", dnsServer, 53)
-        }
+        verify(dnsServiceMock).checkHealth("example.org", dnsServer, 53)
       }
 
       @Test
@@ -257,18 +240,15 @@ class ServicesTest {
         val serviceId = "testServiceId"
         val pingServer = "192.168.0.1"
 
-        every { userConfigMock.services[serviceId] } returns PingServiceConfig(true, pingServer)
-        every { pingServiceMock.checkHealth(pingServer, 1000) } returns Ok(HealthCheckSuccess)
+        whenever(userConfigMock.services[serviceId]).thenReturn(PingServiceConfig(true, pingServer))
+        whenever(pingServiceMock.checkHealth(pingServer, 1000)).thenReturn(Result.success(HealthCheckSuccess))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe OK
 
-        verify(exactly = 1) {
-          userConfigMock.services[serviceId]
-          pingServiceMock.checkHealth(pingServer, 1000)
-        }
+        verify(pingServiceMock).checkHealth(pingServer, 1000)
       }
 
       @Test
@@ -285,18 +265,14 @@ class ServicesTest {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
-        every { userConfigMock.services[serviceId] } returns HttpServiceConfig(true, httpEndpoint)
-        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Ok(HealthCheckFailure())
+        whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(true, httpEndpoint))
+        whenever(httpServiceMock.checkHealth(httpEndpoint, true)).thenReturn(Result.success(HealthCheckFailure()))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe SERVER_IS_DOWN
-
-        verify(exactly = 1) {
-          userConfigMock.services[serviceId]
-          httpServiceMock.checkHealth(httpEndpoint, true)
-        }
+        verify(httpServiceMock).checkHealth(httpEndpoint, true)
       }
 
       @Test
@@ -313,18 +289,15 @@ class ServicesTest {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
-        every { userConfigMock.services[serviceId] } returns HttpServiceConfig(true, httpEndpoint)
-        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Err(Exception())
+        whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(true, httpEndpoint))
+        whenever(httpServiceMock.checkHealth(httpEndpoint, true)).thenReturn(Result.failure(Exception()))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe INTERNAL_SERVER_ERROR
 
-        verify(exactly = 1) {
-          userConfigMock.services[serviceId]
-          httpServiceMock.checkHealth(httpEndpoint, true)
-        }
+        verify(httpServiceMock).checkHealth(httpEndpoint, true)
       }
 
       @Test
@@ -341,18 +314,15 @@ class ServicesTest {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
-        every { userConfigMock.services[serviceId] } returns HttpServiceConfig(true, httpEndpoint)
-        every { httpServiceMock.checkHealth(httpEndpoint, true) } returns Ok(HealthCheckFailure(SSLException("")))
+        whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(true, httpEndpoint))
+        whenever(httpServiceMock.checkHealth(httpEndpoint, true)).thenReturn(Result.success(HealthCheckFailure(SSLException(""))))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe SSL_HANDSHAKE_FAILED
 
-        verify(exactly = 1) {
-          userConfigMock.services[serviceId]
-          httpServiceMock.checkHealth(httpEndpoint, true)
-        }
+        verify(httpServiceMock).checkHealth(httpEndpoint, true)
       }
 
       @Test
@@ -368,16 +338,12 @@ class ServicesTest {
       private fun `service not found`(method: Method) {
         val serviceId = "testServiceId"
 
-        every { userConfigMock.services[serviceId] } returns null
+        whenever(userConfigMock.services[serviceId]).thenReturn(null)
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
 
         response.status shouldBe NOT_FOUND
-
-        verify(exactly = 1) {
-          userConfigMock.services[serviceId]
-        }
       }
     }
   }

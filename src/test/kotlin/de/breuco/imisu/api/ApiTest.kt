@@ -9,11 +9,6 @@ import de.breuco.imisu.service.HttpService
 import de.breuco.imisu.service.PingService
 import de.breuco.imisu.service.TcpService
 import io.kotest.matchers.shouldBe
-import io.mockk.clearAllMocks
-import io.mockk.confirmVerified
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
 import org.http4k.core.Method
 import org.http4k.core.Request
 import org.http4k.core.Status
@@ -22,34 +17,46 @@ import org.http4k.kotest.shouldNotHaveBody
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.reset
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 
 class ApiTest {
-  private val appConfigMock = mockk<ApplicationConfig>()
-  private val userConfigMock = mockk<UserConfig>()
-  private val dnsServiceMock = mockk<DnsService>()
-  private val httpServiceMock = mockk<HttpService>()
-  private val pingServiceMock = mockk<PingService>()
-  private val tcpServiceMock = mockk<TcpService>()
+  private val appConfigMock = mock<ApplicationConfig>()
+  private val userConfigMock = mock<UserConfig>()
+  private val dnsServiceMock = mock<DnsService>()
+  private val httpServiceMock = mock<HttpService>()
+  private val pingServiceMock = mock<PingService>()
+  private val tcpServiceMock = mock<TcpService>()
 
   private lateinit var underTest: Api
 
   @BeforeEach
   fun beforeEach() {
-    every { appConfigMock.userConfig } returns userConfigMock
-    every { appConfigMock.versions } returns Versions("appVersion", "swaggerUiVersion")
+    whenever(appConfigMock.userConfig).thenReturn(userConfigMock)
+    whenever(appConfigMock.versions).thenReturn(Versions("appVersion", "swaggerUiVersion"))
     underTest = Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock, tcpServiceMock))
   }
 
   @AfterEach
   fun afterEach() {
-    confirmVerified(dnsServiceMock, httpServiceMock, pingServiceMock, userConfigMock)
-    clearAllMocks()
+    verifyNoMoreInteractions(dnsServiceMock, httpServiceMock, pingServiceMock, userConfigMock)
+    reset(
+      appConfigMock,
+      userConfigMock,
+      dnsServiceMock,
+      httpServiceMock,
+      pingServiceMock,
+      tcpServiceMock
+    )
   }
 
   @Test
   fun `404 for endpoints, which should be disabled when exposeFullApi == false`() {
-    every { userConfigMock.exposeFullApi } returns false
-    every { userConfigMock.exposeSwagger } returns false
+    whenever(userConfigMock.exposeFullApi).thenReturn(false)
+    whenever(userConfigMock.exposeSwagger).thenReturn(false)
     val disabledRoutes = listOf(
       "/services",
       "/services/testId"
@@ -63,16 +70,14 @@ class ApiTest {
 
     responses.forEach { it.status shouldBe Status.NOT_FOUND }
 
-    verify(exactly = 1) {
-      userConfigMock.exposeFullApi
-      userConfigMock.exposeSwagger
-    }
+    verify(userConfigMock).exposeFullApi
+    verify(userConfigMock).exposeSwagger
   }
 
   @Test
   fun `Don't provide swagger json when disabled`() {
-    every { userConfigMock.exposeFullApi } returns false
-    every { userConfigMock.exposeSwagger } returns false
+    whenever(userConfigMock.exposeFullApi).thenReturn(false)
+    whenever(userConfigMock.exposeSwagger).thenReturn(false)
 
     val routing = underTest.routing()
 
@@ -81,16 +86,14 @@ class ApiTest {
     response.status shouldBe Status.OK
     response shouldHaveBody ""
 
-    verify(exactly = 1) {
-      userConfigMock.exposeFullApi
-      userConfigMock.exposeSwagger
-    }
+    verify(userConfigMock).exposeFullApi
+    verify(userConfigMock).exposeSwagger
   }
 
   @Test
   fun `Provide swagger json when enabled`() {
-    every { userConfigMock.exposeFullApi } returns false
-    every { userConfigMock.exposeSwagger } returns true
+    whenever(userConfigMock.exposeFullApi).thenReturn(false)
+    whenever(userConfigMock.exposeSwagger).thenReturn(true)
 
     val routing = underTest.routing()
 
@@ -99,9 +102,7 @@ class ApiTest {
     response.status shouldBe Status.OK
     response shouldNotHaveBody ""
 
-    verify(exactly = 1) {
-      userConfigMock.exposeFullApi
-      userConfigMock.exposeSwagger
-    }
+    verify(userConfigMock).exposeFullApi
+    verify(userConfigMock).exposeSwagger
   }
 }

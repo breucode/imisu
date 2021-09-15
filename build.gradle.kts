@@ -91,7 +91,6 @@ detekt {
   buildUponDefaultConfig = true
   allRules = true
   config = files("$projectDir/detekt.yaml")
-  baseline = file("$projectDir/detekt-baseline.xml")
 }
 
 fun isNonStable(version: String): Boolean {
@@ -132,8 +131,6 @@ dependencies {
   implementation("io.insert-koin:koin-core-ext:$koinVersion")
   testImplementation("io.insert-koin:koin-test:$koinVersion")
 
-  implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.11")
-
   val hopliteVersion = "1.4.1"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
@@ -150,7 +147,8 @@ dependencies {
   testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
 
-  testImplementation("io.mockk:mockk:1.10.0")
+  testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+  testImplementation("org.mockito:mockito-inline:3.10.0")
 
   implementation(kotlin("reflect", version = Versions.kotlin))
 }

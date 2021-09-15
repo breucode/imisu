@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package de.breuco.imisu.api
 
 import org.http4k.core.Status

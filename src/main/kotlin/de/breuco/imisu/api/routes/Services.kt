@@ -1,7 +1,5 @@
 package de.breuco.imisu.api.routes
 
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.fold
 import de.breuco.imisu.api.INVALID_SSL_CERTIFICATE
 import de.breuco.imisu.api.ORIGIN_IS_UNREACHABLE
 import de.breuco.imisu.api.SERVER_IS_DOWN
@@ -78,7 +76,7 @@ class Services(
           "httpExampleService" to HttpServiceConfig(true, "http://example.org"),
           "dnsExampleService" to DnsServiceConfig(true, "1.1.1.1"),
           "pingExampleService" to PingServiceConfig(true, "1.1.1.1"),
-          "tcpExampleService" to TcpServiceConfig(true, "towel.blinkenlights.nl", 23)
+          "tcpExampleService" to TcpServiceConfig(true, "towel.blinkenlights.nl", @Suppress("MagicNumber") 23)
         )
       )
     } bindContract GET to handler()
@@ -136,10 +134,10 @@ class Services(
             val queryStatus = checkHealth(service)
 
             queryStatus.fold(
-              failure = {
+              onFailure = {
                 Response(INTERNAL_SERVER_ERROR)
               },
-              success = {
+              onSuccess = {
                 when (it) {
                   is HealthCheckSuccess -> Response(OK)
                   is HealthCheckFailure -> Response(it.cause.toHttpStatus())
@@ -174,7 +172,7 @@ class Services(
     }
   }
 
-  private fun checkHealth(service: ServiceConfig): Result<HealthCheckResult, Throwable> =
+  private fun checkHealth(service: ServiceConfig): Result<HealthCheckResult> =
     when (service) {
       is DnsServiceConfig -> dnsService.checkHealth(
         service.dnsDomain,
