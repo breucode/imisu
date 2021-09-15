@@ -148,6 +148,8 @@ dependencies {
   testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
 
+  testImplementation("io.mockk:mockk:1.10.0")
+
   testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
   testImplementation("org.mockito:mockito-inline:3.10.0")
 
