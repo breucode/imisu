@@ -7,8 +7,8 @@ plugins {
   kotlin("jvm") version Versions.kotlin
   kotlin("kapt") version Versions.kotlin
   id("jacoco")
-  id("com.diffplug.spotless") version "5.12.5"
-  id("io.gitlab.arturbosch.detekt") version "1.17.1"
+  id("com.diffplug.spotless") version "5.15.0"
+  id("io.gitlab.arturbosch.detekt") version "1.18.1"
   id("com.github.ben-manes.versions") version "0.39.0"
   id("application")
   id("org.mikeneck.graalvm-native-image") version "1.4.1"
@@ -37,7 +37,7 @@ if (project.property("generateNativeImageConfig").toString().toBoolean()) {
   }
 }
 
-val swaggerUiVersion = "3.49.0"
+val swaggerUiVersion = "3.52.1"
 
 val createVersionProperties by tasks.registering(WriteProperties::class) {
   dependsOn(tasks.processResources)
@@ -55,7 +55,7 @@ tasks.classes {
 }
 
 spotless {
-  val ktlintVersion = "0.41.0"
+  val ktlintVersion = "0.42.1"
   kotlin {
     ktlint(ktlintVersion).userData(
       mapOf(
@@ -75,7 +75,7 @@ spotless {
   format("prettier") {
     target("*.md", "*.yaml", ".github/**/*.yaml", "src/**/*.json")
 
-    prettier("2.2.1")
+    prettier("2.4.0")
   }
 }
 
@@ -114,7 +114,7 @@ repositories {
 }
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:4.9.4.0"))
+  implementation(platform("org.http4k:http4k-bom:4.13.0.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
@@ -126,29 +126,28 @@ dependencies {
 
   implementation("org.minidns:minidns-hla:1.0.0")
 
-  val koinVersion = "3.0.2"
+  val koinVersion = "3.1.2"
   implementation("io.insert-koin:koin-core:$koinVersion")
-  implementation("io.insert-koin:koin-core-ext:$koinVersion")
   testImplementation("io.insert-koin:koin-test:$koinVersion")
 
-  val hopliteVersion = "1.4.1"
+  val hopliteVersion = "1.4.7"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
 
-  runtimeOnly("org.slf4j:slf4j-simple:1.7.30")
-  implementation("io.github.microutils:kotlin-logging:2.0.6")
+  runtimeOnly("org.slf4j:slf4j-simple:1.7.32")
+  implementation("io.github.microutils:kotlin-logging:2.0.11")
 
-  val kotestVersion = "4.6.0"
+  val kotestVersion = "4.6.2"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
     exclude("junit")
     exclude("org.junit.vintage")
   }
   testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.0")
 
   testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
-  testImplementation("org.mockito:mockito-inline:3.10.0")
+  testImplementation("org.mockito:mockito-inline:3.12.4")
 
   implementation(kotlin("reflect", version = Versions.kotlin))
 }
