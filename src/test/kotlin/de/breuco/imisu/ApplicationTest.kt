@@ -34,7 +34,7 @@ class ApplicationTest {
 
   @Test
   fun `log warning when full api is exposed`() {
-    whenever(appConfigMock.userConfig.serverPort).thenReturn(8080)
+    whenever(appConfigMock.userConfig.serverPort).thenReturn(8081)
     whenever(appConfigMock.userConfig.exposeFullApi).thenReturn(true)
 
     underTest.run()
