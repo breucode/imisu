@@ -101,9 +101,3 @@ data class PingServiceConfig(
   val pingServer: String,
   val timeout: Int = 1000
 ) : ServiceConfig()
-
-data class TcpServiceConfig(
-  override val enabled: Boolean,
-  val tcpServer: String,
-  val tcpServerPort: Int
-) : ServiceConfig()

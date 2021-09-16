@@ -6,7 +6,6 @@ import de.breuco.imisu.config.ApplicationConfig
 import de.breuco.imisu.service.DnsService
 import de.breuco.imisu.service.HttpService
 import de.breuco.imisu.service.PingService
-import de.breuco.imisu.service.TcpService
 import mu.KLogger
 import mu.KotlinLogging
 import okhttp3.OkHttpClient
@@ -47,7 +46,7 @@ fun main(args: Array<String>) {
     modules(
       module {
         single { Api(get(), get()) }
-        single { Services(get(), get(), get(), get(), get()) }
+        single { Services(get(), get(), get(), get()) }
         single {
           HttpService(
             get(named("httpClient")),
@@ -60,7 +59,6 @@ fun main(args: Array<String>) {
           )
         }
         single { PingService() }
-        single { TcpService() }
         single<HttpHandler>(named("httpClient")) { OkHttp(OkHttpClient.Builder().build()) }
         single<HttpHandler>(named("nonSslValidatingHttpClient")) { OkHttp(PreCannedOkHttpClients.insecureOkHttpClient()) }
         single { DnsClient(null) }

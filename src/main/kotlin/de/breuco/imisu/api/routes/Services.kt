@@ -10,14 +10,12 @@ import de.breuco.imisu.config.DnsServiceConfig
 import de.breuco.imisu.config.HttpServiceConfig
 import de.breuco.imisu.config.PingServiceConfig
 import de.breuco.imisu.config.ServiceConfig
-import de.breuco.imisu.config.TcpServiceConfig
 import de.breuco.imisu.service.DnsService
 import de.breuco.imisu.service.HealthCheckFailure
 import de.breuco.imisu.service.HealthCheckResult
 import de.breuco.imisu.service.HealthCheckSuccess
 import de.breuco.imisu.service.HttpService
 import de.breuco.imisu.service.PingService
-import de.breuco.imisu.service.TcpService
 import org.http4k.contract.ContractRoute
 import org.http4k.contract.div
 import org.http4k.contract.meta
@@ -39,7 +37,6 @@ class Services(
   private val dnsService: DnsService,
   private val httpService: HttpService,
   private val pingService: PingService,
-  private val tcpService: TcpService
 ) {
 
   val routes by lazy {
@@ -76,7 +73,6 @@ class Services(
           "httpExampleService" to HttpServiceConfig(true, "http://example.org"),
           "dnsExampleService" to DnsServiceConfig(true, "1.1.1.1"),
           "pingExampleService" to PingServiceConfig(true, "1.1.1.1"),
-          "tcpExampleService" to TcpServiceConfig(true, "towel.blinkenlights.nl", @Suppress("MagicNumber") 23)
         )
       )
     } bindContract GET to handler()
@@ -181,6 +177,5 @@ class Services(
       )
       is PingServiceConfig -> pingService.checkHealth(service.pingServer, service.timeout)
       is HttpServiceConfig -> httpService.checkHealth(service.httpEndpoint, service.validateSsl)
-      is TcpServiceConfig -> tcpService.checkHealth(service.tcpServer, service.tcpServerPort)
     }
 }

@@ -44,11 +44,6 @@ This is an example configuration. When there are defaults specified, you can lea
       "pingServer": "1.1.1.1",                    # IP, which will be queried with a Ping
       "timeout": "1000"                           # Timout for the Ping in ms. Default: 1000
       "enabled": false
-    },
-    "exampleTcp": {
-      "tcpServer": "towel.blinkenlights.nl",      # Tcp server, which will be checked for a running service on the specified port
-      "tcpServerPort": 23,                        # Port on which the tcp service runs
-      "enabled": true
     }
   }
 }
@@ -56,7 +51,7 @@ This is an example configuration. When there are defaults specified, you can lea
 
 **DO NOT use `"exposeFullApi": true` in a production environment**. It will show the complete configuration of imisu, including internal IPs and URLs.
 
-Note, that imisu determines, which type of service you configured via the keywords `dnsServer`, `httpEndpoint`, `pingServer` and `tcpServer`.
+Note, that imisu determines, which type of service you configured via the keywords `dnsServer`, `httpEndpoint` and `pingServer`.
 When you try to mix `httpEndpoint` and `dnsDomain` in one service, the configuration is invalid, and the application will not start.
 
 ## Run

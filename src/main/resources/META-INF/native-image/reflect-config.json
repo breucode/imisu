@@ -20,6 +20,22 @@
     "name": "com.fasterxml.jackson.databind.ser.Serializers[]"
   },
   {
+    "name": "com.sun.crypto.provider.AESCipher$General",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "com.sun.crypto.provider.DHParameters",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "com.sun.crypto.provider.HmacCore$HmacSHA384",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "com.sun.crypto.provider.TlsMasterSecretGenerator",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
     "name": "de.breuco.imisu.config.DnsServiceConfig",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
@@ -105,7 +121,7 @@
   },
   {
     "name": "io.netty.buffer.AbstractReferenceCountedByteBuf",
-    "fields": [{ "name": "refCnt", "allowUnsafeAccess": true }]
+    "fields": [{ "name": "refCnt" }]
   },
   {
     "name": "io.netty.channel.ChannelDuplexHandler",
@@ -576,27 +592,27 @@
   },
   {
     "name": "io.netty.util.internal.shaded.org.jctools.queues.BaseMpscLinkedArrayQueueColdProducerFields",
-    "fields": [{ "name": "producerLimit", "allowUnsafeAccess": true }]
+    "fields": [{ "name": "producerLimit" }]
   },
   {
     "name": "io.netty.util.internal.shaded.org.jctools.queues.BaseMpscLinkedArrayQueueConsumerFields",
-    "fields": [{ "name": "consumerIndex", "allowUnsafeAccess": true }]
+    "fields": [{ "name": "consumerIndex" }]
   },
   {
     "name": "io.netty.util.internal.shaded.org.jctools.queues.BaseMpscLinkedArrayQueueProducerFields",
-    "fields": [{ "name": "producerIndex", "allowUnsafeAccess": true }]
+    "fields": [{ "name": "producerIndex" }]
   },
   {
     "name": "io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueueConsumerIndexField",
-    "fields": [{ "name": "consumerIndex", "allowUnsafeAccess": true }]
+    "fields": [{ "name": "consumerIndex" }]
   },
   {
     "name": "io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueueProducerIndexField",
-    "fields": [{ "name": "producerIndex", "allowUnsafeAccess": true }]
+    "fields": [{ "name": "producerIndex" }]
   },
   {
     "name": "io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueueProducerLimitField",
-    "fields": [{ "name": "producerLimit", "allowUnsafeAccess": true }]
+    "fields": [{ "name": "producerLimit" }]
   },
   {
     "name": "java.io.Serializable",
@@ -620,6 +636,9 @@
   {
     "name": "java.lang.Deprecated",
     "allDeclaredMethods": true
+  },
+  {
+    "name": "java.lang.FunctionalInterface"
   },
   {
     "name": "java.lang.Integer",
@@ -681,7 +700,7 @@
   },
   {
     "name": "java.nio.Buffer",
-    "fields": [{ "name": "address", "allowUnsafeAccess": true }]
+    "fields": [{ "name": "address" }]
   },
   {
     "name": "java.nio.ByteBuffer",
@@ -705,6 +724,18 @@
   },
   {
     "name": "java.security.SecureRandomParameters"
+  },
+  {
+    "name": "java.security.interfaces.ECPrivateKey"
+  },
+  {
+    "name": "java.security.interfaces.ECPublicKey"
+  },
+  {
+    "name": "java.security.interfaces.RSAPrivateKey"
+  },
+  {
+    "name": "java.security.interfaces.RSAPublicKey"
   },
   {
     "name": "java.util.Collection",
@@ -783,24 +814,14 @@
     ]
   },
   {
+    "name": "jdk.internal.HotSpotIntrinsicCandidate"
+  },
+  {
     "name": "jdk.internal.misc.Unsafe",
     "methods": [{ "name": "getUnsafe", "parameterTypes": [] }]
   },
   {
-    "name": "kotlin.KotlinVersion",
-    "allDeclaredFields": true,
-    "allDeclaredMethods": true,
-    "allPublicMethods": true,
-    "allDeclaredConstructors": true
-  },
-  {
-    "name": "kotlin.KotlinVersion$Companion"
-  },
-  {
-    "name": "kotlin.KotlinVersion$Companion[]"
-  },
-  {
-    "name": "kotlin.KotlinVersion[]"
+    "name": "kotlin.Deprecated"
   },
   {
     "name": "kotlin.Metadata",
@@ -814,6 +835,17 @@
   },
   {
     "name": "kotlin.Unit"
+  },
+  {
+    "name": "kotlin.annotation.AnnotationTarget"
+  },
+  {
+    "name": "kotlin.annotation.MustBeDocumented",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "kotlin.annotation.Target",
+    "allDeclaredMethods": true
   },
   {
     "name": "kotlin.collections.EmptyList",
@@ -839,7 +871,7 @@
   },
   {
     "name": "kotlin.reflect.jvm.internal.ReflectionFactoryImpl",
-    "allDeclaredConstructors": true
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {
     "name": "kotlin.reflect.jvm.internal.impl.resolve.scopes.DescriptorKindFilter",
@@ -918,7 +950,7 @@
     "allDeclaredMethods": true
   },
   {
-    "name": "org.http4k.contract.openapi.v3.OpenApi3$toSchemaContent$1$1",
+    "name": "org.http4k.contract.openapi.v3.OpenApi3$toSchemaContent$exampleSchemaIsValid$1",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true
@@ -988,7 +1020,7 @@
     "name": "org.http4k.server.Http4kChannelHandler"
   },
   {
-    "name": "org.http4k.server.Netty$toServer$1$start$$inlined$apply$lambda$1"
+    "name": "org.http4k.server.Netty$toServer$1$start$1$2"
   },
   {
     "name": "org.http4k.util.JsonSchema"
@@ -1020,10 +1052,7 @@
   },
   {
     "name": "sun.nio.ch.SelectorImpl",
-    "fields": [
-      { "name": "publicSelectedKeys", "allowUnsafeAccess": true },
-      { "name": "selectedKeys", "allowUnsafeAccess": true }
-    ]
+    "fields": [{ "name": "publicSelectedKeys" }, { "name": "selectedKeys" }]
   },
   {
     "name": "sun.security.pkcs.SignerInfo[]"
@@ -1034,6 +1063,14 @@
   },
   {
     "name": "sun.security.pkcs12.PKCS12KeyStore$DualFormatPKCS12",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "sun.security.provider.DSA$SHA224withDSA",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "sun.security.provider.DSA$SHA256withDSA",
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {
@@ -1049,6 +1086,22 @@
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {
+    "name": "sun.security.provider.SHA2$SHA224",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "sun.security.provider.SHA2$SHA256",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "sun.security.provider.SHA5$SHA384",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "sun.security.provider.SHA5$SHA512",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
     "name": "sun.security.provider.SecureRandom",
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
@@ -1057,7 +1110,27 @@
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {
+    "name": "sun.security.provider.certpath.PKIXCertPathValidator",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "sun.security.rsa.PSSParameters",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
     "name": "sun.security.rsa.RSAKeyFactory$Legacy",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "sun.security.rsa.RSAPSSSignature",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "sun.security.rsa.RSASignature$SHA224withRSA",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "sun.security.rsa.RSASignature$SHA256withRSA",
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {
