@@ -7,7 +7,6 @@ import de.breuco.imisu.config.Versions
 import de.breuco.imisu.service.DnsService
 import de.breuco.imisu.service.HttpService
 import de.breuco.imisu.service.PingService
-import de.breuco.imisu.service.TcpService
 import io.kotest.matchers.shouldBe
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -29,7 +28,6 @@ class ApiTest {
   private val dnsServiceMock = mock<DnsService>()
   private val httpServiceMock = mock<HttpService>()
   private val pingServiceMock = mock<PingService>()
-  private val tcpServiceMock = mock<TcpService>()
 
   private lateinit var underTest: Api
 
@@ -37,7 +35,7 @@ class ApiTest {
   fun beforeEach() {
     whenever(appConfigMock.userConfig).thenReturn(userConfigMock)
     whenever(appConfigMock.versions).thenReturn(Versions("appVersion", "swaggerUiVersion"))
-    underTest = Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock, tcpServiceMock))
+    underTest = Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock))
   }
 
   @AfterEach
@@ -49,7 +47,6 @@ class ApiTest {
       dnsServiceMock,
       httpServiceMock,
       pingServiceMock,
-      tcpServiceMock
     )
   }
 

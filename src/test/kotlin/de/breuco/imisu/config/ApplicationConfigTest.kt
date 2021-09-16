@@ -35,7 +35,7 @@ class ApplicationConfigTest {
     userConfig.exposeSwagger shouldBe true
     userConfig.serverPort shouldBe 9090
 
-    userConfig.services shouldHaveSize 4
+    userConfig.services shouldHaveSize 3
 
     val dnsConfig = userConfig.services["exampleDns"]
     dnsConfig.shouldNotBeNull()
@@ -58,13 +58,6 @@ class ApplicationConfigTest {
     pingConfig.enabled shouldBe false
     pingConfig.pingServer shouldBe "1.1.1.1"
     pingConfig.timeout shouldBe 1337
-
-    val tcpConfig = userConfig.services["exampleTcp"]
-    tcpConfig.shouldNotBeNull()
-    tcpConfig.shouldBeTypeOf<TcpServiceConfig>()
-    tcpConfig.enabled shouldBe true
-    tcpConfig.tcpServer shouldBe "towel.blinkenlights.nl"
-    tcpConfig.tcpServerPort shouldBe 23
   }
 
   @Test
@@ -76,7 +69,7 @@ class ApplicationConfigTest {
     userConfig.exposeSwagger shouldBe false
     userConfig.serverPort shouldBe 8080
 
-    userConfig.services shouldHaveSize 4
+    userConfig.services shouldHaveSize 3
 
     val dnsConfig = userConfig.services["dnsTest"]
     dnsConfig.shouldNotBeNull()
@@ -96,13 +89,6 @@ class ApplicationConfigTest {
     pingConfig.enabled shouldBe true
     pingConfig.pingServer shouldBe "1.1.1.1"
     pingConfig.timeout shouldBe 1000
-
-    val tcpConfig = userConfig.services["tcpTest"]
-    tcpConfig.shouldNotBeNull()
-    tcpConfig.shouldBeTypeOf<TcpServiceConfig>()
-    tcpConfig.enabled shouldBe true
-    tcpConfig.tcpServer shouldBe "horizons.jpl.nasa.gov"
-    tcpConfig.tcpServerPort shouldBe 6775
   }
 
   @Test

@@ -14,7 +14,6 @@ import de.breuco.imisu.service.HealthCheckFailure
 import de.breuco.imisu.service.HealthCheckSuccess
 import de.breuco.imisu.service.HttpService
 import de.breuco.imisu.service.PingService
-import de.breuco.imisu.service.TcpService
 import io.kotest.matchers.shouldBe
 import org.http4k.core.Method
 import org.http4k.core.Method.GET
@@ -42,7 +41,6 @@ class ServicesTest {
   private val dnsServiceMock = mock<DnsService>()
   private val httpServiceMock = mock<HttpService>()
   private val pingServiceMock = mock<PingService>()
-  private val tcpServiceMock = mock<TcpService>()
 
   private lateinit var api: Api
 
@@ -52,14 +50,14 @@ class ServicesTest {
     whenever(userConfigMock.exposeFullApi).thenReturn(true)
     whenever(userConfigMock.exposeSwagger).thenReturn(false)
     whenever(appConfigMock.versions).thenReturn(Versions("appVersion", "swaggerUiVersion"))
-    api = Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock, tcpServiceMock))
+    api = Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock))
   }
 
   @AfterEach
   fun afterEach() {
     verify(userConfigMock).exposeFullApi
     verify(userConfigMock).exposeSwagger
-    verifyNoMoreInteractions(dnsServiceMock, httpServiceMock, tcpServiceMock)
+    verifyNoMoreInteractions(dnsServiceMock, httpServiceMock, pingServiceMock)
 
     reset(
       appConfigMock,
@@ -67,7 +65,6 @@ class ServicesTest {
       dnsServiceMock,
       httpServiceMock,
       pingServiceMock,
-      tcpServiceMock
     )
   }
 
