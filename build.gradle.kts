@@ -1,7 +1,5 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import io.gitlab.arturbosch.detekt.Detekt
 import org.apache.tools.ant.filters.ReplaceTokens
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   kotlin("jvm") version Versions.kotlin
@@ -9,7 +7,7 @@ plugins {
   id("jacoco")
   id("com.diffplug.spotless") version "6.1.0"
   id("io.gitlab.arturbosch.detekt") version "1.19.0"
-  id("com.github.ben-manes.versions") version "0.40.0"
+  id("com.github.ben-manes.versions") version "0.41.0"
   id("application")
   id("org.mikeneck.graalvm-native-image") version "1.4.1"
 }
@@ -37,7 +35,7 @@ if (project.property("generateNativeImageConfig").toString().toBoolean()) {
   }
 }
 
-val swaggerUiVersion = "3.52.1"
+val swaggerUiVersion = "4.1.2"
 
 val createVersionProperties by tasks.registering(WriteProperties::class) {
   dependsOn(tasks.processResources)
@@ -79,14 +77,6 @@ spotless {
   }
 }
 
-val javaVersion = JavaVersion.VERSION_11
-
-tasks {
-  withType<Detekt> {
-    this.jvmTarget = javaVersion.toString()
-  }
-}
-
 detekt {
   buildUponDefaultConfig = true
   allRules = true
@@ -114,7 +104,7 @@ repositories {
 }
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:4.13.0.0"))
+  implementation(platform("org.http4k:http4k-bom:4.17.7.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
@@ -124,7 +114,7 @@ dependencies {
 
   runtimeOnly("org.webjars:swagger-ui:$swaggerUiVersion")
 
-  implementation("org.minidns:minidns-hla:1.0.0")
+  implementation("org.minidns:minidns-hla:1.0.2")
 
   val koinVersion = "3.1.4"
   implementation("io.insert-koin:koin-core:$koinVersion")
@@ -138,13 +128,13 @@ dependencies {
   runtimeOnly("org.slf4j:slf4j-simple:1.7.32")
   implementation("io.github.microutils:kotlin-logging:2.1.21")
 
-  val kotestVersion = "4.6.2"
+  val kotestVersion = "5.0.3"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
     exclude("junit")
     exclude("org.junit.vintage")
   }
   testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.0")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 
   testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
   testImplementation("org.mockito:mockito-inline:4.2.0")
@@ -182,13 +172,6 @@ tasks.nativeImage {
   )
 }
 
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions.jvmTarget = javaVersion.toString()
-
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions.jvmTarget = javaVersion.toString()
-
 java {
-  sourceCompatibility = javaVersion
-  targetCompatibility = javaVersion
+  toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
