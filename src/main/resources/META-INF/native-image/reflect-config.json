@@ -59,12 +59,6 @@
     "allDeclaredMethods": true
   },
   {
-    "name": "de.breuco.imisu.config.TcpServiceConfig",
-    "allDeclaredFields": true,
-    "allDeclaredMethods": true,
-    "allDeclaredConstructors": true
-  },
-  {
     "name": "de.breuco.imisu.config.UserConfig",
     "methods": [
       {
@@ -812,9 +806,6 @@
     "methods": [
       { "name": "<init>", "parameterTypes": ["sun.security.x509.X500Name"] }
     ]
-  },
-  {
-    "name": "jdk.internal.HotSpotIntrinsicCandidate"
   },
   {
     "name": "jdk.internal.misc.Unsafe",
