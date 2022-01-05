@@ -25,7 +25,7 @@ tasks.jacocoTestReport {
   dependsOn(tasks.test)
 
   reports {
-    csv.isEnabled = true
+    csv.required.set(true)
   }
 }
 
