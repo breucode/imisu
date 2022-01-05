@@ -7,9 +7,9 @@ plugins {
   kotlin("jvm") version Versions.kotlin
   kotlin("kapt") version Versions.kotlin
   id("jacoco")
-  id("com.diffplug.spotless") version "5.15.0"
-  id("io.gitlab.arturbosch.detekt") version "1.18.1"
-  id("com.github.ben-manes.versions") version "0.39.0"
+  id("com.diffplug.spotless") version "6.1.0"
+  id("io.gitlab.arturbosch.detekt") version "1.19.0"
+  id("com.github.ben-manes.versions") version "0.40.0"
   id("application")
   id("org.mikeneck.graalvm-native-image") version "1.4.1"
 }
@@ -126,17 +126,17 @@ dependencies {
 
   implementation("org.minidns:minidns-hla:1.0.0")
 
-  val koinVersion = "3.1.2"
+  val koinVersion = "3.1.4"
   implementation("io.insert-koin:koin-core:$koinVersion")
   testImplementation("io.insert-koin:koin-test:$koinVersion")
 
-  val hopliteVersion = "1.4.7"
+  val hopliteVersion = "1.4.16"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
 
   runtimeOnly("org.slf4j:slf4j-simple:1.7.32")
-  implementation("io.github.microutils:kotlin-logging:2.0.11")
+  implementation("io.github.microutils:kotlin-logging:2.1.21")
 
   val kotestVersion = "4.6.2"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
@@ -146,8 +146,8 @@ dependencies {
   testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.0")
 
-  testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
-  testImplementation("org.mockito:mockito-inline:3.12.4")
+  testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+  testImplementation("org.mockito:mockito-inline:4.2.0")
 
   implementation(kotlin("reflect", version = Versions.kotlin))
 }
