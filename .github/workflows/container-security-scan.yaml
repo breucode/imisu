@@ -19,8 +19,8 @@ jobs:
       - name: Run Trivy vulnerability scanner
         id: vuln-scan
         run: |
-          noOfVulns=$(trivy -q --severity UNKNOWN,MEDIUM,HIGH,CRITICAL -o trivy-scan-result.txt ghcr.io/breucode/imisu:stable | grep "Total: " | awk '{print $2}')
-          baseImageVulns=$(trivy -q --severity UNKNOWN,MEDIUM,HIGH,CRITICAL gcr.io/distroless/base-debian11 | grep "Total: " | awk '{print $2}')
+          noOfVulns=$(trivy -q image --severity UNKNOWN,MEDIUM,HIGH,CRITICAL -o trivy-scan-result.txt ghcr.io/breucode/imisu:stable | grep "Total: " | awk '{print $2}')
+          baseImageVulns=$(trivy -q image --severity UNKNOWN,MEDIUM,HIGH,CRITICAL gcr.io/distroless/base-debian11 | grep "Total: " | awk '{print $2}')
           echo "::set-output name=noOfVulns::$noOfVulns"
           echo "::set-output name=baseImageVulns::$baseImageVulns"
       - name: Upload trivy-scan-result
