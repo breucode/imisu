@@ -125,7 +125,7 @@ dependencies {
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
 
-  runtimeOnly("org.slf4j:slf4j-simple:1.7.32")
+  runtimeOnly("org.slf4j:slf4j-simple:1.7.36")
   implementation("io.github.microutils:kotlin-logging:2.1.21")
 
   val kotestVersion = "5.1.0"
