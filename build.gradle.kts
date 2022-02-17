@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "de.breuco"
-version = "0.8.1"
+version = "0.8.2"
 
 tasks.wrapper {
   distributionType = Wrapper.DistributionType.ALL
