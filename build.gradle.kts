@@ -53,7 +53,7 @@ tasks.classes {
 }
 
 spotless {
-  val ktlintVersion = "0.42.1"
+  val ktlintVersion = "0.44.0"
   kotlin {
     ktlint(ktlintVersion).userData(
       mapOf(
@@ -73,7 +73,7 @@ spotless {
   format("prettier") {
     target("*.md", "*.yaml", ".github/**/*.yaml", "src/**/*.json")
 
-    prettier("2.4.0")
+    prettier("2.5.1")
   }
 }
 
