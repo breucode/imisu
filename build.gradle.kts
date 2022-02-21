@@ -104,7 +104,7 @@ repositories {
 }
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:4.19.3.0"))
+  implementation(platform("org.http4k:http4k-bom:4.19.4.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
