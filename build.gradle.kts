@@ -114,7 +114,7 @@ dependencies {
 
   runtimeOnly("org.webjars:swagger-ui:$swaggerUiVersion")
 
-  implementation("org.minidns:minidns-hla:1.0.2")
+  implementation("org.minidns:minidns-hla:1.0.3")
 
   val koinVersion = "3.1.5"
   implementation("io.insert-koin:koin-core:$koinVersion")
