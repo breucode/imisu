@@ -35,7 +35,7 @@ if (project.property("generateNativeImageConfig").toString().toBoolean()) {
   }
 }
 
-val swaggerUiVersion = "4.1.2"
+val swaggerUiVersion = "4.9.1"
 
 val createVersionProperties by tasks.registering(WriteProperties::class) {
   dependsOn(tasks.processResources)
