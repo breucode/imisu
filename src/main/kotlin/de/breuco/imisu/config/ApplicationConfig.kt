@@ -1,22 +1,23 @@
 package de.breuco.imisu.config
 
-import com.sksamuel.hoplite.ConfigFilePropertySource
-import com.sksamuel.hoplite.ConfigLoader
+import com.sksamuel.hoplite.ConfigLoaderBuilder
 import com.sksamuel.hoplite.ConfigSource
+import com.sksamuel.hoplite.addFileSource
+import com.sksamuel.hoplite.sources.ConfigFilePropertySource
 import mu.KLogger
 import java.nio.file.Path
 import kotlin.system.exitProcess
-import com.sksamuel.hoplite.fp.fold as foldWithReturn
 
 private val FORBIDDEN_SERVICE_NAMES = setOf("health")
 
 class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
   val versions =
-    ConfigLoader.Builder()
+    ConfigLoaderBuilder
+      .default()
       .addPropertySource(ConfigFilePropertySource(ConfigSource.ClasspathSource("/versions.properties")))
       .build()
       .loadConfig<Versions>()
-      .foldWithReturn(
+      .fold(
         ifInvalid = {
           logger.error {
             """
@@ -30,9 +31,12 @@ class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
       )
 
   val userConfig =
-    ConfigLoader()
-      .loadConfig<UserConfig>(configPath)
-      .foldWithReturn(
+    ConfigLoaderBuilder
+      .default()
+      .addFileSource(configPath.toFile())
+      .build()
+      .loadConfig<UserConfig>()
+      .fold(
         ifInvalid = {
           logger.error {
             """
