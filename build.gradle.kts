@@ -104,7 +104,7 @@ repositories {
 }
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:4.19.5.0"))
+  implementation(platform("org.http4k:http4k-bom:4.25.8.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
@@ -116,7 +116,7 @@ dependencies {
 
   implementation("org.minidns:minidns-hla:1.0.3")
 
-  val koinVersion = "3.1.5"
+  val koinVersion = "3.1.6"
   implementation("io.insert-koin:koin-core:$koinVersion")
   testImplementation("io.insert-koin:koin-test:$koinVersion")
 
