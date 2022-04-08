@@ -862,7 +862,7 @@
   },
   {
     "name": "kotlin.reflect.jvm.internal.ReflectionFactoryImpl",
-    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+    "allDeclaredConstructors": true
   },
   {
     "name": "kotlin.reflect.jvm.internal.impl.resolve.scopes.DescriptorKindFilter",
@@ -935,6 +935,12 @@
   },
   {
     "name": "org.http4k.contract.openapi.v3.FieldMetadata"
+  },
+  {
+    "name": "org.http4k.contract.openapi.v3.FieldHolder",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true
   },
   {
     "name": "org.http4k.contract.openapi.v3.HasSchema",
