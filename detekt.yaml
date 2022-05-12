@@ -10,9 +10,6 @@ style:
   SpacingBetweenPackageAndImports:
     active: false
 
-formatting:
-  active: false
-
 exceptions:
   TooGenericExceptionCaught:
     active: false
