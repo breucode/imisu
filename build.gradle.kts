@@ -116,11 +116,11 @@ dependencies {
 
   implementation("org.minidns:minidns-hla:1.0.3")
 
-  val koinVersion = "3.1.6"
+  val koinVersion = "3.2.0"
   implementation("io.insert-koin:koin-core:$koinVersion")
   testImplementation("io.insert-koin:koin-test:$koinVersion")
 
-  val hopliteVersion = "2.1.0"
+  val hopliteVersion = "2.1.1"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
@@ -137,7 +137,7 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 
   testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
-  testImplementation("org.mockito:mockito-inline:4.4.0")
+  testImplementation("org.mockito:mockito-inline:4.5.1")
 }
 
 tasks.test {
