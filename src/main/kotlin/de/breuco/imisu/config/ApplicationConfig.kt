@@ -4,17 +4,18 @@ import com.sksamuel.hoplite.ConfigLoaderBuilder
 import com.sksamuel.hoplite.ConfigSource
 import com.sksamuel.hoplite.addFileSource
 import com.sksamuel.hoplite.sources.ConfigFilePropertySource
-import mu.KLogger
 import java.nio.file.Path
 import kotlin.system.exitProcess
+import mu.KLogger
 
 private val FORBIDDEN_SERVICE_NAMES = setOf("health")
 
 class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
   val versions =
-    ConfigLoaderBuilder
-      .default()
-      .addPropertySource(ConfigFilePropertySource(ConfigSource.ClasspathSource("/versions.properties")))
+    ConfigLoaderBuilder.default()
+      .addPropertySource(
+        ConfigFilePropertySource(ConfigSource.ClasspathSource("/versions.properties"))
+      )
       .build()
       .loadConfig<Versions>()
       .fold(
@@ -31,8 +32,7 @@ class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
       )
 
   val userConfig =
-    ConfigLoaderBuilder
-      .default()
+    ConfigLoaderBuilder.default()
       .addFileSource(configPath.toFile())
       .build()
       .loadConfig<UserConfig>()
@@ -50,8 +50,7 @@ class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
           exitProcess(1)
         },
         ifValid = { userConfig ->
-          val forbiddenServices = userConfig.services.keys
-            .filter { it in FORBIDDEN_SERVICE_NAMES }
+          val forbiddenServices = userConfig.services.keys.filter { it in FORBIDDEN_SERVICE_NAMES }
 
           if (forbiddenServices.isNotEmpty()) {
             logger.error {
@@ -71,10 +70,7 @@ class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
       )
 }
 
-data class Versions(
-  val applicationVersion: String,
-  val swaggerUiVersion: String
-)
+data class Versions(val applicationVersion: String, val swaggerUiVersion: String)
 
 data class UserConfig(
   val exposeFullApi: Boolean = false,

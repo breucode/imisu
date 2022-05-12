@@ -2,6 +2,7 @@ package de.breuco.imisu.service
 
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.types.shouldBeInstanceOf
+import java.net.InetAddress
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -9,7 +10,6 @@ import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import java.net.InetAddress
 
 class PingServiceTest {
   private lateinit var underTest: PingService
@@ -26,8 +26,7 @@ class PingServiceTest {
 
     Mockito.mockStatic(InetAddress::class.java).use {
       val inetAddress = mock<InetAddress>()
-      it.`when`<Any> { InetAddress.getByName(pingAddress) }
-        .thenReturn(inetAddress)
+      it.`when`<Any> { InetAddress.getByName(pingAddress) }.thenReturn(inetAddress)
 
       doReturn(true).whenever(inetAddress).isReachable(timeout)
 
@@ -44,8 +43,7 @@ class PingServiceTest {
 
     Mockito.mockStatic(InetAddress::class.java).use {
       val inetAddress = mock<InetAddress>()
-      it.`when`<Any> { InetAddress.getByName(pingAddress) }
-        .thenReturn(inetAddress)
+      it.`when`<Any> { InetAddress.getByName(pingAddress) }.thenReturn(inetAddress)
 
       doReturn(false).whenever(inetAddress).isReachable(timeout)
 
@@ -62,8 +60,7 @@ class PingServiceTest {
 
     Mockito.mockStatic(InetAddress::class.java).use {
       val inetAddress = mock<InetAddress>()
-      it.`when`<Any> { InetAddress.getByName(pingAddress) }
-        .thenReturn(inetAddress)
+      it.`when`<Any> { InetAddress.getByName(pingAddress) }.thenReturn(inetAddress)
 
       doAnswer { Exception() }.whenever(inetAddress).isReachable(timeout)
 

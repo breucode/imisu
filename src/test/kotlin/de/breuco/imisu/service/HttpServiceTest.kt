@@ -25,10 +25,7 @@ internal class HttpServiceTest {
 
   @BeforeEach
   fun beforeEach() {
-    underTest = HttpService(
-      httpClientMock,
-      nonSslValidatingHttpClientMock
-    )
+    underTest = HttpService(httpClientMock, nonSslValidatingHttpClientMock)
   }
 
   @AfterEach
@@ -43,11 +40,9 @@ internal class HttpServiceTest {
 
     val responseMock = mock<Response>()
 
-    whenever(httpClientMock(Request(Method.HEAD, hostName)))
-      .thenReturn(responseMock)
+    whenever(httpClientMock(Request(Method.HEAD, hostName))).thenReturn(responseMock)
 
-    doReturn(Status.OK)
-      .whenever(responseMock).status
+    doReturn(Status.OK).whenever(responseMock).status
 
     val result = underTest.checkHealth(hostName, true)
 
@@ -62,14 +57,11 @@ internal class HttpServiceTest {
 
     val responseMock = mock<Response>()
 
-    whenever(httpClientMock(Request(Method.HEAD, hostName)))
-      .thenReturn(responseMock)
+    whenever(httpClientMock(Request(Method.HEAD, hostName))).thenReturn(responseMock)
 
-    whenever(httpClientMock(Request(Method.GET, hostName)))
-      .thenReturn(responseMock)
+    whenever(httpClientMock(Request(Method.GET, hostName))).thenReturn(responseMock)
 
-    doReturn(Status.CLIENT_TIMEOUT)
-      .whenever(responseMock).status
+    doReturn(Status.CLIENT_TIMEOUT).whenever(responseMock).status
 
     val result = underTest.checkHealth(hostName, true)
 
@@ -83,8 +75,7 @@ internal class HttpServiceTest {
   fun `Error during HTTP query`() {
     val hostName = "http://example.org"
 
-    whenever(httpClientMock(Request(Method.HEAD, hostName)))
-      .thenAnswer { throw Exception() }
+    whenever(httpClientMock(Request(Method.HEAD, hostName))).thenAnswer { throw Exception() }
 
     val result = underTest.checkHealth(hostName, true)
 
@@ -98,18 +89,14 @@ internal class HttpServiceTest {
     val hostName = "http://example.org"
 
     val notAllowedResponseMock = mock<Response>()
-    whenever(httpClientMock(Request(Method.HEAD, hostName)))
-      .thenReturn(notAllowedResponseMock)
+    whenever(httpClientMock(Request(Method.HEAD, hostName))).thenReturn(notAllowedResponseMock)
 
-    doReturn(Status.METHOD_NOT_ALLOWED)
-      .whenever(notAllowedResponseMock).status
+    doReturn(Status.METHOD_NOT_ALLOWED).whenever(notAllowedResponseMock).status
 
     val responseMock = mock<Response>()
-    whenever(httpClientMock(Request(Method.GET, hostName)))
-      .thenReturn(responseMock)
+    whenever(httpClientMock(Request(Method.GET, hostName))).thenReturn(responseMock)
 
-    doReturn(Status.OK)
-      .whenever(responseMock).status
+    doReturn(Status.OK).whenever(responseMock).status
 
     val result = underTest.checkHealth(hostName, true)
 
@@ -128,8 +115,7 @@ internal class HttpServiceTest {
     whenever(nonSslValidatingHttpClientMock(Request(Method.HEAD, hostName)))
       .thenReturn(responseMock)
 
-    doReturn(Status.OK)
-      .whenever(responseMock).status
+    doReturn(Status.OK).whenever(responseMock).status
 
     val result = underTest.checkHealth(hostName, false)
 

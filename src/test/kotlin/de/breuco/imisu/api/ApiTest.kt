@@ -35,7 +35,8 @@ class ApiTest {
   fun beforeEach() {
     whenever(appConfigMock.userConfig).thenReturn(userConfigMock)
     whenever(appConfigMock.versions).thenReturn(Versions("appVersion", "swaggerUiVersion"))
-    underTest = Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock))
+    underTest =
+      Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock))
   }
 
   @AfterEach
@@ -54,16 +55,11 @@ class ApiTest {
   fun `404 for endpoints, which should be disabled when exposeFullApi == false`() {
     whenever(userConfigMock.exposeFullApi).thenReturn(false)
     whenever(userConfigMock.exposeSwagger).thenReturn(false)
-    val disabledRoutes = listOf(
-      "/services",
-      "/services/testId"
-    )
+    val disabledRoutes = listOf("/services", "/services/testId")
 
     val routing = underTest.routing()
 
-    val responses = disabledRoutes.map {
-      routing(Request(Method.GET, it))
-    }
+    val responses = disabledRoutes.map { routing(Request(Method.GET, it)) }
 
     responses.forEach { it.status shouldBe Status.NOT_FOUND }
 

@@ -1,9 +1,9 @@
 package de.breuco.imisu
 
+import java.nio.file.Paths
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.stopKoin
-import java.nio.file.Paths
 
 class ApplicationContextTest {
 

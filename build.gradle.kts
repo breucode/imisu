@@ -13,67 +13,56 @@ plugins {
 }
 
 group = "de.breuco"
+
 version = "0.8.3"
 
-tasks.wrapper {
-  distributionType = Wrapper.DistributionType.ALL
-}
+tasks.wrapper { distributionType = Wrapper.DistributionType.ALL }
 
 application.mainClass.set("de.breuco.imisu.ApplicationKt")
 
 tasks.jacocoTestReport {
   dependsOn(tasks.test)
 
-  reports {
-    csv.required.set(true)
-  }
+  reports { csv.required.set(true) }
 }
 
 if (project.property("generateNativeImageConfig").toString().toBoolean()) {
   application {
-    applicationDefaultJvmArgs = listOf("-agentlib:native-image-agent=config-merge-dir=src/main/resources/META-INF/native-image/")
+    applicationDefaultJvmArgs =
+      listOf(
+        "-agentlib:native-image-agent=config-merge-dir=src/main/resources/META-INF/native-image/"
+      )
   }
 }
 
 val swaggerUiVersion = "4.1.2"
 
-val createVersionProperties by tasks.registering(WriteProperties::class) {
-  dependsOn(tasks.processResources)
-  property("applicationVersion", version)
-  property("swaggerUiVersion", swaggerUiVersion)
-  outputFile = File("$buildDir/resources/main/versions.properties")
-}
+val createVersionProperties by
+  tasks.registering(WriteProperties::class) {
+    dependsOn(tasks.processResources)
+    property("applicationVersion", version)
+    property("swaggerUiVersion", swaggerUiVersion)
+    outputFile = File("$buildDir/resources/main/versions.properties")
+  }
 
 tasks.processResources {
   filter<ReplaceTokens>("tokens" to mapOf("SWAGGER_UI_VERSION" to swaggerUiVersion))
 }
 
-tasks.classes {
-  dependsOn(createVersionProperties)
-}
+tasks.classes { dependsOn(createVersionProperties) }
 
 spotless {
-  val ktlintVersion = "0.44.0"
-  kotlin {
-    ktlint(ktlintVersion).userData(
-      mapOf(
-        Pair("indent_size", "2")
-      )
-    )
-  }
+  val ktfmtVersion = "0.37"
+  kotlin { ktfmt(ktfmtVersion).googleStyle() }
   kotlinGradle {
     target("*.gradle.kts")
 
-    ktlint(ktlintVersion).userData(
-      mapOf(
-        Pair("indent_size", "2")
-      )
-    )
+    ktfmt(ktfmtVersion).googleStyle()
   }
   format("prettier") {
     target("*.md", "*.yaml", ".github/**/*.yaml", "src/**/*.json")
 
-    prettier("2.5.1")
+    prettier("2.6.2")
   }
 }
 
@@ -91,17 +80,13 @@ fun isNonStable(version: String): Boolean {
 }
 
 tasks.named("dependencyUpdates", DependencyUpdatesTask::class.java).configure {
-  rejectVersionIf {
-    isNonStable(candidate.version)
-  }
+  rejectVersionIf { isNonStable(candidate.version) }
 
   revision = "release"
   gradleReleaseChannel = "current"
 }
 
-repositories {
-  mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
   implementation(platform("org.http4k:http4k-bom:4.25.14.0"))
@@ -140,16 +125,12 @@ dependencies {
   testImplementation("org.mockito:mockito-inline:4.5.1")
 }
 
-tasks.test {
-  useJUnitPlatform()
-}
+tasks.test { useJUnitPlatform() }
 
 tasks.nativeImage {
   setGraalVmHome(System.getProperty("java.home"))
   buildType { buildTypeSelector ->
-    buildTypeSelector.executable {
-      main = application.mainClass.get()
-    }
+    buildTypeSelector.executable { main = application.mainClass.get() }
   }
   executableName = "imisu"
   arguments(
@@ -159,17 +140,16 @@ tasks.nativeImage {
     "--enable-https",
     "--initialize-at-build-time=" +
       listOf(
-        "org.slf4j.impl.SimpleLogger",
-        "org.slf4j.LoggerFactory",
-        "org.slf4j.impl.StaticLoggerBinder",
-        "org.minidns"
-      ).joinToString(","),
+          "org.slf4j.impl.SimpleLogger",
+          "org.slf4j.LoggerFactory",
+          "org.slf4j.impl.StaticLoggerBinder",
+          "org.minidns"
+        )
+        .joinToString(","),
     "--initialize-at-run-time=io.netty.util.internal.logging.Log4JLogger",
     "-H:+StaticExecutableWithDynamicLibC",
     "-H:+InlineBeforeAnalysis"
   )
 }
 
-java {
-  toolchain.languageVersion.set(JavaLanguageVersion.of(17))
-}
+java { toolchain.languageVersion.set(JavaLanguageVersion.of(17)) }

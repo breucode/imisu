@@ -5,6 +5,7 @@ import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
+import java.nio.file.Paths
 import mu.KLogger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -15,7 +16,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.reset
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import java.nio.file.Paths
 
 class ApplicationConfigTest {
 
@@ -29,7 +29,8 @@ class ApplicationConfigTest {
   @Test
   fun `Load config`() {
     val userConfig =
-      ApplicationConfig(loggerMock, Paths.get(javaClass.getResource("/complete.conf").toURI())).userConfig
+      ApplicationConfig(loggerMock, Paths.get(javaClass.getResource("/complete.conf").toURI()))
+        .userConfig
 
     userConfig.exposeFullApi shouldBe true
     userConfig.exposeSwagger shouldBe true
@@ -63,7 +64,8 @@ class ApplicationConfigTest {
   @Test
   fun `Load config defaults`() {
     val userConfig =
-      ApplicationConfig(loggerMock, Paths.get(javaClass.getResource("/basic.conf").toURI())).userConfig
+      ApplicationConfig(loggerMock, Paths.get(javaClass.getResource("/basic.conf").toURI()))
+        .userConfig
 
     userConfig.exposeFullApi shouldBe false
     userConfig.exposeSwagger shouldBe false
@@ -101,9 +103,10 @@ class ApplicationConfigTest {
 
       shouldThrow<Exception> {
         ApplicationConfig(
-          loggerMock,
-          Paths.get(javaClass.getResource("/forbidden-service-name.conf").toURI())
-        ).userConfig
+            loggerMock,
+            Paths.get(javaClass.getResource("/forbidden-service-name.conf").toURI())
+          )
+          .userConfig
       }
 
       verify(loggerMock).error(any<() -> Any?>())
@@ -120,10 +123,8 @@ class ApplicationConfigTest {
       whenever(Runtime.getRuntime()).thenReturn(runtimeMock)
 
       shouldThrow<Exception> {
-        ApplicationConfig(
-          loggerMock,
-          Paths.get(javaClass.getResource("/broken.conf").toURI())
-        ).userConfig
+        ApplicationConfig(loggerMock, Paths.get(javaClass.getResource("/broken.conf").toURI()))
+          .userConfig
       }
 
       verify(loggerMock).error(any<() -> Any?>())

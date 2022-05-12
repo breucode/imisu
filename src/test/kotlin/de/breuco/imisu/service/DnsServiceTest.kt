@@ -2,6 +2,7 @@ package de.breuco.imisu.service
 
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.types.shouldBeInstanceOf
+import java.net.InetAddress
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -15,7 +16,6 @@ import org.mockito.kotlin.reset
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
-import java.net.InetAddress
 
 class DnsServiceTest {
 
@@ -43,10 +43,10 @@ class DnsServiceTest {
     val dnsQueryResultMock = mock<DnsQueryResult>()
 
     doReturn(dnsQueryResultMock)
-      .whenever(dnsClientMock).query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
+      .whenever(dnsClientMock)
+      .query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
 
-    doReturn(true)
-      .whenever(dnsQueryResultMock).wasSuccessful()
+    doReturn(true).whenever(dnsQueryResultMock).wasSuccessful()
 
     val result = underTest.checkHealth(hostName, ip, port)
 
@@ -65,10 +65,10 @@ class DnsServiceTest {
     val dnsQueryResultMock = mock<DnsQueryResult>()
 
     doReturn(dnsQueryResultMock)
-      .whenever(dnsClientMock).query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
+      .whenever(dnsClientMock)
+      .query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
 
-    doReturn(false)
-      .whenever(dnsQueryResultMock).wasSuccessful()
+    doReturn(false).whenever(dnsQueryResultMock).wasSuccessful()
 
     val result = underTest.checkHealth(hostName, ip, port)
 
@@ -85,7 +85,8 @@ class DnsServiceTest {
     val port = 53
 
     doAnswer { throw Exception() }
-      .whenever(dnsClientMock).query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
+      .whenever(dnsClientMock)
+      .query(hostName, Record.TYPE.A, Record.CLASS.IN, InetAddress.getByName(ip), port)
 
     val result = underTest.checkHealth(hostName, ip, port)
 

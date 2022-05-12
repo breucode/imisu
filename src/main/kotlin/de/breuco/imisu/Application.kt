@@ -6,6 +6,7 @@ import de.breuco.imisu.config.ApplicationConfig
 import de.breuco.imisu.service.DnsService
 import de.breuco.imisu.service.HttpService
 import de.breuco.imisu.service.PingService
+import java.nio.file.Paths
 import mu.KLogger
 import mu.KotlinLogging
 import okhttp3.OkHttpClient
@@ -19,7 +20,6 @@ import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.minidns.DnsClient
-import java.nio.file.Paths
 
 class Application(
   private val api: Api,
@@ -47,20 +47,13 @@ fun main(args: Array<String>) {
       module {
         single { Api(get(), get()) }
         single { Services(get(), get(), get(), get()) }
-        single {
-          HttpService(
-            get(named("httpClient")),
-            get(named("nonSslValidatingHttpClient"))
-          )
-        }
-        single {
-          DnsService(
-            get()
-          )
-        }
+        single { HttpService(get(named("httpClient")), get(named("nonSslValidatingHttpClient"))) }
+        single { DnsService(get()) }
         single { PingService() }
         single<HttpHandler>(named("httpClient")) { OkHttp(OkHttpClient.Builder().build()) }
-        single<HttpHandler>(named("nonSslValidatingHttpClient")) { OkHttp(PreCannedOkHttpClients.insecureOkHttpClient()) }
+        single<HttpHandler>(named("nonSslValidatingHttpClient")) {
+          OkHttp(PreCannedOkHttpClients.insecureOkHttpClient())
+        }
         single { DnsClient(null) }
         single {
           ApplicationConfig(
@@ -69,7 +62,13 @@ fun main(args: Array<String>) {
           )
         }
         factory { (name: String) -> KotlinLogging.logger(name) }
-        single { Application(get(), get(), get(parameters = { parametersOf(Application::class.java.name) })) }
+        single {
+          Application(
+            get(),
+            get(),
+            get(parameters = { parametersOf(Application::class.java.name) })
+          )
+        }
       }
     )
   }

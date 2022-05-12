@@ -15,6 +15,7 @@ import de.breuco.imisu.service.HealthCheckSuccess
 import de.breuco.imisu.service.HttpService
 import de.breuco.imisu.service.PingService
 import io.kotest.matchers.shouldBe
+import javax.net.ssl.SSLException
 import org.http4k.core.Method
 import org.http4k.core.Method.GET
 import org.http4k.core.Method.HEAD
@@ -33,7 +34,6 @@ import org.mockito.kotlin.reset
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
-import javax.net.ssl.SSLException
 
 class ServicesTest {
   private val appConfigMock = mock<ApplicationConfig>()
@@ -50,7 +50,8 @@ class ServicesTest {
     whenever(userConfigMock.exposeFullApi).thenReturn(true)
     whenever(userConfigMock.exposeSwagger).thenReturn(false)
     whenever(appConfigMock.versions).thenReturn(Versions("appVersion", "swaggerUiVersion"))
-    api = Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock))
+    api =
+      Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock))
   }
 
   @AfterEach
@@ -73,17 +74,15 @@ class ServicesTest {
     val serviceId = "testServiceId"
     val httpEndpoint = "http://example.org"
 
-    whenever(userConfigMock.services).thenReturn(
-      mapOf(
-        serviceId to HttpServiceConfig(true, httpEndpoint)
-      )
-    )
+    whenever(userConfigMock.services)
+      .thenReturn(mapOf(serviceId to HttpServiceConfig(true, httpEndpoint)))
 
     val route = api.routing()
     val response = route(Request(GET, "/services"))
 
     response.status shouldBe OK
-    response shouldHaveBody """{"$serviceId":{"enabled":true,"httpEndpoint":"$httpEndpoint","validateSsl":true}}"""
+    response shouldHaveBody
+      """{"$serviceId":{"enabled":true,"httpEndpoint":"$httpEndpoint","validateSsl":true}}"""
 
     verify(userConfigMock).services
   }
@@ -93,11 +92,8 @@ class ServicesTest {
     val serviceId = "testServiceId"
     val httpEndpoint = "http://example.org"
 
-    whenever(userConfigMock.services).thenReturn(
-      mapOf(
-        serviceId to HttpServiceConfig(false, httpEndpoint)
-      )
-    )
+    whenever(userConfigMock.services)
+      .thenReturn(mapOf(serviceId to HttpServiceConfig(false, httpEndpoint)))
 
     val route = api.routing()
     val response = route(Request(GET, "/services"))
@@ -121,7 +117,8 @@ class ServicesTest {
       val response = route(Request(GET, "/services/$serviceId"))
 
       response.status shouldBe OK
-      response shouldHaveBody """{"enabled":true,"httpEndpoint":"$httpEndpoint","validateSsl":true}"""
+      response shouldHaveBody
+        """{"enabled":true,"httpEndpoint":"$httpEndpoint","validateSsl":true}"""
     }
 
     @Test
@@ -129,7 +126,8 @@ class ServicesTest {
       val serviceId = "testServiceId"
       val httpEndpoint = "http://example.org"
 
-      whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(false, httpEndpoint))
+      whenever(userConfigMock.services[serviceId])
+        .thenReturn(HttpServiceConfig(false, httpEndpoint))
 
       val route = api.routing()
       val response = route(Request(GET, "/services/$serviceId"))
@@ -165,8 +163,10 @@ class ServicesTest {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
-        whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(true, httpEndpoint))
-        whenever(httpServiceMock.checkHealth(httpEndpoint, true)).thenReturn(Result.success(HealthCheckSuccess))
+        whenever(userConfigMock.services[serviceId])
+          .thenReturn(HttpServiceConfig(true, httpEndpoint))
+        whenever(httpServiceMock.checkHealth(httpEndpoint, true))
+          .thenReturn(Result.success(HealthCheckSuccess))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -190,7 +190,8 @@ class ServicesTest {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
-        whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(false, httpEndpoint))
+        whenever(userConfigMock.services[serviceId])
+          .thenReturn(HttpServiceConfig(false, httpEndpoint))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -213,7 +214,8 @@ class ServicesTest {
         val dnsServer = "testDnsServer"
 
         whenever(userConfigMock.services[serviceId]).thenReturn(DnsServiceConfig(true, dnsServer))
-        whenever(dnsServiceMock.checkHealth("example.org", dnsServer, 53)).thenReturn(Result.success(HealthCheckSuccess))
+        whenever(dnsServiceMock.checkHealth("example.org", dnsServer, 53))
+          .thenReturn(Result.success(HealthCheckSuccess))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -238,7 +240,8 @@ class ServicesTest {
         val pingServer = "192.168.0.1"
 
         whenever(userConfigMock.services[serviceId]).thenReturn(PingServiceConfig(true, pingServer))
-        whenever(pingServiceMock.checkHealth(pingServer, 1000)).thenReturn(Result.success(HealthCheckSuccess))
+        whenever(pingServiceMock.checkHealth(pingServer, 1000))
+          .thenReturn(Result.success(HealthCheckSuccess))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -262,8 +265,10 @@ class ServicesTest {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
-        whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(true, httpEndpoint))
-        whenever(httpServiceMock.checkHealth(httpEndpoint, true)).thenReturn(Result.success(HealthCheckFailure()))
+        whenever(userConfigMock.services[serviceId])
+          .thenReturn(HttpServiceConfig(true, httpEndpoint))
+        whenever(httpServiceMock.checkHealth(httpEndpoint, true))
+          .thenReturn(Result.success(HealthCheckFailure()))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -286,8 +291,10 @@ class ServicesTest {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
-        whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(true, httpEndpoint))
-        whenever(httpServiceMock.checkHealth(httpEndpoint, true)).thenReturn(Result.failure(Exception()))
+        whenever(userConfigMock.services[serviceId])
+          .thenReturn(HttpServiceConfig(true, httpEndpoint))
+        whenever(httpServiceMock.checkHealth(httpEndpoint, true))
+          .thenReturn(Result.failure(Exception()))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
@@ -311,8 +318,10 @@ class ServicesTest {
         val serviceId = "testServiceId"
         val httpEndpoint = "http://example.org"
 
-        whenever(userConfigMock.services[serviceId]).thenReturn(HttpServiceConfig(true, httpEndpoint))
-        whenever(httpServiceMock.checkHealth(httpEndpoint, true)).thenReturn(Result.success(HealthCheckFailure(SSLException(""))))
+        whenever(userConfigMock.services[serviceId])
+          .thenReturn(HttpServiceConfig(true, httpEndpoint))
+        whenever(httpServiceMock.checkHealth(httpEndpoint, true))
+          .thenReturn(Result.success(HealthCheckFailure(SSLException(""))))
 
         val route = api.routing()
         val response = route(Request(method, "/services/$serviceId/health"))
