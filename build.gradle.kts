@@ -5,7 +5,7 @@ plugins {
   kotlin("jvm") version Versions.kotlin
   kotlin("kapt") version Versions.kotlin
   id("jacoco")
-  id("com.diffplug.spotless") version "6.4.2"
+  id("com.diffplug.spotless") version "6.6.0"
   id("io.gitlab.arturbosch.detekt") version "1.19.0"
   id("com.github.ben-manes.versions") version "0.42.0"
   id("application")
@@ -128,7 +128,7 @@ dependencies {
   runtimeOnly("org.slf4j:slf4j-simple:1.7.36")
   implementation("io.github.microutils:kotlin-logging:2.1.21")
 
-  val kotestVersion = "5.2.3"
+  val kotestVersion = "5.3.0"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
     exclude("junit")
     exclude("org.junit.vintage")
