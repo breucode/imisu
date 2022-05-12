@@ -20,6 +20,11 @@ jobs:
         run: |
           unset JAVA_HOME
           ./gradlew check --console=plain
+      - name: Inject version
+        run: |
+          sed -i "s/%ARTIFACT_VERSION%/$VERSION/g" build.gradle.kts
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}
       - name: Build native image
         run: |
           unset JAVA_HOME
