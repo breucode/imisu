@@ -6,10 +6,12 @@ import org.http4k.contract.ContractRenderer
 import org.http4k.contract.NoRenderer
 import org.http4k.contract.contract
 import org.http4k.contract.openapi.ApiInfo
+import org.http4k.contract.openapi.v3.ApiServer
 import org.http4k.contract.openapi.v3.OpenApi3
 import org.http4k.core.Method.GET
 import org.http4k.core.Response
 import org.http4k.core.Status
+import org.http4k.core.Uri
 import org.http4k.format.Jackson
 import org.http4k.routing.ResourceLoader.Companion.Classpath
 import org.http4k.routing.RoutingHttpHandler
@@ -22,7 +24,8 @@ class Api(private val appConfig: ApplicationConfig, private val services: Servic
     if (appConfig.userConfig.exposeSwagger) {
       OpenApi3(
         ApiInfo("imisu API", appConfig.versions.applicationVersion, "The API of imisu"),
-        Jackson
+        servers = listOf(ApiServer(Uri.of("http://localhost:8080/"), "localhost")),
+        json = Jackson
       )
     } else {
       NoRenderer

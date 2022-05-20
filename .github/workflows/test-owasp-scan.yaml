@@ -1,0 +1,25 @@
+name: OWASP Scan
+
+on:
+  push:
+    branches:
+      - "owasp-scan"
+    tags-ignore:
+      - "**"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run application
+        env:
+          IMAGE_TAG: ${{ steps.get_version.outputs.version }}
+        run: |
+          docker run -p 8080:8080 -v "$(pwd)/imisu.conf:/imisu.conf:ro" "ghcr.io/breucode/imisu:$IMAGE_TAG" &
+          sleep 10
+      - name: ZAP Scan
+        uses: zaproxy/action-api-scan@v0.1.0
+        with:
+          format: openapi
+          target: 'http://localhost:8080/swagger.json'
