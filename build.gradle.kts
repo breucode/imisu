@@ -122,7 +122,7 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 
   testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
-  testImplementation("org.mockito:mockito-inline:4.6.0")
+  testImplementation("org.mockito:mockito-inline:4.6.1")
 }
 
 tasks.test { useJUnitPlatform() }
