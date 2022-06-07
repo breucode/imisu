@@ -89,7 +89,7 @@ tasks.named("dependencyUpdates", DependencyUpdatesTask::class.java).configure {
 repositories { mavenCentral() }
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:4.25.16.2"))
+  implementation(platform("org.http4k:http4k-bom:4.26.0.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
