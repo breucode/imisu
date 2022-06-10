@@ -11,18 +11,11 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: gradle/wrapper-validation-action@v1
-      - uses: asdf-vm/actions/install@v1
-        env:
-          NODEJS_CHECK_SIGNATURES: no
-      - name: Check
-        run: |
-          unset JAVA_HOME
-          ./gradlew check --console=plain
-      - name: Upload test reports
-        uses: actions/upload-artifact@v2
-        if: ${{ failure() }}
+      - uses: actions/setup-java@v3
         with:
-          name: test-reports
-          path: build/reports/tests
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Check
+        run: ./gradlew check --console=plain

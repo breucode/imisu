@@ -9,13 +9,11 @@ style:
     active: false
   SpacingBetweenPackageAndImports:
     active: false
+  ForbiddenComment:
+    active: false
 
 exceptions:
   TooGenericExceptionCaught:
     active: false
   TooGenericExceptionThrown:
     excludes: ["**/test/**"]
-
-performance:
-  SpreadOperator:
-    active: false

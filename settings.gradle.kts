@@ -1,1 +1,2 @@
-rootProject.name = "imisu"
+
+rootProject.name = "untitled"

@@ -1,4 +1,4 @@
-package de.breuco.imisu.service
+package de.breuco.imisu.healthcheck
 
 sealed class HealthCheckResult
 
