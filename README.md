@@ -26,7 +26,7 @@ This is an example configuration. When there are defaults specified, you can lea
 ```hocon
 {
   "exposeFullApi": false,                         # !!!ONLY USE FOR DEBUGGING PURPOSES!!! Exposes a complete restful API, so you can see all configured services and routes. Default: false
-  "exposeSwagger": false,                         # Exposes a swagger-ui endpoint with OpenAPI 3 capability under /swagger-ui. Default: false
+  "exposeSwagger": false,                         # Exposes a swagger-ui endpoint with OpenAPI 3 capability under /swagger-ui/. Default: false
   "serverPort": 8080                              # Port on which imisu runs. Default: 8080
   "services": {
     "exampleDns": {                               # Name of the service to be configured. It will be available at /services/exampleDns/health

@@ -1,5 +1,4 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
   kotlin("jvm") version Versions.kotlin
@@ -30,26 +29,10 @@ if (project.property("generateNativeImageConfig").toString().toBoolean()) {
   application {
     applicationDefaultJvmArgs =
       listOf(
-        "-agentlib:native-image-agent=config-merge-dir=src/main/resources/META-INF/native-image/"
+        "-agentlib:native-image-agent=config-merge-dir=src/main/resources/META-INF/native-image/",
       )
   }
 }
-
-val swaggerUiVersion = "4.1.2"
-
-val createVersionProperties by
-  tasks.registering(WriteProperties::class) {
-    dependsOn(tasks.processResources)
-    property("applicationVersion", version)
-    property("swaggerUiVersion", swaggerUiVersion)
-    outputFile = File("$buildDir/resources/main/versions.properties")
-  }
-
-tasks.processResources {
-  filter<ReplaceTokens>("tokens" to mapOf("SWAGGER_UI_VERSION" to swaggerUiVersion))
-}
-
-tasks.classes { dependsOn(createVersionProperties) }
 
 spotless {
   val ktfmtVersion = "0.37"
@@ -86,7 +69,20 @@ tasks.named("dependencyUpdates", DependencyUpdatesTask::class.java).configure {
   gradleReleaseChannel = "current"
 }
 
-repositories { mavenCentral() }
+repositories {
+  mavenCentral()
+  val github = ivy {
+    url = uri("https://github.com/")
+    patternLayout { artifact("/[organisation]/[module]/archive/refs/tags/v[revision].[ext]") }
+    metadataSources { artifact() }
+  }
+  exclusiveContent {
+    forRepositories(github)
+    filter { includeModule("swagger-api", "swagger-ui") }
+  }
+}
+
+val swaggerRuntime: Configuration by configurations.creating
 
 dependencies {
   implementation(platform("org.http4k:http4k-bom:4.27.1.0"))
@@ -97,7 +93,7 @@ dependencies {
   implementation("org.http4k:http4k-client-okhttp")
   testImplementation("org.http4k:http4k-testing-kotest")
 
-  runtimeOnly("org.webjars:swagger-ui:$swaggerUiVersion")
+  swaggerRuntime("swagger-api:swagger-ui:4.12.0@zip")
 
   implementation("org.minidns:minidns-hla:1.0.3")
 
@@ -125,6 +121,32 @@ dependencies {
   testImplementation("org.mockito:mockito-inline:4.6.1")
 }
 
+val createVersionProperties by
+  tasks.registering(WriteProperties::class) {
+    property("applicationVersion", version)
+    outputFile = File("$buildDir/resources/main/versions.properties")
+  }
+
+val unzipSwagger by
+  tasks.registering(Copy::class) {
+    from(zipTree(swaggerRuntime.singleFile)) {
+      include("*/dist/**")
+
+      includeEmptyDirs = false
+
+      eachFile {
+        this.relativePath = RelativePath(true, *this.relativePath.segments.drop(2).toTypedArray())
+      }
+    }
+
+    into("${sourceSets.main.get().output.resourcesDir!!.path}/swagger-ui")
+  }
+
+tasks.processResources {
+  dependsOn(unzipSwagger)
+  dependsOn(createVersionProperties)
+}
+
 tasks.test { useJUnitPlatform() }
 
 tasks.nativeImage {
@@ -143,12 +165,12 @@ tasks.nativeImage {
           "org.slf4j.impl.SimpleLogger",
           "org.slf4j.LoggerFactory",
           "org.slf4j.impl.StaticLoggerBinder",
-          "org.minidns"
+          "org.minidns",
         )
         .joinToString(","),
     "--initialize-at-run-time=io.netty.util.internal.logging.Log4JLogger",
     "-H:+StaticExecutableWithDynamicLibC",
-    "-H:+InlineBeforeAnalysis"
+    "-H:+InlineBeforeAnalysis",
   )
 }
 

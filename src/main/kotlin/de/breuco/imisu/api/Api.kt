@@ -7,9 +7,6 @@ import org.http4k.contract.NoRenderer
 import org.http4k.contract.contract
 import org.http4k.contract.openapi.ApiInfo
 import org.http4k.contract.openapi.v3.OpenApi3
-import org.http4k.core.Method.GET
-import org.http4k.core.Response
-import org.http4k.core.Status
 import org.http4k.format.Jackson
 import org.http4k.routing.ResourceLoader.Companion.Classpath
 import org.http4k.routing.RoutingHttpHandler
@@ -32,16 +29,7 @@ class Api(private val appConfig: ApplicationConfig, private val services: Servic
 
   fun routing(): RoutingHttpHandler =
     routes(
-      "/swagger-ui" bind
-        GET to
-        {
-          Response(Status.FOUND)
-            .header("Location", "/swagger-ui/index.html?url=$swaggerUiPath&validatorUrl=")
-        },
-      "/swagger-ui/" bind
-        static(
-          Classpath("META-INF/resources/webjars/swagger-ui/${appConfig.versions.swaggerUiVersion}")
-        ),
+      "/swagger-ui/" bind static(Classpath("swagger-ui/")),
       contract {
         renderer = getApiRenderer()
         descriptionPath = swaggerUiPath
