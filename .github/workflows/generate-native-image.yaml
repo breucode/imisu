@@ -21,4 +21,4 @@ jobs:
         if: ${{ success() }}
         with:
           name: native-image
-          path: build/libs/imisu
+          path: build/native-image/imisu
