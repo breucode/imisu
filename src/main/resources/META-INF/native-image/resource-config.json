@@ -6,18 +6,6 @@
       { "pattern": "META-INF/services/.*" },
       { "pattern": "\\QMETA-INF/org/http4k/core/mime.types\\E" },
       {
-        "pattern": "\\QMETA-INF/resources/webjars/swagger-ui/@SWAGGER_UI_VERSION@/index.html\\E"
-      },
-      {
-        "pattern": "\\QMETA-INF/resources/webjars/swagger-ui/@SWAGGER_UI_VERSION@/swagger-ui-bundle.js\\E"
-      },
-      {
-        "pattern": "\\QMETA-INF/resources/webjars/swagger-ui/@SWAGGER_UI_VERSION@/swagger-ui-standalone-preset.js\\E"
-      },
-      {
-        "pattern": "\\QMETA-INF/resources/webjars/swagger-ui/@SWAGGER_UI_VERSION@/swagger-ui.css\\E"
-      },
-      {
         "pattern": "\\QMETA-INF/services/com.sksamuel.hoplite.decoder.Decoder\\E"
       },
       {
@@ -31,7 +19,8 @@
       },
       { "pattern": "\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E" },
       { "pattern": "\\Qsimplelogger.properties\\E" },
-      { "pattern": "\\Qversions.properties\\E" }
+      { "pattern": "\\Qversions.properties\\E" },
+      { "pattern": "swagger-ui/*$" }
     ]
   },
   "bundles": []

@@ -70,7 +70,7 @@ class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
       )
 }
 
-data class Versions(val applicationVersion: String, val swaggerUiVersion: String)
+data class Versions(val applicationVersion: String)
 
 data class UserConfig(
   val exposeFullApi: Boolean = false,
