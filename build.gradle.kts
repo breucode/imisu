@@ -157,7 +157,6 @@ tasks.nativeImage {
   executableName = "imisu"
   arguments(
     "--no-fallback",
-    "--allow-incomplete-classpath",
     "--enable-http",
     "--enable-https",
     "--initialize-at-build-time=" +

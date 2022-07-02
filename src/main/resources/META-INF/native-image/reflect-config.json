@@ -1,5 +1,26 @@
 [
   {
+    "name": "[B"
+  },
+  {
+    "name": "[Lcom.fasterxml.jackson.databind.deser.Deserializers;"
+  },
+  {
+    "name": "[Lcom.fasterxml.jackson.databind.deser.KeyDeserializers;"
+  },
+  {
+    "name": "[Lcom.fasterxml.jackson.databind.deser.ValueInstantiators;"
+  },
+  {
+    "name": "[Lcom.fasterxml.jackson.databind.ser.Serializers;"
+  },
+  {
+    "name": "[Ljava.lang.String;"
+  },
+  {
+    "name": "[Lsun.security.pkcs.SignerInfo;"
+  },
+  {
     "name": "byte[]"
   },
   {
@@ -24,7 +45,27 @@
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {
+    "name": "com.sun.crypto.provider.ARCFOURCipher",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "com.sun.crypto.provider.ChaCha20Cipher$ChaCha20Poly1305",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "com.sun.crypto.provider.DESCipher",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "com.sun.crypto.provider.DESedeCipher",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
     "name": "com.sun.crypto.provider.DHParameters",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "com.sun.crypto.provider.GaloisCounterMode$AESGCM",
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {
@@ -80,12 +121,7 @@
   },
   {
     "name": "de.breuco.imisu.config.Versions",
-    "methods": [
-      {
-        "name": "<init>",
-        "parameterTypes": ["java.lang.String", "java.lang.String"]
-      }
-    ]
+    "methods": [{ "name": "<init>", "parameterTypes": ["java.lang.String"] }]
   },
   {
     "name": "io.netty.bootstrap.ServerBootstrap$1"
@@ -625,6 +661,17 @@
     "name": "java.lang.CharSequence"
   },
   {
+    "name": "java.lang.Class",
+    "methods": [
+      { "name": "getRecordComponents", "parameterTypes": [] },
+      { "name": "isRecord", "parameterTypes": [] },
+      { "name": "isSealed", "parameterTypes": [] }
+    ],
+    "queriedMethods": [
+      { "name": "getPermittedSubclasses", "parameterTypes": [] }
+    ]
+  },
+  {
     "name": "java.lang.Comparable"
   },
   {
@@ -667,6 +714,20 @@
     "name": "java.lang.Void"
   },
   {
+    "name": "java.lang.annotation.Documented",
+    "queryAllDeclaredMethods": true
+  },
+  {
+    "name": "java.lang.annotation.Retention",
+    "queryAllDeclaredMethods": true,
+    "methods": [{ "name": "value", "parameterTypes": [] }]
+  },
+  {
+    "name": "java.lang.annotation.Target",
+    "queryAllDeclaredMethods": true,
+    "methods": [{ "name": "value", "parameterTypes": [] }]
+  },
+  {
     "name": "java.lang.management.ManagementFactory",
     "methods": [{ "name": "getRuntimeMXBean", "parameterTypes": [] }]
   },
@@ -703,6 +764,19 @@
   {
     "name": "java.nio.DirectByteBuffer",
     "methods": [{ "name": "<init>", "parameterTypes": ["long", "int"] }]
+  },
+  {
+    "name": "java.nio.channels.spi.SelectorProvider",
+    "queriedMethods": [
+      {
+        "name": "openServerSocketChannel",
+        "parameterTypes": ["java.net.ProtocolFamily"]
+      },
+      {
+        "name": "openSocketChannel",
+        "parameterTypes": ["java.net.ProtocolFamily"]
+      }
+    ]
   },
   {
     "name": "java.nio.charset.Charset"
@@ -808,8 +882,14 @@
     ]
   },
   {
+    "name": "jdk.internal.ValueBased"
+  },
+  {
     "name": "jdk.internal.misc.Unsafe",
     "methods": [{ "name": "getUnsafe", "parameterTypes": [] }]
+  },
+  {
+    "name": "jdk.internal.vm.annotation.IntrinsicCandidate"
   },
   {
     "name": "kotlin.Deprecated"
@@ -898,6 +978,16 @@
     "name": "org.http4k.contract.openapi.v3.ApiPath$WithBody"
   },
   {
+    "name": "org.http4k.contract.openapi.v3.ApiServer",
+    "allDeclaredFields": true,
+    "queryAllDeclaredMethods": true,
+    "queryAllDeclaredConstructors": true,
+    "methods": [
+      { "name": "getDescription", "parameterTypes": [] },
+      { "name": "getUrl", "parameterTypes": [] }
+    ]
+  },
+  {
     "name": "org.http4k.contract.openapi.v3.ArrayItem"
   },
   {
@@ -934,13 +1024,13 @@
     "allDeclaredConstructors": true
   },
   {
-    "name": "org.http4k.contract.openapi.v3.FieldMetadata"
-  },
-  {
     "name": "org.http4k.contract.openapi.v3.FieldHolder",
     "allDeclaredFields": true,
     "allDeclaredMethods": true,
     "allDeclaredConstructors": true
+  },
+  {
+    "name": "org.http4k.contract.openapi.v3.FieldMetadata"
   },
   {
     "name": "org.http4k.contract.openapi.v3.HasSchema",
@@ -1008,6 +1098,9 @@
     "allDeclaredConstructors": true
   },
   {
+    "name": "org.http4k.core.Uri"
+  },
+  {
     "name": "org.http4k.lens.Meta"
   },
   {
@@ -1045,7 +1138,8 @@
         "parameterTypes": ["java.lang.Object", "long", "java.lang.Object"]
       },
       { "name": "invokeCleaner", "parameterTypes": ["java.nio.ByteBuffer"] }
-    ]
+    ],
+    "queriedMethods": [{ "name": "storeFence", "parameterTypes": [] }]
   },
   {
     "name": "sun.nio.ch.SelectorImpl",

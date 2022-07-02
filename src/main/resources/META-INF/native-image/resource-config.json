@@ -1,10 +1,18 @@
 {
   "resources": {
     "includes": [
-      { "pattern": ".*.kotlin_builtins" },
-      { "pattern": "META-INF/.*.kotlin_module$" },
-      { "pattern": "META-INF/services/.*" },
-      { "pattern": "\\QMETA-INF/org/http4k/core/mime.types\\E" },
+      {
+        "pattern": ".*.kotlin_builtins"
+      },
+      {
+        "pattern": "META-INF/.*.kotlin_module$"
+      },
+      {
+        "pattern": "META-INF/services/.*"
+      },
+      {
+        "pattern": "\\QMETA-INF/org/http4k/core/mime.types\\E"
+      },
       {
         "pattern": "\\QMETA-INF/services/com.sksamuel.hoplite.decoder.Decoder\\E"
       },
@@ -17,10 +25,18 @@
       {
         "pattern": "\\QMETA-INF/services/kotlin.reflect.jvm.internal.impl.resolve.ExternalOverridabilityCondition\\E"
       },
-      { "pattern": "\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E" },
-      { "pattern": "\\Qsimplelogger.properties\\E" },
-      { "pattern": "\\Qversions.properties\\E" },
-      { "pattern": "swagger-ui/*$" }
+      {
+        "pattern": "\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"
+      },
+      {
+        "pattern": "\\Qsimplelogger.properties\\E"
+      },
+      {
+        "pattern": "swagger-ui/.*"
+      },
+      {
+        "pattern": "\\Qversions.properties\\E"
+      }
     ]
   },
   "bundles": []
