@@ -49,7 +49,7 @@ class ServicesTest {
     whenever(appConfigMock.userConfig).thenReturn(userConfigMock)
     whenever(userConfigMock.exposeFullApi).thenReturn(true)
     whenever(userConfigMock.exposeSwagger).thenReturn(false)
-    whenever(appConfigMock.versions).thenReturn(Versions("appVersion", "swaggerUiVersion"))
+    whenever(appConfigMock.versions).thenReturn(Versions("appVersion"))
     api =
       Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock))
   }

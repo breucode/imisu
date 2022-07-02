@@ -34,7 +34,7 @@ class ApiTest {
   @BeforeEach
   fun beforeEach() {
     whenever(appConfigMock.userConfig).thenReturn(userConfigMock)
-    whenever(appConfigMock.versions).thenReturn(Versions("appVersion", "swaggerUiVersion"))
+    whenever(appConfigMock.versions).thenReturn(Versions("appVersion"))
     underTest =
       Api(appConfigMock, Services(appConfigMock, dnsServiceMock, httpServiceMock, pingServiceMock))
   }
