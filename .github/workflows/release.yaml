@@ -56,16 +56,16 @@ jobs:
           sleep 10
       - name: Download swagger
         run: |
-          mkdir public
+          mkdir -p public/swagger-ui
           curl localhost:8080/swagger.json -o public/swagger.json
-          curl localhost:8080/swagger-ui/index.html -o public/index.html
-          curl localhost:8080/swagger-ui/swagger-ui.css -o public/swagger-ui.css
-          curl localhost:8080/swagger-ui/index.css -o public/index.css
-          curl localhost:8080/swagger-ui/favicon-32x32.png -o public/favicon-32x32.png
-          curl localhost:8080/swagger-ui/favicon-16x16.png -o public/favicon-16x16.png
-          curl localhost:8080/swagger-ui/swagger-ui-bundle.js -o public/swagger-ui-bundle.js
-          curl localhost:8080/swagger-ui/swagger-ui-standalone-preset.js -o public/swagger-ui-standalone-preset.js
-          curl localhost:8080/swagger-ui/swagger-initializer.js -o public/swagger-initializer.js
+          curl localhost:8080/swagger-ui/index.html -o public/swagger-ui/index.html
+          curl localhost:8080/swagger-ui/swagger-ui.css -o public/swagger-ui/swagger-ui.css
+          curl localhost:8080/swagger-ui/index.css -o public/swagger-ui/index.css
+          curl localhost:8080/swagger-ui/favicon-32x32.png -o public/swagger-ui/favicon-32x32.png
+          curl localhost:8080/swagger-ui/favicon-16x16.png -o public/swagger-ui/favicon-16x16.png
+          curl localhost:8080/swagger-ui/swagger-ui-bundle.js -o public/swagger-ui/swagger-ui-bundle.js
+          curl localhost:8080/swagger-ui/swagger-ui-standalone-preset.js -o public/swagger-ui/swagger-ui-standalone-preset.js
+          curl localhost:8080/swagger-ui/swagger-initializer.js -o public/swagger-ui/swagger-initializer.js
       - name: Deploy gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:

@@ -131,6 +131,10 @@ val unzipSwagger by
   tasks.registering(Copy::class) {
     from(zipTree(swaggerRuntime.singleFile)) {
       include("*/dist/**")
+      exclude("**/*.map")
+      exclude("**/swagger-ui-es*.js")
+      exclude("**/swagger-ui.js")
+      exclude("**/oauth2-redirect.html")
 
       includeEmptyDirs = false
 

@@ -2,7 +2,7 @@
 ![Test Coverage](https://raw.githubusercontent.com/breucode/imisu/badges/coverage.svg)
 [![Container image size](https://raw.githubusercontent.com/breucode/imisu/badges/container-image-size.svg)](https://github.com/users/breucode/packages/container/package/imisu)
 [![Container vulnerabilities](https://raw.githubusercontent.com/breucode/imisu/badges/container-vulns.svg)](https://github.com/breucode/imisu/blob/badges/trivy-scan-result.txt)
-[![Api-Docs](https://img.shields.io/badge/api--docs-swagger--ui-brightgreen?style=flat-square&logo=swagger)](https://breucode.github.io/imisu/swagger-ui.html?url=swagger.json&validatorUrl=)
+[![Api-Docs](https://img.shields.io/badge/api--docs-swagger--ui-brightgreen?style=flat-square&logo=swagger)](https://breucode.github.io/imisu/swagger-ui/)
 [![License](https://img.shields.io/github/license/breucode/imisu?style=flat-square)](LICENSE)
 
 # imisu
