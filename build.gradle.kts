@@ -101,7 +101,7 @@ dependencies {
   implementation("io.insert-koin:koin-core:$koinVersion")
   testImplementation("io.insert-koin:koin-test:$koinVersion")
 
-  val hopliteVersion = "2.4.0"
+  val hopliteVersion = "2.5.0"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
