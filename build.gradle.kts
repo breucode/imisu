@@ -85,7 +85,7 @@ repositories {
 val swaggerRuntime: Configuration by configurations.creating
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:4.28.0.0"))
+  implementation(platform("org.http4k:http4k-bom:4.28.1.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
@@ -95,13 +95,13 @@ dependencies {
 
   swaggerRuntime("swagger-api:swagger-ui:4.12.0@zip")
 
-  implementation("org.minidns:minidns-hla:1.0.3")
+  implementation("org.minidns:minidns-hla:1.0.4")
 
   val koinVersion = "3.2.0"
   implementation("io.insert-koin:koin-core:$koinVersion")
   testImplementation("io.insert-koin:koin-test:$koinVersion")
 
-  val hopliteVersion = "2.5.0"
+  val hopliteVersion = "2.5.2"
   implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
