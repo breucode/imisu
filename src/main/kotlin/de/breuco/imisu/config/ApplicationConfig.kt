@@ -14,7 +14,10 @@ class ApplicationConfig(private val logger: KLogger, val configPath: Path) {
   val versions =
     ConfigLoaderBuilder.default()
       .addPropertySource(
-        ConfigFilePropertySource(ConfigSource.ClasspathSource("/versions.properties"))
+        ConfigFilePropertySource(
+          ConfigSource.ClasspathSource("/versions.properties"),
+          allowEmpty = false
+        )
       )
       .build()
       .loadConfig<Versions>()
