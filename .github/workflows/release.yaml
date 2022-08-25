@@ -11,24 +11,24 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: gradle/wrapper-validation-action@v1
-      - uses: asdf-vm/actions/install@v1
-        env:
-          NODEJS_CHECK_SIGNATURES: no
+      - uses: DeLaGuardo/setup-graalvm@5.0
+        with:
+          graalvm: "22.2.0"
+          java: "java17"
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
       - id: get_version
         uses: battila7/get-version-action@v2
       - name: Check
-        run: |
-          unset JAVA_HOME
-          ./gradlew check --console=plain
+        run: ./gradlew check --console=plain
       - name: Inject version
         run: |
           sed -i "s/%ARTIFACT_VERSION%/$VERSION/g" build.gradle.kts
         env:
           VERSION: ${{ steps.get_version.outputs.version }}
       - name: Build native image
-        run: |
-          unset JAVA_HOME
-          ./gradlew nativeImage --console=plain
+        run: ./gradlew nativeImage --console=plain
 
       - name: Build Image
         id: build-image

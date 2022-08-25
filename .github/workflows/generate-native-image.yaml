@@ -9,13 +9,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: gradle/wrapper-validation-action@v1
-      - uses: asdf-vm/actions/install@v1
-        env:
-          NODEJS_CHECK_SIGNATURES: no
+      - uses: DeLaGuardo/setup-graalvm@5.0
+        with:
+          graalvm: "22.2.0"
+          java: "java17"
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
       - name: Generate native image
-        run: |
-          unset JAVA_HOME
-          ./gradlew nativeImage --console=plain
+        run: ./gradlew nativeImage --console=plain
       - name: Upload test reports
         uses: actions/upload-artifact@v2
         if: ${{ success() }}
