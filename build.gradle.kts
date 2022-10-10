@@ -97,7 +97,7 @@ dependencies {
 
   implementation("org.minidns:minidns-hla:1.0.4")
 
-  val koinVersion = "3.2.1"
+  val koinVersion = "3.2.2"
   implementation("io.insert-koin:koin-core:$koinVersion")
   testImplementation("io.insert-koin:koin-test:$koinVersion")
 
@@ -106,10 +106,10 @@ dependencies {
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
 
-  runtimeOnly("org.slf4j:slf4j-simple:2.0.1")
-  implementation("io.github.microutils:kotlin-logging:2.1.23")
+  runtimeOnly("org.slf4j:slf4j-simple:2.0.3")
+  implementation("io.github.microutils:kotlin-logging:3.0.0")
 
-  val kotestVersion = "5.4.2"
+  val kotestVersion = "5.5.1"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
     exclude("junit")
     exclude("org.junit.vintage")
