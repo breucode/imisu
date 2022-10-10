@@ -85,7 +85,7 @@ repositories {
 val swaggerRuntime: Configuration by configurations.creating
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:4.30.6.0"))
+  implementation(platform("org.http4k:http4k-bom:4.32.3.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
@@ -97,7 +97,7 @@ dependencies {
 
   implementation("org.minidns:minidns-hla:1.0.4")
 
-  val koinVersion = "3.2.1"
+  val koinVersion = "3.2.2"
   implementation("io.insert-koin:koin-core:$koinVersion")
   testImplementation("io.insert-koin:koin-test:$koinVersion")
 
