@@ -2,7 +2,7 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
   kotlin("jvm") version Versions.kotlin
-  kotlin("kapt") version Versions.kotlin
+  kotlin("kapt") version 1.7.20
   id("jacoco")
   id("com.diffplug.spotless") version "6.11.0"
   id("io.gitlab.arturbosch.detekt") version "1.21.0"
@@ -97,7 +97,7 @@ dependencies {
 
   implementation("org.minidns:minidns-hla:1.0.4")
 
-  val koinVersion = "3.2.1"
+  val koinVersion = "3.2.2"
   implementation("io.insert-koin:koin-core:$koinVersion")
   testImplementation("io.insert-koin:koin-test:$koinVersion")
 
@@ -106,8 +106,8 @@ dependencies {
   implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
   implementation("com.sksamuel.hoplite:hoplite-props:1.0.8")
 
-  runtimeOnly("org.slf4j:slf4j-simple:2.0.1")
-  implementation("io.github.microutils:kotlin-logging:2.1.23")
+  runtimeOnly("org.slf4j:slf4j-simple:2.0.3")
+  implementation("io.github.microutils:kotlin-logging:3.0.0")
 
   val kotestVersion = "5.4.2"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
