@@ -6,7 +6,7 @@ plugins {
   id("jacoco")
   id("com.diffplug.spotless") version "6.11.0"
   id("io.gitlab.arturbosch.detekt") version "1.21.0"
-  id("com.github.ben-manes.versions") version "0.42.0"
+  id("com.github.ben-manes.versions") version "0.43.0"
   id("application")
   id("org.mikeneck.graalvm-native-image") version "1.4.1"
 }
