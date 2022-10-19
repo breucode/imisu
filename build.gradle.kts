@@ -165,7 +165,7 @@ tasks.nativeImage {
     "--enable-https",
     "--initialize-at-build-time=" +
       listOf(
-          "org.slf4j.impl.SimpleLogger",
+          "org.slf4j.simple.SimpleLogger",
           "org.slf4j.LoggerFactory",
           "org.slf4j.impl.StaticLoggerBinder",
           "org.minidns",
