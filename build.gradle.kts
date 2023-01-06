@@ -85,7 +85,7 @@ repositories {
 val swaggerRuntime: Configuration by configurations.creating
 
 dependencies {
-  implementation(platform("org.http4k:http4k-bom:4.34.3.1"))
+  implementation(platform("org.http4k:http4k-bom:4.35.4.0"))
   implementation("org.http4k:http4k-core")
   implementation("org.http4k:http4k-server-netty")
   implementation("org.http4k:http4k-contract")
