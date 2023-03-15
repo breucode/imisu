@@ -118,7 +118,7 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 
   testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
-  testImplementation("org.mockito:mockito-inline:5.1.1")
+  testImplementation("org.mockito:mockito-inline:5.2.0")
 }
 
 val createVersionProperties by
