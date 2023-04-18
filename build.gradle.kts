@@ -109,7 +109,7 @@ dependencies {
   runtimeOnly("org.slf4j:slf4j-simple:2.0.7")
   implementation("io.github.microutils:kotlin-logging:3.0.5")
 
-  val kotestVersion = "5.6.0"
+  val kotestVersion = "5.6.1"
   testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion") {
     exclude("junit")
     exclude("org.junit.vintage")
