@@ -18,7 +18,7 @@ jobs:
         with:
           graalvm: "22.2.0"
           java: "java17"
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 16
       - name: Calculate test coverage
