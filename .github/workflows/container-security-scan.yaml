@@ -24,7 +24,7 @@ jobs:
           echo "::set-output name=noOfVulns::$noOfVulns"
           echo "::set-output name=baseImageVulns::$baseImageVulns"
       - name: Upload trivy-scan-result
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: trivy-scan-result
           path: trivy-scan-result.txt
