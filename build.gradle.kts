@@ -4,7 +4,7 @@ plugins {
   kotlin("jvm") version Versions.kotlin
   kotlin("kapt") version Versions.kotlin
   id("jacoco")
-  id("com.diffplug.spotless") version "6.24.0"
+  id("com.diffplug.spotless") version "6.25.0"
   id("io.gitlab.arturbosch.detekt") version "1.23.4"
   id("com.github.ben-manes.versions") version "0.51.0"
   id("application")
