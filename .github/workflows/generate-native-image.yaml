@@ -19,7 +19,7 @@ jobs:
       - name: Generate native image
         run: ./gradlew nativeImage --console=plain
       - name: Upload test reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ success() }}
         with:
           name: native-image
