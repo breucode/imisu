@@ -95,7 +95,7 @@ dependencies {
 
   swaggerRuntime("swagger-api:swagger-ui:4.12.0@zip")
 
-  implementation("org.minidns:minidns-hla:1.0.5")
+  implementation("org.minidns:minidns-hla:1.1.1")
 
   val koinVersion = "3.5.6"
   implementation("io.insert-koin:koin-core:$koinVersion")
