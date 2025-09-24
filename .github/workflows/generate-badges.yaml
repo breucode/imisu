@@ -12,7 +12,7 @@ jobs:
   generate-badges:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: gradle/wrapper-validation-action@v2
       - uses: DeLaGuardo/setup-graalvm@5.0
         with:
@@ -34,7 +34,7 @@ jobs:
           containerImageSize=$(podman image tree ghcr.io/breucode/imisu:stable | grep "Size: " | awk '{print $2}')
           echo "::set-output name=containerImageSize::$containerImageSize"
       - name: Checkout badges branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: badges
       - name: Download and commit badge
