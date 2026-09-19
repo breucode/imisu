@@ -19,7 +19,7 @@ jobs:
           java: "java17"
       - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 24
       - name: Check
         run: ./gradlew check --console=plain
       - name: Upload test reports
